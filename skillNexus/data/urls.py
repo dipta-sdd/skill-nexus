@@ -1,0 +1,33 @@
+from django.urls import path
+from . import views  # Assuming your views are in views.py within the same directory
+
+urlpatterns = [
+    path('', views.home, name='home'),
+    path('login', views.login, name='login'),
+    path('signup', views.signup, name='signup'),
+    path('profile', views.profile, name='profile'),
+    path('profile2', views.profile2, name='profile2'),
+    path('education', views.education, name='education'),
+    path('my_skills', views.my_skills, name='my_skills'),
+    path('experience', views.experience, name='experience'),
+    path('manage_education', views.manage_education, name='manage_education'),
+    path('training', views.training, name='training'),
+    path('programs', views.programs, name='programs'),
+    path('users', views.users, name='users'),
+    path('suspended', views.suspended, name='suspended'),
+    path('program', views.program, name='program'),
+    path('lecture_up', views.lecture_up, name='lecture_up'),
+    path('all_course_detail', views.all_course_detail, name='all_course_detail'),
+    path('course_detail', views.course_detail, name='course_detail'),
+    path('course_list', views.course_list, name='course_list'),
+    path('course_list_single', views.course_list_single,
+         name='course_list_single'),
+    path('edit_detail', views.edit_detail, name='edit_detail'),
+    path('edit_video', views.edit_video, name='edit_video'),
+    path('create_course', views.create_course, name='create_course'),
+    path('lec_detail', views.lec_detail, name='lec_detail'),
+    path('student_view_lec_detail', views.student_view_lec_detail,
+         name='student_view_lec_detail'),
+    path('videoshow', views.videoshow, name='videoshow'),
+    path('allvideoshow', views.allvideoshow, name='allvideoshow'),
+]

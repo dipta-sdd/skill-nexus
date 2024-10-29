@@ -1,0 +1,30 @@
+.program-con span.name{
+    font-size: 1.2em;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+.program-con span.type{
+    font-size: 1em;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.program-con .smaller-details{
+    padding-left: .4em;
+        font-size: .8em;
+        font-weight: 400;
+}
+.smaller_details-con {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     gap: 1rem;
+ }
+
+
+.edit-delete i:hover {
+    color: blue;
+}
+.program-con hr{
+    margin-top: 10px;
+}

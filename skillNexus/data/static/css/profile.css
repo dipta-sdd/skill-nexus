@@ -1,0 +1,56 @@
+@media only screen and (max-width: 576px) {
+    .d-flex {
+        display: block !important;
+    }
+}
+.profile-pic{
+    display: inline-block;
+    padding: 2px;
+    border: 2px solid;
+    border-radius: 10px;
+    background-color: #dbdbdb;
+    overflow: hidden;
+    height: 200px;
+    width: 200px;
+    min-width: 200px;
+    position: relative;
+}
+
+.profile-pic .fa-user{
+    transform: scale(5);
+    transform-origin: -6px -20px;
+}
+.profile-pic img{
+    width: 200px;
+    height: auto;
+}
+b.flex-grow-1 {
+    font-size: 1.4rem;
+}
+.name{
+    font-size: 1.5rem;
+}
+.profile-hr{
+    margin: 10px 0px;
+    /* margin-right: -30px; */
+}
+
+/* change profile btn */
+.profile-pic .edit-pic-btn{
+    position:absolute;
+    bottom: 0;
+    right: 0;
+}
+.pre-img-div{
+    position: fixed;
+    left: 0;
+    z-index: 5000;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+}
+
+/* cropper width fix */
+.cropper-bg{
+    width: 99%!important;
+}

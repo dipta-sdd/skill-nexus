@@ -1,0 +1,17 @@
+.details .name{
+    font-size: 1.2em;
+    font-weight: 600;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: block;
+    cursor: pointer;
+}
+.details .type{
+    opacity: 0.9;
+    font-size: small;
+    display: block;
+}
+.details .versity{
+    text-decoration: none;
+    
+}

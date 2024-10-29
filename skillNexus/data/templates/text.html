@@ -1,0 +1,614 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SkilNexus</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="{%  static 'css/cropper.min.css' %}" />
+    <link rel="stylesheet" href="{%  static 'css/style.css' %}" />
+    <link rel="stylesheet" href="{%  static 'css/profile.css' %}" />
+  </head>
+
+  <body>
+    <div aria-live="polite" aria-atomic="true" class="position-relative">
+      <div class="toast-container top-0 end-0 p-3">
+        <!-- Then put toasts within -->
+      </div>
+    </div>
+    <!-- start sidebar  -->
+    <!-- start sidebar  -->
+    <!-- start sidebar  -->
+    <!-- start sidebar  -->
+    <!-- start sidebar  -->
+    <!-- start sidebar  -->
+    <!-- start sidebar  -->
+    <!-- start sidebar  -->
+    <!-- start sidebar  -->
+    <!-- start sidebar  -->
+    <div class="transition_speed m-0 p-0" id="left_side">
+      <div class="" id="nav_con">
+        <div class="container fix-extra-margin">
+          <nav class="navbar navbar-expand-lg navbar-dark mybg my-round ms-0">
+            <div class="container-fluid" style="background-color: transparent">
+              <a class="navbar-brand my-color" href="#">SkillNexus</a>
+              <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+              >
+                <span class="navbar-toggler-icon my-color"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <form class="d-flex ms-auto me-5" role="search">
+                  <input
+                    class="form-control me-2"
+                    type="search"
+                    placeholder="Search"
+                    aria-label="Search"
+                  />
+                  <button class="btn navbar-btn btn-outline-dark" type="submit">
+                    Search
+                  </button>
+                </form>
+                <!-- theme switch -->
+                <!-- theme switch -->
+                <!-- theme switch -->
+                <!-- theme switch -->
+                <label class="switch">
+                  <input type="checkbox" id="theme" />
+                  <span class="slider"></span>
+                </label>
+                <!-- theme switch -->
+                <!-- theme switch -->
+                <!-- theme switch -->
+                <!-- theme switch -->
+                <!-- theme switch -->
+                <ul class="navbar-nav ms-1 mb-2 mb-lg-0">
+                  <li class="nav-item logged-out d-none">
+                    <a class="nav-link" href="/login" data="Link">Login</a>
+                  </li>
+                  <div class="profile-con ms-1 logged-in d-none">
+                    <div class="icon">
+                      <i
+                        class="fa-solid fa-user fa-xl"
+                        style="color: #00eeff"
+                      ></i>
+                    </div>
+                    <ul class="dropdown-menu bg-dar">
+                      <li>
+                        <a class="dropdown-item" href="/profile">Profile</a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item" href="#">Another action</a>
+                      </li>
+                      <li>
+                        <hr class="dropdown-divider" />
+                      </li>
+                      <li>
+                        <a class="dropdown-item logout" href="#">Logout</a>
+                      </li>
+                    </ul>
+                  </div>
+                </ul>
+              </div>
+            </div>
+          </nav>
+        </div>
+      </div>
+      <div id="sidebar" class="h-100 transition_speed">
+        <ul class="list-unstyled components mb-5">
+          <li>
+            <a href="/"><span class="fa fa-home mr-3"></span> &nbsp Home</a>
+          </li>
+          <li class="d-none logged-in">
+            <a href="/profile"
+              ><span class="fa fa-download mr-3 notif"></span> &nbsp Profile</a
+            >
+          </li>
+          <li class="d-none u-Admin">
+            <a href="/manage_education"
+              ><span class="fa fa-download mr-3 notif"></span> &nbsp
+              Educations</a
+            >
+          </li>
+          <li class="d-none u-Student">
+            <a href="/education"
+              ><span class="fa fa-book mr-3 notif"></span> &nbsp Educations</a
+            >
+          </li>
+          <li class="d-none u-Student">
+            <a href="/training"
+              ><span class="fa-solid fa-hammer"></span> &nbsp Trainings</a
+            >
+          </li>
+          <li class="d-none u-Educator">
+            <a href="/create_course"
+              ><span class="fa-solid fa-plus"></span> &nbsp Create Course</a
+            >
+          </li>
+          <li class="d-none u-Educator">
+            <a href="/all_course_detail"
+              ><span class="fa-solid fa-hammer"></span> &nbsp See Details</a
+            >
+          </li>
+          <li class="d-none u-Student">
+            <a href="/experience"
+              ><span class="fa-solid fa-wand-magic-sparkles"></span> &nbsp
+              Experience</a
+            >
+          </li>
+          <li class="d-none u-Student">
+            <a href="/course_list"
+              ><span class="fa-solid fa-wand-magic-sparkles"></span> &nbsp
+              Course List</a
+            >
+          </li>
+
+          <li class="d-none u-Student">
+            <a href="/program"
+              ><span class="fa-solid fa-wand-magic-sparkles"></span> &nbsp
+              Program</a
+            >
+          </li>
+          <li class="d-none u-Student">
+            <a href="/my_skills"
+              ><span class="fa-solid fa-wand-magic-sparkles"></span> &nbsp
+              Skills</a
+            >
+          </li>
+          <li class="d-none u-University">
+            <a href="/programs"
+              ><span class="fa-solid fa-wand-magic-sparkles"></span> &nbsp
+              Programs</a
+            >
+          </li>
+          <li class="d-none u-Admin">
+            <a href="/users"
+              ><span class="fa-solid fa-user"></span> &nbsp Users</a
+            >
+          </li>
+
+          <li>
+            <a href="#"><i class="fa-solid fa-headset"></i> &nbsp Support</a>
+          </li>
+          <li class="logged-in d-none logout">
+            <a href="/logout"
+              ><span class="fa fa-sign-out mr-3 logout"></span> &nbsp Sign
+              Out</a
+            >
+          </li>
+          <li class="logged-out d-none">
+            <a href="/login"
+              ><span class="fa fa-sign-out mr-3"></span> &nbsp Sign In</a
+            >
+          </li>
+        </ul>
+      </div>
+      <div class="sidebar_btn">
+        <i class="fa-solid fa-chevron-up fa-rotate-90 fa-2xl"></i>
+      </div>
+      <!-- loader code -->
+      <div class="loader-container">
+        <div class="loader">
+          <div class="bar1"></div>
+          <div class="bar2"></div>
+          <div class="bar3"></div>
+          <div class="bar4"></div>
+          <div class="bar5"></div>
+          <div class="bar6"></div>
+          <div class="bar7"></div>
+          <div class="bar8"></div>
+          <div class="bar9"></div>
+          <div class="bar10"></div>
+          <div class="bar11"></div>
+          <div class="bar12"></div>
+        </div>
+      </div>
+      <!-- side bar -->
+      <div class="container">
+        <!-- end sidebar  -->
+        <!-- end sidebar  -->
+        <!-- end sidebar  -->
+        <!-- end sidebar  -->
+        <!-- end sidebar  -->
+        <!-- end sidebar  -->
+        <!-- end sidebar  -->
+        <div class="my-round" id="body" data-bs-theme="light">
+          <nav aria-label="breadcrumb" class="mybg-t breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/">Home</a></li>
+              <li class="breadcrumb-item" aria-current="page">Profile</li>
+            </ol>
+          </nav>
+          <!-- main body-->
+          <!-- main body-->
+          <!-- main body-->
+          <!-- main body-->
+          <!-- main body-->
+          <!-- main body-->
+          <!-- main body-->
+          <div class="row my-color mybg my-row">
+            <div class="col d-flex">
+              <div class="profile-pic">
+                <!-- if no profile picture then it will be shown -->
+                <i class="fa-regular fa-user fa-2xl"></i>
+                <button
+                  type="button"
+                  class="btn btn-primary edit-pic-btn"
+                  data-bs-toggle="modal"
+                  data-bs-target="#profilePicChangeModal"
+                >
+                  <i class="fa-solid fa-pen fa-lg" style="color: #ffffff"></i>
+                </button>
+                <!-- modal -->
+                <!-- modal -->
+                <!-- modal -->
+                <!-- Modal -->
+                <!-- Modal for profile pic change -->
+                <div
+                  class="modal fade"
+                  id="profilePicChangeModal"
+                  data-bs-backdrop="static"
+                  data-bs-keyboard="false"
+                  tabindex="-1"
+                  aria-labelledby="profilePicChangeModalLabel"
+                  aria-hidden="true"
+                >
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1
+                          class="modal-title fs-5"
+                          id="profilePicChangeModalLabel"
+                        >
+                          Change Profile Picture
+                        </h1>
+                        <button
+                          type="button"
+                          class="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                      <div class="modal-body">
+                        <!-- preview img -->
+                        <img
+                          id="imagePreview"
+                          src="#"
+                          alt="Image Preview"
+                          style="max-width: 200px; display: none"
+                        />
+                        <!-- preview img -->
+                        <div class="input-group mb-3">
+                          <input
+                            type="file"
+                            class="form-control"
+                            id="imageUpload"
+                            accept="image/*"
+                          />
+                          <input
+                            type="hidden"
+                            id="croppedImageData"
+                            name="croppedImage"
+                          />
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button
+                          type="button"
+                          class="btn btn-secondary"
+                          data-bs-dismiss="modal"
+                        >
+                          Close
+                        </button>
+                        <button
+                          type="button"
+                          class="btn btn-primary"
+                          id="saveCropedPic"
+                        >
+                          Save
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- modal -->
+                <!-- modal -->
+                <!-- modal -->
+              </div>
+
+              <div class="ps-3 profile-details">
+                <div class="row">
+                  <b class="name"></b>
+                  <i class="username"></i>
+                  <p class="role align-bottom my-color"></p>
+                </div>
+              </div>
+
+              <div class="ms-auto">
+                <button
+                  type="button"
+                  class="btn btn-outline-primary ms-auto me-0"
+                >
+                  Download CV
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- profile -->
+          <div class="row my-color mybg my-row" id="profile">
+            <div class="d-flex">
+              <b class="flex-grow-1">Profile details</b>
+              <div>
+                <button
+                  type="button"
+                  class="btn btn-outline-primary btn-edit-p"
+                  id="btn-edit-profile"
+                >
+                  <i class="fa-solid fa-pen pe-1"> </i>Edit
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-primary btn-save-p d-none"
+                  id="btn-save"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+            <div class="col-11"></div>
+            <div class="col-1"></div>
+            <hr class="profile-hr" />
+            <div class="col-12">
+              <div class="row profile-details2"></div>
+            </div>
+          </div>
+          <!-- personal details -->
+          <div class="row my-color mybg my-row" id="personal">
+            <div class="d-flex">
+              <b class="flex-grow-1">Personal details</b>
+              <div>
+                <button
+                  type="button"
+                  class="btn btn-outline-primary btn-edit-p"
+                  id="btn-edit-personal"
+                >
+                  <i class="fa-solid fa-pen pe-1"> </i>Edit
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-primary btn-save-p d-none"
+                  id="btn-save-personal"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+            <div class="col-11"></div>
+            <div class="col-1"></div>
+            <hr class="profile-hr" />
+            <div class="col-12">
+              <div class="row personal-details"></div>
+            </div>
+          </div>
+          <!-- company details -->
+          <div class="row my-color mybg my-row company">
+            <div class="d-flex">
+              <b class="flex-grow-1">Company Details</b>
+              <div>
+                <button type="button" class="btn btn-outline-primary btn-edit">
+                  <i class="fa-solid fa-pen pe-1"> </i>Edit
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-primary btn-save d-none"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+            <div class="col-11"></div>
+            <div class="col-1"></div>
+            <hr class="profile-hr" />
+            <div class="col-12">
+              <div class="row details">
+                <div class="col-lg-6">
+                  <div class="input-group mb-3">
+                    <span class="input-group-text">Company Name </span>
+                    <input
+                      type="text"
+                      name="name"
+                      value=""
+                      class="form-control per-name"
+                      disabled=""
+                    />
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="input-group mb-3">
+                    <span class="input-group-text">Industry </span>
+                    <input
+                      type="text"
+                      name="industry"
+                      value=""
+                      class="form-control per-name"
+                      disabled=""
+                    />
+                  </div>
+                </div>
+                <div class="col-lg-12">
+                  <div class="input-group mb-3">
+                    <span class="input-group-text">Description </span>
+                    <textarea
+                      type="text"
+                      name="description"
+                      value=""
+                      class="form-control per-name"
+                      disabled=""
+                    ></textarea>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="input-group mb-3">
+                    <span class="input-group-text">Address </span>
+                    <input
+                      type="text"
+                      name="address"
+                      value=""
+                      class="form-control per-name"
+                      disabled=""
+                    />
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="input-group mb-3">
+                    <span class="input-group-text">Website </span>
+                    <input
+                      type="text"
+                      name="url"
+                      value=""
+                      class="form-control per-name"
+                      disabled=""
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- university details  -->
+          <div class="row my-color mybg my-row university">
+            <div class="d-flex">
+              <b class="flex-grow-1">University Details</b>
+              <div>
+                <button type="button" class="btn btn-outline-primary btn-edit">
+                  <i class="fa-solid fa-pen pe-1"> </i>Edit
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-primary btn-save d-none"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+            <div class="col-11"></div>
+            <div class="col-1"></div>
+            <hr class="profile-hr" />
+            <div class="col-12">
+              <div class="row details">
+                <div class="col-lg-6">
+                  <div class="input-group mb-3">
+                    <span class="input-group-text">University Name </span>
+                    <input
+                      type="text"
+                      name="name"
+                      value=""
+                      class="form-control per-name"
+                      disabled=""
+                    />
+                  </div>
+                </div>
+                <div class="col-lg-12">
+                  <div class="input-group mb-3">
+                    <span class="input-group-text">Description </span>
+                    <textarea
+                      type="text"
+                      name="description"
+                      value=""
+                      class="form-control per-name"
+                      disabled=""
+                    ></textarea>
+                  </div>
+                </div>
+                <div class="col-lg-12">
+                  <div class="input-group mb-3">
+                    <span class="input-group-text">Address </span>
+                    <input
+                      type="text"
+                      name="address"
+                      value=""
+                      class="form-control per-name"
+                      disabled=""
+                    />
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="input-group mb-3">
+                    <span class="input-group-text">Website </span>
+                    <input
+                      type="text"
+                      name="url"
+                      value=""
+                      class="form-control per-name"
+                      disabled=""
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--_________________________________________-->
+          <!--_________________________________________-->
+          <!--_________________________________________-->
+          <!--_________________________________________-->
+          <!-- skills -->
+          <!-- skills -->
+          <!-- skills -->
+          <!-- skills -->
+          <!-- skills -->
+          <!-- skills -->
+          <!-- skills -->
+          <!-- ________________________________________ -->
+          <!-- ________________________________________ -->
+          <!-- ________________________________________ -->
+          <!-- ________________________________________ -->
+          <!-- main body-->
+          <!-- main body-->
+          <!-- main body-->
+          <!-- main body-->
+          <!-- main body-->
+          <!-- main body-->
+          <!-- main body-->
+        </div>
+      </div>
+    </div>
+
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'js/cropper.min.js' %}"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+    <script src="{% static 'js/profile.js' %}"></script>
+    <script>
+      $(document).ready(function () {
+        on_page_load([
+          "Admin",
+          "Student",
+          "Educator",
+          "University",
+          "Freelancer",
+          "Employer",
+        ]);
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,36 @@
+.training-con span.institute{
+    font-size: 1.2em;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+.training-con span.title{
+    font-size: 1em;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+.training-con .country,
+.training-con .duration,
+.training-con .date{
+    padding-left: .4em;
+        font-size: .8em;
+        font-weight: 400;
+}
+.date-duration {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+ }
+.edit-delete {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.edit-delete i:hover {
+    color: blue;
+}
+.training-con hr{
+    margin-top: 10px;
+}

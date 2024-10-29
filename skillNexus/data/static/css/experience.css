@@ -1,0 +1,37 @@
+.experience-con span.institute{
+    font-size: 1.2em;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+.experience-con span.designation{
+    font-size: 1em;
+    font-weight: 500;
+    text-transform: capitalize;
+    opacity: 0.7;
+}
+.experience-con .location,
+.experience-con .duration,
+.experience-con .date{
+    padding-left: .4em;
+        font-size: .8em;
+        font-weight: 400;
+}
+.date-duration {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+ }
+.edit-delete {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.edit-delete i:hover {
+    color: blue;
+}
+.experience-con hr{
+    margin-top: 10px;
+}

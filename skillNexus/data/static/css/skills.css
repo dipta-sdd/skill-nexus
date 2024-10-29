@@ -1,0 +1,36 @@
+.skill-flex {
+    display: flex;
+    gap: 0.5em;
+    flex-wrap: wrap;
+
+}
+
+.skill-flex .skill {
+    display: inline-block;
+    background-color: #9393934a;
+    padding: 0em 0em 0em 0.5em;
+    border-radius: 0.2em;
+    cursor: pointer;
+    font-weight: normal;
+}
+
+.skill-flex .skill i {
+    padding: .3em .5em;
+}
+
+.skill-flex .skill:hover,
+.skill-flex .skill:hover i {
+    color: #0d6efd;
+}
+
+.skill-flex .skill .second {
+    display: none;
+}
+
+.skill-flex .skill:hover .second {
+    display: inline-block;
+}
+
+.skill-flex .skill:hover .first {
+    display: none;
+}
