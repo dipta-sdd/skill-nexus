@@ -2,3 +2,4 @@
 /env
 /project.code-workspace
 /venv
+db.sqlite3
