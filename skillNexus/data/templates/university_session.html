@@ -1,0 +1,219 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SkilNexus</title>
+  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="{%  static 'css/style.css' %}" />
+</head>
+
+<body>
+  <div aria-live="polite" aria-atomic="true" class="position-relative">
+    <div class="toast-container top-0 end-0 p-3">
+      <!-- Then put toasts within -->
+    </div>
+  </div>
+  {% include "sidebar.php" %}
+
+  <div class="my-round" id="body">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mybg-t breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/" class="my-color">Home</a></li>
+        <li class="breadcrumb-item"><a href="/programs" class="my-color">Programs</a></li>
+        <li class="breadcrumb-item"><a href="/university/program/{{ session.program_id }}"
+            class="my-color">{{session.program_name}}</a></li>
+        <li class="breadcrumb-item active my-color" aria-current="page">{{ session.session_name }}</li>
+      </ol>
+    </nav>
+    <!-- Program Print Section -->
+
+
+
+    <!-- Program Overview Section -->
+    <div class="row ">
+      <div class="col-lg-12">
+
+        <div class="card mybg my-row rounded-0">
+          <div class="card-header my-color" style="margin: -10px -10px 0 -10px">
+            <div class="d-flex justify-content-between">
+              <h4 class="card-title mb-0">{{ session.program_name}} ( {{ session.session_name }} )</h4>
+              <!-- <button class="btn btn-primary ms-2 rounded-0" type="button" data-bs-toggle="modal"
+                data-bs-target="#programSessionModal"> Edit</button> -->
+            </div>
+
+          </div>
+          <div class="card-body my-color">
+            <p><strong>Program Name:</strong> {{ session.program_name }}</p>
+            <p><strong>Start Date:</strong> {{ session.start_date }}</p>
+            <p><strong>End Date:</strong> {{ session.end_date }}</p>
+            <p><strong>Admission Start Date:</strong> {{ session.admission_start_date }}</p>
+            <p><strong>Admission End Date:</strong> {{ session.admission_end_date }}</p>
+            <p><strong>Admission Fee:</strong> {{ session.admission_fee }} USD</p>
+            <p><strong>Application Fee:</strong> {{ session.application_fee }} USD</p>
+            {% if session.registration_fee %}
+            <p><strong>Registration Fee:</strong> {{ session.registration_fee }} USD</p>
+            {% else %}
+            <p><strong>Registration Fee:</strong> Not Applicable</p>
+            {% endif %}
+            {% if session.other_fees %}
+            <p><strong>Other Fees:</strong> {{ session.other_fees }} USD</p>
+            {% else %}
+            <p><strong>Other Fees:</strong> None</p>
+            {% endif %}
+            {% if session.syllabus %}
+            <p><strong>Syllabus:</strong>
+              <a href="/{{ session.syllabus }}" target="_blank" class="my-color">Download</a>
+            </p>
+            {% else %}
+            <p><strong>Syllabus:</strong> Not Available</p>
+            {% endif %}
+          </div>
+          <div class="card-footer my-color">
+            <strong>Total Fee:</strong>
+            {% if session.fee %}
+            {{ session.fee }} USD
+            {% else %}
+            Fee not defined
+            {% endif %}
+          </div>
+        </div>
+
+
+        <div class="card  my-row rounded-0  mybg">
+          <div class="card-header" style="margin: -10px -10px 0 -10px">
+
+            <div class="d-flex justify-content-between">
+              <h3 class="card-title mb-0">Sessions</h3>
+              <button class="btn btn-primary ms-2 rounded-0" type="button" data-bs-toggle="modal"
+                data-bs-target="#programSessionModal">Add Session</button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-striped table-bordered align-middle">
+                <thead>
+                  <tr>
+                  </tr>
+                </thead>
+                <tbody class="table-group-divider">
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Applicant List Table -->
+
+        <div class="col-12">
+          <div class="card  my-row rounded-0 mybg">
+            <div class="card-header" style="margin: -10px -10px 0 -10px">
+              <div class="d-flex justify-content-between">
+                <h3 class="card-title mb-0">Applicant List</h3>
+
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <input type="text" class="form-control" id="applicantSearch" placeholder="Search applicants...">
+              </div>
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr class="my-color">
+                      <th>Name</th>
+                      <th>Status</th>
+                      <th>Submission Date</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                  </tbody>
+                </table>
+              </div>
+              <!-- Pagination controls would go here -->
+            </div>
+          </div>
+        </div>
+
+
+
+      </div>
+      <!-- Metrics and Insights Section -->
+      <!-- Charts -->
+      <div class="col-lg-3 pe-lg-0">
+        <div class="card  rounded-0  mybg">
+          <div class="card-body">
+            <h3 class="card-title my-color"> </h3>
+            <canvas id=""></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 ps-lg-2 pe-lg-0">
+        <div class="card  rounded-0  mybg">
+          <div class="card-body">
+            <h3 class="card-title my-color"> </h3>
+            <canvas id=""></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 ps-lg-2 pe-lg-0">
+        <div class="card  rounded-0  mybg">
+          <div class="card-body">
+            <h3 class="card-title my-color"> </h3>
+            <canvas id=""></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 ps-lg-2 pb-2">
+        <div class="card  rounded-0  mybg">
+          <div class="card-body">
+            <h3 class="card-title my-color"> </h3>
+            <canvas id=""></canvas>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
+
+
+    </div>
+
+
+
+
+  </div>
+  </div>
+
+  <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+
+  <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="{% static 'js/script.js' %}"></script>
+  <!-- <script src="{% static 'js/university_session.js' %}"></script> -->
+  <script>
+    $(document).ready(function () {
+      on_page_load([]);
+
+    });
+  </script>
+
+</body>
+
+</html>

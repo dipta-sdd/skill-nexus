@@ -147,9 +147,9 @@ function showProgram(program) {
   $(".program-con").append(`
         <div class="row" id="program${program.id}">
           <div class="col-xl-9 ">
-            <span class="name">
+            <a class="name" href="/university/program/${program.id}">
               ${program.name}
-            </span>
+            </a>
             <br>
             <span class="type">
               ${program.type}

@@ -2,6 +2,7 @@ from django.urls import path
 
 from . import views
 
+
 urlpatterns = [
     path('signup', views.signup),
     path('login', views.login_view),
@@ -32,6 +33,7 @@ urlpatterns = [
     path('university/program/add', views.addProgram),
     path('university/program/get', views.getProgram),
     path('university/program/del', views.deelProgram),
+    path('university/program/session', views.addEditSession),
     path('program', views.getProgramStudent),
     path('skills/all', views.allSkill),
     path('skills/add', views.addSkill),
@@ -39,6 +41,9 @@ urlpatterns = [
     path('skills/del', views.delSkill),
     path('admin/users', views.allUsers),
     path('admin/user/status', views.editStatus),
+    path('student/university/apply', views.applyUniversity),
+    path('university/application/<int:application_id>',
+         views.unuiversityApplication),
 
 
 
@@ -64,6 +69,7 @@ urlpatterns = [
     path('course_enroll/check', views.check_enrollment),
     path('enrolled_course_video/get', views.getEnrolledCourseVideo),
     path('enrollment/get', views.get_enrolled_users, name='get_enrolled_users'),
-    path('enrollment/delete', views.ban_user_from_course, name='ban_user_from_course')
-    
+    path('enrollment/delete', views.ban_user_from_course,
+         name='ban_user_from_course')
+
 ]

@@ -2,3 +2,6 @@
 /env
 /project.code-workspace
 /venv
+/data/migrations/
+/data/__pycache__
+db.sqlite3

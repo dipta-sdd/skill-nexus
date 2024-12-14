@@ -22,6 +22,9 @@ body {
 .theme-light{
     background-attachment: fixed;
     background-color:#ccc;
+    & .table-striped>tbody>tr:nth-of-type(odd)>*{
+        --bs-table-bg-type: #ebf4fc59 !important;
+    }
 }
 .theme-dark{
    background-attachment: fixed;
@@ -119,7 +122,7 @@ border: none;
 }
 .profile-con .dropdown-menu{
     right: 0px;
-    margin-top: 45px;
+    margin-top: 5px;
 }
 .profile-con .dropdown-menu .dropdown-item:hover{
     background-color: blue;
@@ -424,19 +427,17 @@ input:checked+.slider:before {
 .input-group-text{
     padding: .175rem 0.75rem;
     border-radius: 0;
-    min-width: 7rem;
+    /* min-width: 7rem; */
 }
 .form-control{
     border-radius: 1px;
     padding: .175rem 0.75rem;
+    transition: none;
 }
 .form-control:focus{
-    /* border: none; */
-    border-bottom: 3px solid #0066ffc9;
+     border:var(--bs-border-width) solid var(--bs-border-color);
+    border-bottom: 1px solid #0066ffc9;
     box-shadow: none;
-    border-top: none;
-        border-left: none;
-        border-right: none;
     /* box-shadow: 0 0 0 .05rem rgba(0, 102, 255, 0.25); */
 }
 
@@ -447,7 +448,7 @@ input:checked+.slider:before {
      margin-bottom: 27px;
  }
 
- p {
+ footer p {
      font-family: 'Nunito', sans-serif;
      font-size: 16px;
      color: white;
@@ -864,3 +865,45 @@ input:checked+.slider:before {
  .btn{
     padding: .2em .4em;
  }
+
+
+ .btn.loading{
+    position: relative;
+    &::after{
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,.4);
+        background: var(--bg2);
+        z-index: 1;
+    }
+    &::before{
+        content: "";
+        z-index: 2;
+        position: absolute;
+        top: 0;
+        left: 0;
+        margin-left: 30%;
+        margin-top: 5%;
+        height: 80%;
+        aspect-ratio: 1/1;
+        border: 4px solid transparent;
+        border-top: 4px solid #007bff;
+        border-radius: 50%;
+        animation: loader_spin 1s linear infinite;
+    }
+
+ }
+
+         @keyframes loader_spin {
+             0% {
+                 transform: rotate(0deg);
+             }
+    
+             100% {
+                 transform: rotate(360deg);
+             }
+         }

@@ -1,3 +1,4 @@
+
 from datetime import datetime
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -168,21 +169,6 @@ class University(models.Model):
     url = models.URLField(blank=False)
 
 
-class UniversityProgram(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=200, blank=False)
-    type = models.CharField(max_length=50, blank=False, choices=[
-        ('Graduate', 'Graduate'),
-        ('Undergraduate', 'Undergraduate'),
-        ('Professional', 'Professional'),
-        ('Certificate', 'Certificate'),
-        ('Doctoral', 'Doctoral')
-    ])
-    duration_year = models.IntegerField(blank=False)
-    duration_month = models.IntegerField(blank=False)
-    description = models.CharField(max_length=200, blank=True)
-
-
 class Course(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
     title = models.CharField(max_length=1000, blank=False)
@@ -221,3 +207,91 @@ class Enrollment(models.Model):
 
     class Meta:
         unique_together = ('user', 'course')
+
+
+class Jobs(models.Model):
+    employer = models.ForeignKey(
+        User, on_delete=models.CASCADE, limit_choices_to={'role': 'Employer'})
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    skills_required = models.ManyToManyField(
+        Skill)  # Many-to-many for multiple skills
+    experience_required = models.PositiveIntegerField(
+        help_text="Experience required in years")
+    price = models.DecimalField(
+        max_digits=10, decimal_places=2)  # Added price field
+    deadline = models.DateTimeField()  # Added deadline field
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.title} - {self.employer.company.name}"
+
+
+class UniversityProgram(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=200, blank=False)
+    type = models.CharField(max_length=50, blank=False, choices=[
+        ('Graduate', 'Graduate'),
+        ('Undergraduate', 'Undergraduate'),
+        ('Professional', 'Professional'),
+        ('Certificate', 'Certificate'),
+        ('Doctoral', 'Doctoral')
+    ])
+    duration_year = models.IntegerField(blank=False)
+    duration_month = models.IntegerField(blank=False)
+    description = models.CharField(max_length=200, blank=True)
+
+
+class UniversityProgramSession(models.Model):
+    program = models.ForeignKey(UniversityProgram, on_delete=models.CASCADE)
+    session_name = models.CharField(max_length=200, blank=False)
+    start_date = models.DateField(blank=False)
+    end_date = models.DateField(blank=False)
+    requirements = models.TextField(blank=True)
+    syllabus = models.FileField(upload_to='syllabus/', blank=False)
+    admission_start_date = models.DateField(blank=False)
+    admission_end_date = models.DateField(blank=False)
+    fee = models.DecimalField(
+        max_digits=10, decimal_places=2, blank=True, null=True
+    )
+    admission_fee = models.DecimalField(
+        max_digits=10, decimal_places=2, blank=False
+    )
+    registration_fee = models.DecimalField(
+        max_digits=10, decimal_places=2, blank=True, null=True
+    )
+    application_fee = models.DecimalField(
+        max_digits=10, decimal_places=2, blank=False
+    )
+    other_fees = models.DecimalField(
+        max_digits=10, decimal_places=2, blank=True, null=True
+    )
+
+    def __str__(self):
+        return f"{self.program.name} - {self.session_name}"
+
+    class Meta:
+        unique_together = ('program', 'session_name')
+        ordering = ['start_date']
+
+
+class ProgramApplication(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    session = models.ForeignKey(
+        UniversityProgramSession, on_delete=models.CASCADE)
+    status = models.CharField(
+        max_length=50,
+        choices=[
+            ('Pending', 'Pending'),
+            ('Accepted', 'Accepted'),
+            ('Rejected', 'Rejected')
+        ],
+        default='Pending'
+    )
+    comment = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('session', 'user')

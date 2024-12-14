@@ -15,6 +15,28 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 
+def run_raw_sql(query, params=None):
+    """
+    Execute a raw SQL query and return the results.
+
+    Args:
+        query (str): The raw SQL query to execute.
+        params (tuple, optional): Parameters to safely include in the query.
+
+    Returns:
+        list[dict]: Query results as a list of dictionaries.
+    """
+    with connection.cursor() as cursor:
+        cursor.execute(query, params or ())
+        # Fetch all rows from the result
+        columns = [col[0] for col in cursor.description]
+        results = [
+            dict(zip(columns, row))
+            for row in cursor.fetchall()
+        ]
+    return results
+
+
 def getUser(request):
     if isinstance(request.user, User):
         serializer = UserSerializer(request.user)
@@ -33,6 +55,8 @@ def current_user(request):
         serializer = UserSerializer(request.user)
         if serializer.data['status'] == 'Banned':
             return Response({"message": "Banned"}, status=status.HTTP_401_UNAUTHORIZED)
+        print('_________________________________________________________________________________')
+        print(serializer.data)
         return Response(serializer.data)
     else:
         return Response({"detail": "Authentication credentials were not provided."}, status=401)
@@ -161,6 +185,12 @@ def editPersonaDetails(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@swagger_auto_schema(
+    methods=['post'],
+    operation_summary="Edit Education Level",
+    request_body=Edu_levelSerializer,
+    security=[{"Bearer": []}]
+)
 @ api_view(['POST'])
 def edu_level(req):
     user = getUser(req)
@@ -180,6 +210,29 @@ def edu_level(req):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@swagger_auto_schema(
+    methods=['get'],
+    operation_summary="Get Education (degree)",
+    security=[{"Bearer": []}],
+    responses={
+        200: openapi.Response(
+            description="Degree List",
+            schema=Edu_degreeSerializer
+        )
+    }
+)
+@swagger_auto_schema(
+    methods=['post'],
+    operation_summary="Create Education (degree)",
+    request_body=Edu_degreeSerializer,
+    security=[{"Bearer": []}],
+    responses={
+        201: openapi.Response(
+            description="Degree created",
+            schema=Edu_degreeSerializer
+        )
+    }
+)
 @ api_view(["GET", 'POST'])
 def edu_degree(req):
     user = getUser(req)
@@ -198,26 +251,116 @@ def edu_degree(req):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@swagger_auto_schema(
+    methods=['get'],
+    operation_summary="Get Education (group or major)",
+    security=[{"Bearer": []}],
+    responses={
+        200: openapi.Response(
+            description="Group or major List",
+            schema=openapi.Schema(
+                type=openapi.TYPE_ARRAY,
+                items=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        "name": openapi.Schema(type=openapi.TYPE_STRING),
+                        "id": openapi.Schema(type=openapi.TYPE_INTEGER)
+                    }
+                )
+            )
+        )
+    }
+)
+@swagger_auto_schema(
+    methods=['post'],
+    operation_summary="Create Education (group or major)",
+    request_body=Edu_group_or_majorSerializer,
+    security=[{"Bearer": []}],
+    responses={
+        201: openapi.Response(
+            description="Group or major created",
+            schema=Edu_group_or_majorSerializer
+        ),
+        400: openapi.Response(
+            description="Bad Request",
+            schema=openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    "errors": openapi.Schema(
+                        type=openapi.TYPE_OBJECT,
+                        properties={
+                            "name": openapi.Schema(
+                                type=openapi.TYPE_ARRAY,
+                                items=openapi.Schema(
+                                    type=openapi.TYPE_STRING
+                                )
+                            )
+                        }
+                    )
+                }
+            )
+        )
+    }
+)
 @ api_view(["GET", 'POST'])
 def edu_group_or_mejor(req):
     user = getUser(req)
     if req.method == 'GET':
         try:
-            obj = Edu_group_or_major.objects.get()
-            serializer = Edu_group_or_majorSerializer(obj)
+            obj = Edu_group_or_major.objects.all()
+            serializer = Edu_group_or_majorSerializer(obj, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except:
             return Response({'msg': 'No group/major Found'}, status=status.HTTP_204_NO_CONTENT)
     elif req.method == 'POST' and user['role'] == 'Admin':
         serializer = Edu_group_or_majorSerializer(data=req.data, partial=True)
-        # print(req.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@ api_view(["GET", ])
+@swagger_auto_schema(
+    methods=['get'],
+    operation_summary="Get Education (user)",
+    security=[{"Bearer": []}],
+    responses={
+        200: openapi.Response(
+            description="Education List",
+            schema=openapi.Schema(
+                type=openapi.TYPE_ARRAY,
+                items=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        "name": openapi.Schema(type=openapi.TYPE_STRING),
+                        "id": openapi.Schema(type=openapi.TYPE_INTEGER),
+                        "degrees": openapi.Schema(
+                            type=openapi.TYPE_ARRAY,
+                            items=openapi.Schema(
+                                type=openapi.TYPE_OBJECT,
+                                properties={
+                                    "name": openapi.Schema(type=openapi.TYPE_STRING),
+                                    "id": openapi.Schema(type=openapi.TYPE_INTEGER),
+                                    "groups": openapi.Schema(
+                                        type=openapi.TYPE_ARRAY,
+                                        items=openapi.Schema(
+                                            type=openapi.TYPE_OBJECT,
+                                            properties={
+                                                "name": openapi.Schema(type=openapi.TYPE_STRING),
+                                                "id": openapi.Schema(type=openapi.TYPE_INTEGER)
+                                            }
+                                        )
+                                    )
+                                }
+                            )
+                        )
+                    }
+                )
+            )
+        )
+    }
+)
+@ api_view(["GET"])
 def edu_get(req):
     with connection.cursor() as cursor:
         cursor.execute(
@@ -576,6 +719,7 @@ def getProgram(req):
                 user=user['id'], id=req.query_params['program_id'])
         else:
             objs = UniversityProgram.objects.filter(user=user['id'])
+
         print(objs)
         program = UniversityProgramSerial(objs, many=True)
         return Response(program.data, status=status.HTTP_200_OK)
@@ -609,16 +753,19 @@ def deelProgram(req):
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-@ api_view(['POST'])
+@swagger_auto_schema(
+    methods=['post'],
+    operation_summary="Add Course",
+    request_body=CourseSeriallizer,
+    responses={201: CourseSeriallizer, 400: 'Bad Request'},
+    security=[{"Bearer": []}]
+)
+@api_view(['POST'])
 def addCourse(req):
     print('_____________________add training_______________________')
     user = getUser(req)
     data = req.data.copy()
     data['user'] = user['id']
-    # if 'id' in data:
-    #     obj = Experience.objects.get(id=data['id'], user=user['id'])
-    #     serializer = ExperienceSeriallizer(obj, data=data, partial=True)
-    # else:
 
     serializer = CourseSeriallizer(data=data)
     if serializer.is_valid():
@@ -627,6 +774,22 @@ def addCourse(req):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@swagger_auto_schema(
+    methods=['get'],
+    operation_summary="Get a course by ID",
+    manual_parameters=[
+        openapi.Parameter(
+            'course_id', openapi.IN_QUERY,
+            description="Course ID",
+            type=openapi.TYPE_INTEGER
+        )
+    ],
+    responses={
+        200: CourseSeriallizer(many=True),
+        204: 'No Course Found'
+    },
+    security=[{"Bearer": []}]
+)
 @ api_view(['GET'])
 def getCourseDetail(req):
     user = getUser(req)
@@ -643,7 +806,24 @@ def getCourseDetail(req):
         return Response({'msg': 'No Course Found'}, status=status.HTTP_204_NO_CONTENT)
 
 
-@ api_view(['DELETE'])
+@swagger_auto_schema(
+    methods=['delete'],
+    operation_summary="Delete a course",
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        required=['course_id'],
+        properties={
+            'course_id': openapi.Schema(type=openapi.TYPE_INTEGER, description='Course ID')
+        }
+    ),
+    responses={
+        200: openapi.Response(description='Course has been deleted'),
+        404: openapi.Response(description='Course record not found or does not belong to the user'),
+        500: openapi.Response(description='Internal Server Error')
+    },
+    security=[{"Bearer": []}]
+)
+@api_view(['DELETE'])
 def delcourse(req):
     user = getUser(req)
 
@@ -659,7 +839,14 @@ def delcourse(req):
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-@ api_view(['POST'])
+@swagger_auto_schema(
+    methods=['post'],
+    operation_summary="Add Course Lecture",
+    request_body=CourseLectureSeriallizer,
+    responses={201: CourseLectureSeriallizer, 400: 'Bad Request'},
+    security=[{"Bearer": []}]
+)
+@api_view(['POST'])
 def addCourseLecture(req):
     print('_____________________add Lecture_______________________')
     user = getUser(req)
@@ -674,6 +861,23 @@ def addCourseLecture(req):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@swagger_auto_schema(
+    methods=['delete'],
+    operation_summary="Delete a course",
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        required=['course_id'],
+        properties={
+            'course_id': openapi.Schema(type=openapi.TYPE_INTEGER, description='Course ID')
+        }
+    ),
+    responses={
+        204: openapi.Response(description='Course has been deleted'),
+        404: openapi.Response(description='Course record not found or does not belong to the user'),
+        500: openapi.Response(description='Internal Server Error')
+    },
+    security=[{"Bearer": []}]
+)
 @api_view(['DELETE'])
 def delCourse(request):
     user = request.user  # Assuming you're using Django Rest Framework's authentication
@@ -690,9 +894,28 @@ def delCourse(request):
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+@swagger_auto_schema(
+    methods=['post'],
+    operation_summary="Edit a course",
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'course_id': openapi.Schema(type=openapi.TYPE_INTEGER, description='Course ID'),
+            'title': openapi.Schema(type=openapi.TYPE_STRING, description='Course Title'),
+            'course_outcome': openapi.Schema(type=openapi.TYPE_STRING, description='Course Outcome'),
+            'course_contain': openapi.Schema(type=openapi.TYPE_STRING, description='Course Content'),
+            'course_thumbnil': openapi.Schema(type=openapi.TYPE_FILE, description='Course Thumbnail')
+        }
+    ),
+    responses={
+        200: openapi.Response(description='Course has been updated'),
+        404: openapi.Response(description='Course record not found or does not belong to the user'),
+        500: openapi.Response(description='Internal Server Error')
+    },
+    security=[{"Bearer": []}]
+)
 @api_view(['POST'])
 def editCourse(request):
-    print('___________________________')
     user = request.user
     course_id = request.data.get('course_id')
     try:
@@ -714,6 +937,18 @@ def editCourse(request):
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+@swagger_auto_schema(
+    methods=['get'],
+    operation_summary="Get a course by ID",
+    manual_parameters=[
+        openapi.Parameter(
+            'course_id', openapi.IN_QUERY,
+            description="Course ID",
+            type=openapi.TYPE_INTEGER
+        )
+    ],
+    responses={200: CourseLectureSeriallizer(many=True)}
+)
 @ api_view(['GET'])
 def getLectureDetail(req):
     user = getUser(req)
@@ -730,6 +965,18 @@ def getLectureDetail(req):
         return Response({'msg': 'No Lecture Found'}, status=status.HTTP_204_NO_CONTENT)
 
 
+@swagger_auto_schema(
+    methods=['get'],
+    operation_summary="Get a course by ID",
+    manual_parameters=[
+        openapi.Parameter(
+            'course_id', openapi.IN_QUERY,
+            description="Course ID",
+            type=openapi.TYPE_INTEGER
+        )
+    ],
+    responses={200: CourseLectureSeriallizer(many=True)}
+)
 @ api_view(['GET'])
 def getCourseVideo(req):
     user = getUser(req)
@@ -768,6 +1015,24 @@ def getCourseVideo(req):
 #         return Response({'msg': 'No Lecture Found'}, status=status.HTTP_204_NO_CONTENT)
 
 
+@swagger_auto_schema(
+    methods=['get'],
+    operation_summary="Get enrolled course video",
+    manual_parameters=[
+        openapi.Parameter('course_id', openapi.IN_QUERY,
+                          description="Course ID", type=openapi.TYPE_INTEGER),
+        openapi.Parameter('lecture_id', openapi.IN_QUERY,
+                          description="Lecture ID", type=openapi.TYPE_INTEGER)
+    ],
+    responses={
+        200: CourseLectureSeriallizer(many=True),
+        400: 'Course ID or Lecture ID not provided',
+        403: 'Not Enrolled in Course',
+        204: 'No Lecture Found',
+        500: 'Internal Server Error'
+    },
+    security=[{"Bearer": []}]
+)
 @api_view(['GET'])
 def getEnrolledCourseVideo(req):
     user = getUser(req)
@@ -795,6 +1060,7 @@ def getEnrolledCourseVideo(req):
         return Response({'msg': f'Error: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+@swagger_auto_schema(methods=['post'], responses={200: CourseLectureSeriallizer(many=True)})
 @api_view(['POST'])
 def edit_course_video(request):
     try:
@@ -816,6 +1082,7 @@ def edit_course_video(request):
         return Response({'msg': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+@swagger_auto_schema(methods=['get'], responses={200: CourseSeriallizer(many=True)})
 @ api_view(['GET'])
 def courselist(req):
     try:
@@ -830,6 +1097,7 @@ def courselist(req):
         return Response({'msg': 'No Course Found'}, status=status.HTTP_204_NO_CONTENT)
 
 
+@swagger_auto_schema(methods=['get'], responses={200: CourseSeriallizer(many=True)})
 @ api_view(['GET'])
 def getSingleCourseDetail(req):
 
@@ -846,261 +1114,235 @@ def getSingleCourseDetail(req):
         return Response({'msg': 'No Course Found'}, status=status.HTTP_204_NO_CONTENT)
 
 
-@ api_view(['GET'])
-def allSkill(req):
-    try:
-        obj = Skill.objects.all()
-        skills = SkillSeriallizer(obj, many=True)
-        return Response(skills.data, status=status.HTTP_200_OK)
-    except:
-        return Response({'message': 'No skill found.'}, status=status.HTTP_404_NOT_FOUND)
-
-
-@ api_view(['GET'])
-def allSkilladd(req):
-    categories = [
-        "Frontend Development",
-        "Backend Development",
-        "Full-Stack Development",
-        "API Development",
-        "Native App Development",
-        "Hybrid App Development",
-        "Data Analysis",
-        "Machine Learning",
-        "Big Data Analysis",
-        "Ethical Hacking",
-        "Network Security",
-        "Security Analysis",
-        "Cloud Computing",
-        "Version Control",
-        "Scrum",
-        "Kanban",
-        "Lean",
-        "Project Management",
-        "Continuous Integration/Continuous Deployment (CI/CD)",
-        "Infrastructure as Code (IaC)",
-        "Configuration Management",
-        "Python",
-        "JavaScript",
-        "Java",
-        "C#",
-        "C++",
-        "PHP",
-        "Ruby",
-        "Swift",
-        "Kotlin",
-        "Django",
-        "React",
-        "Angular",
-        "Vue.js",
-        "Node.js",
-        "Unity",
-        "TensorFlow",
-        "PyTorch",
-        "Print Design",
-        "Web Design",
-        "Branding & Logo Design",
-        "UX/UI Design Principles",
-        "Prototyping",
-        "User Research",
-        "Linear Editing",
-        "Motion Graphics",
-        "3D Modeling",
-        "3D Animation",
-        "Game Design",
-        "Game Programming",
-        "Game Art",
-        "Music Production",
-        "Content Writing",
-        "Copywriting",
-        "Editing & Proofreading",
-        "Coding Bootcamps",
-        "Coursera",
-        "Udemy",
-        "edX",
-        "Pluralsight",
-        "Codecademy",
-        "LinkedIn Learning",
-        "Webinars & Workshops",
-        "W3Schools",
-        "MDN Web Docs",
-        "Stack Overflow",
-        "Tutorialspoint",
-        "GeeksforGeeks"
-    ]
-    for x in categories:
-        skills = SkillSeriallizer(data={'name': x})
-        if skills.is_valid():
-            skills.save()
-    return Response(skills.data, status=status.HTTP_200_OK)
-    return Response({'message': 'No skill found.'}, status=status.HTTP_404_NOT_FOUND)
-
-
-@ api_view(['GET'])
-def getSkill(req):
-    user = getUser(req)
-    try:
-        objs = User_skill.objects.filter(user=user['id'])
-        skills = User_skillSerializer(objs, many=True)
-        return Response(skills.data, status=status.HTTP_200_OK)
-    except:
-        return Response({'msg': 'No skill Found'}, status=status.HTTP_204_NO_CONTENT)
-
-
-@ api_view(['POST'])
-def addSkill(req):
-    user = getUser(req)
-    data = req.data.dict()
-    data['user'] = user['id']
-    serializer = User_skillSerializer(data=data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@ api_view(['DELETE'])
-def delSkill(req):
-    user = getUser(req)
-    skill_id = req.data['skill_id']
-    try:
-        skill = User_skill.objects.get(skill=skill_id, user=user['id'])
-        skill.delete()
-        return Response({"message": "Skill has been deleted"}, status=status.HTTP_200_OK)
-    except User_skill.DoesNotExist:
-        return Response({"error": "Skill record not found or does not belong to the user"}, status=status.HTTP_404_NOT_FOUND)
-    except Exception as e:
-        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
-@ api_view(['GET'])
-def allSkill(req):
-    try:
-        obj = Skill.objects.all()
-        skills = SkillSeriallizer(obj, many=True)
-        return Response(skills.data, status=status.HTTP_200_OK)
-    except:
-        return Response({'message': 'No skill found.'}, status=status.HTTP_404_NOT_FOUND)
-
-
-@ api_view(['GET'])
-def allSkilladd(req):
-    categories = [
-        "Frontend Development",
-        "Backend Development",
-        "Full-Stack Development",
-        "API Development",
-        "Native App Development",
-        "Hybrid App Development",
-        "Data Analysis",
-        "Machine Learning",
-        "Big Data Analysis",
-        "Ethical Hacking",
-        "Network Security",
-        "Security Analysis",
-        "Cloud Computing",
-        "Version Control",
-        "Scrum",
-        "Kanban",
-        "Lean",
-        "Project Management",
-        "Continuous Integration/Continuous Deployment (CI/CD)",
-        "Infrastructure as Code (IaC)",
-        "Configuration Management",
-        "Python",
-        "JavaScript",
-        "Java",
-        "C#",
-        "C++",
-        "PHP",
-        "Ruby",
-        "Swift",
-        "Kotlin",
-        "Django",
-        "React",
-        "Angular",
-        "Vue.js",
-        "Node.js",
-        "Unity",
-        "TensorFlow",
-        "PyTorch",
-        "Print Design",
-        "Web Design",
-        "Branding & Logo Design",
-        "UX/UI Design Principles",
-        "Prototyping",
-        "User Research",
-        "Linear Editing",
-        "Motion Graphics",
-        "3D Modeling",
-        "3D Animation",
-        "Game Design",
-        "Game Programming",
-        "Game Art",
-        "Music Production",
-        "Content Writing",
-        "Copywriting",
-        "Editing & Proofreading",
-        "Coding Bootcamps",
-        "Coursera",
-        "Udemy",
-        "edX",
-        "Pluralsight",
-        "Codecademy",
-        "LinkedIn Learning",
-        "Webinars & Workshops",
-        "W3Schools",
-        "MDN Web Docs",
-        "Stack Overflow",
-        "Tutorialspoint",
-        "GeeksforGeeks"
-    ]
-    for x in categories:
-        skills = SkillSeriallizer(data={'name': x})
-        if skills.is_valid():
-            skills.save()
-    return Response(skills.data, status=status.HTTP_200_OK)
-    return Response({'message': 'No skill found.'}, status=status.HTTP_404_NOT_FOUND)
-
-
-@ api_view(['GET'])
-def getSkill(req):
-    user = getUser(req)
-    try:
-        objs = User_skill.objects.filter(user=user['id'])
-        skills = User_skillSerializer(objs, many=True)
-        return Response(skills.data, status=status.HTTP_200_OK)
-    except:
-        return Response({'msg': 'No skill Found'}, status=status.HTTP_204_NO_CONTENT)
-
-
-@ api_view(['POST'])
-def addSkill(req):
-    user = getUser(req)
-    data = req.data.dict()
-    data['user'] = user['id']
-    serializer = User_skillSerializer(data=data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@ api_view(['DELETE'])
-def delSkill(req):
-    user = getUser(req)
-    skill_id = req.data['skill_id']
-    try:
-        skill = User_skill.objects.get(skill=skill_id, user=user['id'])
-        skill.delete()
-        return Response({"message": "Skill has been deleted"}, status=status.HTTP_200_OK)
-    except User_skill.DoesNotExist:
-        return Response({"error": "Skill record not found or does not belong to the user"}, status=status.HTTP_404_NOT_FOUND)
-    except Exception as e:
-        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
+@swagger_auto_schema(methods=['get'], responses={200: SkillSeriallizer(many=True)})
 @api_view(['GET'])
+def allSkill(req):
+    try:
+        obj = Skill.objects.all()
+        skills = SkillSeriallizer(obj, many=True)
+        return Response(skills.data, status=status.HTTP_200_OK)
+    except:
+        return Response({'message': 'No skill found.'}, status=status.HTTP_404_NOT_FOUND)
+
+
+@swagger_auto_schema(methods=['get'], responses={200: User_skillSerializer(many=True)})
+@api_view(['GET'])
+def getSkill(req):
+    user = getUser(req)
+    try:
+        objs = User_skill.objects.filter(user=user['id'])
+        skills = User_skillSerializer(objs, many=True)
+        return Response(skills.data, status=status.HTTP_200_OK)
+    except:
+        return Response({'msg': 'No skill Found'}, status=status.HTTP_204_NO_CONTENT)
+
+
+@swagger_auto_schema(methods=['post'], request_body=User_skillSerializer, responses={201: User_skillSerializer})
+@api_view(['POST'])
+def addSkill(req):
+    user = getUser(req)
+    data = req.data.dict()
+    data['user'] = user['id']
+    serializer = User_skillSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@swagger_auto_schema(methods=['delete'], request_body=openapi.Schema(
+    type=openapi.TYPE_OBJECT,
+    properties={
+        'skill_id': openapi.Schema(type=openapi.TYPE_INTEGER, description='skill id'),
+    }
+), responses={200: openapi.Response(description='Skill has been deleted', schema=openapi.Schema(type=openapi.TYPE_OBJECT, properties={
+    'message': openapi.Schema(type=openapi.TYPE_STRING, description='message'),
+})),
+    404: openapi.Response(description='Skill record not found or does not belong to the user', schema=openapi.Schema(type=openapi.TYPE_OBJECT, properties={
+        'error': openapi.Schema(type=openapi.TYPE_STRING, description='error'),
+    })),
+    500: openapi.Response(description='Internal Server Error', schema=openapi.Schema(type=openapi.TYPE_OBJECT, properties={
+        'error': openapi.Schema(type=openapi.TYPE_STRING, description='error'),
+    })),
+})
+@api_view(['DELETE'])
+def delSkill(req):
+    user = getUser(req)
+    skill_id = req.data['skill_id']
+    try:
+        skill = User_skill.objects.get(skill=skill_id, user=user['id'])
+        skill.delete()
+        return Response({"message": "Skill has been deleted"}, status=status.HTTP_200_OK)
+    except User_skill.DoesNotExist:
+        return Response({"error": "Skill record not found or does not belong to the user"}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@swagger_auto_schema(methods=['get'], responses={200: SkillSeriallizer(many=True)})
+@api_view(['GET'])
+def allSkill(req):
+    try:
+        obj = Skill.objects.all()
+        skills = SkillSeriallizer(obj, many=True)
+        return Response(skills.data, status=status.HTTP_200_OK)
+    except Skill.DoesNotExist:
+        return Response({'message': 'No skill found.'}, status=status.HTTP_404_NOT_FOUND)
+
+
+@ api_view(['GET'])
+def allSkilladd(req):
+    categories = [
+        "Frontend Development",
+        "Backend Development",
+        "Full-Stack Development",
+        "API Development",
+        "Native App Development",
+        "Hybrid App Development",
+        "Data Analysis",
+        "Machine Learning",
+        "Big Data Analysis",
+        "Ethical Hacking",
+        "Network Security",
+        "Security Analysis",
+        "Cloud Computing",
+        "Version Control",
+        "Scrum",
+        "Kanban",
+        "Lean",
+        "Project Management",
+        "Continuous Integration/Continuous Deployment (CI/CD)",
+        "Infrastructure as Code (IaC)",
+        "Configuration Management",
+        "Python",
+        "JavaScript",
+        "Java",
+        "C#",
+        "C++",
+        "PHP",
+        "Ruby",
+        "Swift",
+        "Kotlin",
+        "Django",
+        "React",
+        "Angular",
+        "Vue.js",
+        "Node.js",
+        "Unity",
+        "TensorFlow",
+        "PyTorch",
+        "Print Design",
+        "Web Design",
+        "Branding & Logo Design",
+        "UX/UI Design Principles",
+        "Prototyping",
+        "User Research",
+        "Linear Editing",
+        "Motion Graphics",
+        "3D Modeling",
+        "3D Animation",
+        "Game Design",
+        "Game Programming",
+        "Game Art",
+        "Music Production",
+        "Content Writing",
+        "Copywriting",
+        "Editing & Proofreading",
+        "Coding Bootcamps",
+        "Coursera",
+        "Udemy",
+        "edX",
+        "Pluralsight",
+        "Codecademy",
+        "LinkedIn Learning",
+        "Webinars & Workshops",
+        "W3Schools",
+        "MDN Web Docs",
+        "Stack Overflow",
+        "Tutorialspoint",
+        "GeeksforGeeks"
+    ]
+    for x in categories:
+        skills = SkillSeriallizer(data={'name': x})
+        if skills.is_valid():
+            skills.save()
+    return Response(skills.data, status=status.HTTP_200_OK)
+    return Response({'message': 'No skill found.'}, status=status.HTTP_404_NOT_FOUND)
+
+
+@swagger_auto_schema(
+    methods=['get'],
+    operation_summary="Get skills of a user",
+    responses={200: User_skillSerializer(many=True)}
+)
+@ api_view(['GET'])
+def getSkill(req):
+    user = getUser(req)
+    try:
+        objs = User_skill.objects.filter(user=user['id'])
+        skills = User_skillSerializer(objs, many=True)
+        return Response(skills.data, status=status.HTTP_200_OK)
+    except:
+        return Response({'msg': 'No skill Found'}, status=status.HTTP_204_NO_CONTENT)
+
+
+@swagger_auto_schema(
+    methods=['post'],
+    operation_summary="Add a skill to a user",
+    request_body=User_skillSerializer,
+    responses={201: User_skillSerializer, 400: 'Bad Request'}
+)
+@ api_view(['POST'])
+def addSkill(req):
+    user = getUser(req)
+    data = req.data.dict()
+    data['user'] = user['id']
+    serializer = User_skillSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@swagger_auto_schema(
+    methods=['delete'],
+    operation_summary="Delete a skill",
+    manual_parameters=[
+        openapi.Parameter(
+            'skill_id', openapi.IN_QUERY,
+            description="Skill ID",
+            type=openapi.TYPE_INTEGER
+        )
+    ],
+    responses={200: openapi.Response(description="Skill has been deleted")}
+)
+@ api_view(['DELETE'])
+def delSkill(req):
+    user = getUser(req)
+    skill_id = req.data['skill_id']
+    try:
+        skill = User_skill.objects.get(skill=skill_id, user=user['id'])
+        skill.delete()
+        return Response({"message": "Skill has been deleted"}, status=status.HTTP_200_OK)
+    except User_skill.DoesNotExist:
+        return Response({"error": "Skill record not found or does not belong to the user"}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@swagger_auto_schema(
+    methods=['get'],
+    operation_summary="Get a course by ID",
+    manual_parameters=[
+        openapi.Parameter(
+            'course_id', openapi.IN_QUERY,
+            description="Course ID",
+            type=openapi.TYPE_INTEGER
+        )
+    ],
+    responses={200: openapi.Response(description="Course found")}
+)
+@ api_view(['GET'])
 def get_lectures(request):
     course_id = request.query_params.get('course_id')
     if not course_id:
@@ -1114,19 +1356,34 @@ def get_lectures(request):
         return Response({'error': 'Lectures not found'}, status=status.HTTP_404_NOT_FOUND)
 
 
+@swagger_auto_schema(
+    methods=['get'],
+    operation_summary="Get programs of students",
+    responses={200: openapi.Response(description="Programs of students found")}
+)
 @ api_view(['GET'])
 def getProgramStudent(req):
     with connection.cursor() as cursor:
         cursor.execute(
             f"select data_universityProgram.id,data_universityProgram.name, data_universityProgram.type , data_universityProgram.duration_year , data_universityProgram.duration_month , data_universityProgram.description , data_university.user_id, data_university.name , data_university.address from data_universityProgram , data_university where data_university.user_id = data_universityProgram.user_id")
         edus = cursor.fetchall()
-        print(edus)
         edus = [dict(zip(['id', 'name', 'type', 'duration_year', 'duration_month', 'description',
                      'university_id', 'university_name', 'university_address'], edu)) for edu in edus]
-        print(edus)
         return Response(edus, status=status.HTTP_200_OK)
 
 
+@swagger_auto_schema(
+    methods=['get'],
+    operation_summary="Get a course by ID",
+    manual_parameters=[
+        openapi.Parameter(
+            'course_id', openapi.IN_QUERY,
+            description="Course ID",
+            type=openapi.TYPE_INTEGER
+        )
+    ],
+    responses={200: CourseSeriallizer, 404: 'Course not found'}
+)
 @api_view(['GET'])
 def get_course_list_single(request):
     course_id = request.GET.get('course_id')
@@ -1142,7 +1399,6 @@ def get_course_list_single(request):
         response_data.append(course_data)
 
     return Response(response_data)
-
 
 # @api_view(['POST'])
 # def course_enroll(request):
@@ -1178,7 +1434,19 @@ def get_course_list_single(request):
 
 #     return Response({'enrolled': is_enrolled})
 
-
+@swagger_auto_schema(
+    methods=['post'],
+    operation_summary="Enroll in a course",
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'course_id': openapi.Schema(type=openapi.TYPE_INTEGER, description='Course ID')
+        }
+    ),
+    responses={201: 'Enrolled successfully.',
+               400: 'Bad Request', 404: 'Course not found'},
+    security=[{"Bearer": []}]
+)
 @api_view(['POST'])
 def course_enroll(request):
     # Use request.data to retrieve POST data
@@ -1199,6 +1467,20 @@ def course_enroll(request):
     return Response({'detail': 'Enrolled successfully.'}, status=status.HTTP_200_OK)
 
 
+@swagger_auto_schema(
+    methods=['get'],
+    operation_summary="Check if a user is enrolled in a course",
+    manual_parameters=[
+        openapi.Parameter(
+            'course_id', openapi.IN_QUERY,
+            description="Course ID",
+            type=openapi.TYPE_INTEGER
+        )
+    ],
+    responses={200: openapi.Schema(
+        type=openapi.TYPE_BOOLEAN, description='Enrollment status'), 404: 'Course not found'},
+    security=[{"Bearer": []}]
+)
 @api_view(['GET'])
 def check_enrollment(request):
     course_id = request.query_params.get('course_id')
@@ -1214,7 +1496,25 @@ def check_enrollment(request):
     return Response({'enrolled': is_enrolled}, status=status.HTTP_200_OK)
 
 
-@ api_view(['POST'])
+@swagger_auto_schema(
+    methods=['post'],
+    operation_summary="Get all enrolled users in a course",
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'role': openapi.Schema(type=openapi.TYPE_ARRAY, items=openapi.Schema(type=openapi.TYPE_STRING)),
+            'status': openapi.Schema(type=openapi.TYPE_ARRAY, items=openapi.Schema(type=openapi.TYPE_STRING)),
+            'sort_by': openapi.Schema(type=openapi.TYPE_STRING)
+        }
+    ),
+    responses={
+        200: UserListSerializer(many=True),
+        401: openapi.Response(description='Unauthorized user'),
+        204: openapi.Response(description='No User Found')
+    },
+    security=[{"Bearer": []}]
+)
+@api_view(['POST'])
 def allUsers(req):
     user = getUser(req)
     data = req.data.dict()
@@ -1232,7 +1532,23 @@ def allUsers(req):
         return Response({'msg': 'No User Found'}, status=status.HTTP_204_NO_CONTENT)
 
 
-@ api_view(['POST'])
+@swagger_auto_schema(
+    methods=['post'],
+    operation_summary="Edit User Status",
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'id': openapi.Schema(type=openapi.TYPE_INTEGER),
+            'status': openapi.Schema(type=openapi.TYPE_STRING)
+        }
+    ),
+    responses={
+        201: UserListSerializer(),
+        400: openapi.Response(description='Bad Request')
+    },
+    security=[{"Bearer": []}]
+)
+@api_view(['POST'])
 def editStatus(req):
     user = getUser(req)
     data = req.data.dict()
@@ -1244,6 +1560,19 @@ def editStatus(req):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@swagger_auto_schema(
+    methods=['get'],
+    operation_summary="Get all enrolled users in a course",
+    manual_parameters=[
+        openapi.Parameter(
+            'course_id', openapi.IN_QUERY,
+            description="Course ID",
+            type=openapi.TYPE_INTEGER
+        )
+    ],
+    responses={200: UserSerializer(many=True), 404: 'Course not found'},
+    security=[{"Bearer": []}]
+)
 @api_view(['GET'])
 def get_enrolled_users(request):
     course_id = request.GET.get('course_id')
@@ -1260,6 +1589,20 @@ def get_enrolled_users(request):
         return Response({"error": "Course not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
+@swagger_auto_schema(
+    methods=['delete'],
+    operation_summary="Ban a user from a course",
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'course_id': openapi.Schema(type=openapi.TYPE_INTEGER, description='Course ID'),
+            'user_id': openapi.Schema(type=openapi.TYPE_INTEGER, description='User ID')
+        }
+    ),
+    responses={204: 'User has been banned successfully.',
+               400: 'Bad Request', 404: 'Course not found'},
+    security=[{"Bearer": []}]
+)
 @api_view(['DELETE'])
 def ban_user_from_course(request):
     course_id = request.data.get('course_id')
@@ -1275,3 +1618,70 @@ def ban_user_from_course(request):
         return Response({"message": "User has been banned successfully."}, status=status.HTTP_204_NO_CONTENT)
     except Enrollment.DoesNotExist:
         return Response({"error": "Enrollment not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+@swagger_auto_schema(
+    methods=['post'],
+    operation_summary="Add or Edit University Program Session",
+    request_body=UniversityProgramSessionSerializer,
+    responses={201: UniversityProgramSessionSerializer, 400: 'Bad Request'},
+    security=[{"Bearer": []}]
+)
+@api_view(['POST'])
+def addEditSession(req):
+    print('addEditSession')
+    user = getUser(req)
+    data = req.data.dict()
+    if 'id' in data:
+        obj = UniversityProgramSession.objects.get(id=data['id'])
+        serializer = UniversityProgramSessionSerializer(
+            obj, data=data, partial=True)
+    else:
+        serializer = UniversityProgramSessionSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@swagger_auto_schema(
+    methods=['post'],
+    operation_summary="Apply to University",
+    request_body=ProgramApplicationSerializer,
+    responses={201: ProgramApplicationSerializer, 400: 'Bad Request'},
+    security=[{"Bearer": []}]
+)
+@api_view(['POST'])
+def applyUniversity(req):
+    user = getUser(req)
+    data = req.data.dict()
+    data['user'] = user['id']
+
+    serializer = ProgramApplicationSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@swagger_auto_schema(
+    methods=['get'],
+    operation_summary="Get University Application",
+    manual_parameters=[
+        openapi.Parameter(
+            'application_id', openapi.IN_PATH,
+            description="ID of the application",
+            type=openapi.TYPE_INTEGER
+        )
+    ],
+    responses={200: 'University Application Data', 404: 'Not Found'},
+    security=[{"Bearer": []}]
+)
+@api_view(['GET'])
+def unuiversityApplication(req, application_id):
+    try:
+        application = ProgramApplication.objects.get(id=application_id)
+        serializer = ProgramApplicationSerializer(application)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except ProgramApplication.DoesNotExist:
+        return Response({'detail': 'Application not found.'}, status=status.HTTP_404_NOT_FOUND)

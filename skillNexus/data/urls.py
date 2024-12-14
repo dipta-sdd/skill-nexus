@@ -4,6 +4,7 @@ from . import views  # Assuming your views are in views.py within the same direc
 urlpatterns = [
     path('', views.home, name='home'),
     path('login', views.login, name='login'),
+    path('logout', views.logout, name='logout'),
     path('signup', views.signup, name='signup'),
     path('profile', views.profile, name='profile'),
     path('profile2', views.profile2, name='profile2'),
@@ -15,7 +16,8 @@ urlpatterns = [
     path('programs', views.programs, name='programs'),
     path('users', views.users, name='users'),
     path('suspended', views.suspended, name='suspended'),
-    path('program', views.program, name='program'),
+    #     path('program', views.program, name='program'),
+    path('program', views.student_programs, name='student_programs'),
     path('lecture_up', views.lecture_up, name='lecture_up'),
     path('all_course_detail', views.all_course_detail, name='all_course_detail'),
     path('course_detail', views.course_detail, name='course_detail'),
@@ -30,4 +32,10 @@ urlpatterns = [
          name='student_view_lec_detail'),
     path('videoshow', views.videoshow, name='videoshow'),
     path('allvideoshow', views.allvideoshow, name='allvideoshow'),
+    path('university/program/<int:program_id>',
+         views.manageProgram, name='manageProgram'),
+    path('university/program/session/<int:session_id>',
+         views.university_session, name='university_session'),
+    path('student/my_programs', views.student_myprograms,
+         name='student_myprograms'),
 ]

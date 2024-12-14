@@ -123,6 +123,12 @@ class UniversityProgramSerial (serializers.ModelSerializer):
         fields = '__all__'
 
 
+class UniversityProgramSessionSerializer (serializers.ModelSerializer):
+    class Meta:
+        model = UniversityProgramSession
+        fields = '__all__'
+
+
 class CourseSeriallizer (serializers.ModelSerializer):
     class Meta:
         model = Course
@@ -150,4 +156,10 @@ class EnrollmentSeriallizer (serializers.ModelSerializer):
 class User_skillSerializer(serializers.ModelSerializer):
     class Meta:
         model = User_skill
+        fields = '__all__'
+
+
+class ProgramApplicationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProgramApplication
         fields = '__all__'

@@ -39,13 +39,17 @@
           <!-- theme switch -->
           <!-- theme switch -->
           <ul class="navbar-nav ms-1 mb-2 mb-lg-0">
-            <li class="nav-item logged-out d-none">
-              <a class="nav-link" href="/login" data="Link">Login</a>
-            </li>
-            <div class="profile-con ms-1 logged-in d-none">
+            
+            {% if user.is_authenticated %}
+            <div class="profile-con ms-1">
+              
+              {%  if user.profile_picture %}
+                <img src="/{{user.profile_picture}}" alt="profile pic" />
+              {% else %}
               <div class="icon">
                 <i class="fa-solid fa-user fa-xl" style="color: #00eeff"></i>
               </div>
+              {% endif %}
               <ul class="dropdown-menu bg-dar">
                 <li>
                   <a class="dropdown-item" href="/profile">Profile</a>
@@ -61,66 +65,89 @@
                 </li>
               </ul>
             </div>
+            {% else  %}
+            <li class="nav-item logged-out {% if user %}d-none{% endif %}">
+              <a class="nav-link" href="/login" data="Link">Login</a>
+            </li>
+            {% endif %}
+
           </ul>
         </div>
       </div>
     </nav>
 
   </div>
-  <div id="sidebar" class="h-100 transition_speed">
+<div id="sidebar" class="h-100 transition_speed">
     <ul class="list-unstyled components mb-5">
-      <li>
-        <a href="/"><span class="fa fa-home"></span> &nbsp Home</a>
-      </li>
-      <li class=" d-none logged-in">
-        <a href="/profile"><span class="fa fa-download"></span> &nbsp Profile</a>
-      </li>
-      <li class=" d-none u-Admin">
-        <a href="/manage_education"><span class="fa fa-graduation-cap"></span> &nbsp Educations</a>
-      </li>
-      <li class=" d-none u-Student">
-        <a href="/education"><span class="fa fa-graduation-cap"></span> &nbsp Educations</a>
-      </li>
-      <li class=" d-none u-Student">
-        <a href="/training"><span class="fa-solid fa-clipboard-list"></span> &nbsp Trainings</a>
-      </li>
-      <li class=" d-none u-Educator">
-        <a href="/create_course"><span class="fa-solid fa-book"></span> &nbsp Create Course</a>
-      </li>
-      <li class=" d-none u-Educator">
-        <a href="/all_course_detail"><span class="fa-solid fa-hammer"></span> &nbsp See Details</a>
-      </li>
-      <li class=" d-none u-Student">
-        <a href="/experience"><span class="fa-solid fa-briefcase "></span> &nbsp Experience</a>
-      </li>
-      <li class=" d-none u-Student">
-        <a href="/course_list"><span class="fa-solid fa-book"></span> &nbsp Course List</a>
-      </li>
+        <li>
+            <a href="/"><span class="fa fa-home"></span> &nbsp; Home</a>
+        </li>
 
-      <li class=" d-none u-Student">
-        <a href="/program"><span class="fa-solid fa-play"></span> &nbsp Program</a>
-      </li>
-      <li class=" d-none u-Student">
-        <a href="/my_skills"><span class="fa-solid fa-tools "></span> &nbsp Skills</a>
-      </li>
-      <li class=" d-none u-University">
-        <a href="/programs"><span class="fa-solid fa-wand-magic-sparkles"></span> &nbsp Programs</a>
-      </li>
-      <li class=" d-none u-Admin">
-        <a href="/users"><span class="fa-solid fa-user"></span> &nbsp Users</a>
-      </li>
+        {% if user.is_authenticated %} 
+            <li>
+                <a href="/profile"><span class="fa fa-download"></span> &nbsp; Profile</a>
+            </li>
 
-      <li>
-        <a href="#"><i class="fa-solid fa-headset"></i> &nbsp Support</a>
-      </li>
-      <li class="logged-in d-none  logout">
-        <a href="/logout"><span class="fa fa-sign-out mr-3 logout"></span> &nbsp Sign Out</a>
-      </li>
-      <li class="logged-out d-none">
-        <a href="/login"><span class="fa fa-sign-out mr-3"></span> &nbsp Sign In</a>
-      </li>
+            {% if user.role == 'Admin' %}
+                <li>
+                    <a href="/manage_education"><span class="fa fa-graduation-cap"></span> &nbsp; Educations</a>
+                </li>
+                <li>
+                    <a href="/users"><span class="fa-solid fa-user"></span> &nbsp; Users</a>
+                </li>
+            {% endif %}
+
+            {% if user.role == 'Student' %}
+                <li>
+                    <a href="/education"><span class="fa fa-graduation-cap"></span> &nbsp; Educations</a>
+                </li>
+                <li>
+                    <a href="/training"><span class="fa-solid fa-clipboard-list"></span> &nbsp; Trainings</a>
+                </li>
+                <li>
+                    <a href="/experience"><span class="fa-solid fa-briefcase"></span> &nbsp; Experience</a>
+                </li>
+                <li>
+                    <a href="/course_list"><span class="fa-solid fa-book"></span> &nbsp; Course List</a>
+                </li>
+                <li>
+                    <a href="/program"><span class="fa-solid fa-play"></span> &nbsp; Program</a>
+                </li>
+                <li>
+                    <a href="/my_skills"><span class="fa-solid fa-tools"></span> &nbsp; Skills</a>
+                </li>
+            {% endif %}
+
+            {% if user.role == 'Educator' %}
+                <li>
+                    <a href="/create_course"><span class="fa-solid fa-book"></span> &nbsp; Create Course</a>
+                </li>
+                <li>
+                    <a href="/all_course_detail"><span class="fa-solid fa-hammer"></span> &nbsp; See Details</a>
+                </li>
+            {% endif %}
+
+            {% if user.role == 'University' %}
+                <li>
+                    <a href="/programs"><span class="fa-solid fa-wand-magic-sparkles"></span> &nbsp; Programs</a>
+                </li>
+            {% endif %}
+
+            <li class="logout">
+                <a href="/logout"><span class="fa fa-sign-out mr-3 logout"></span> &nbsp; Sign Out</a>
+            </li>
+
+        {% else %}
+            <li>
+                <a href="/login"><span class="fa fa-sign-out mr-3"></span> &nbsp; Sign In</a>
+            </li>
+        {% endif %}
+
+        <li>
+            <a href="#"><i class="fa-solid fa-headset"></i> &nbsp; Support</a>
+        </li>
     </ul>
-  </div>
+</div>
   <div class="sidebar_btn">
     <i class="fa-solid fa-chevron-up fa-rotate-90 fa-2xl"></i>
   </div>

@@ -95,14 +95,14 @@ function on_page_load(reqs) {
   })
     .then(function (user) {
       localStorage.setItem("user", JSON.stringify(user));
-      $(".logged-in").removeClass("d-none");
-      $(`.u-${user.role}`).removeClass("d-none");
-      if (user.profile_picture) {
-        $("#nav_con .profile-con .icon").addClass("d-none");
-        $("#nav_con .profile-con").append(`
-          <img src="${apiLink + user.profile_picture}" alt="">
-        `);
-      }
+      // $(".logged-in").removeClass("d-none");
+      // $(`.u-${user.role}`).removeClass("d-none");
+      // if (user.profile_picture) {
+      //   $("#nav_con .profile-con .icon").addClass("d-none");
+      //   $("#nav_con .profile-con").append(`
+      //     <img src="${apiLink + user.profile_picture}" alt="">
+      //   `);
+      // }
       // check requierd user type
       if (reqs == "auth") {
         setTimeout(() => {
@@ -156,7 +156,7 @@ $(".logout").click(function (e) {
   deleteCookie("token");
   localStorage.removeItem("user");
 
-  location.replace("/login");
+  location.replace("/logout");
 });
 
 // hide loader
@@ -364,3 +364,46 @@ $(`#sidebar ul li`).each(function () {
     $(this).addClass("active");
   }
 });
+function labelErrors(selector, e) {
+  $(selector).each(function () {
+    if (e[$(this).attr("name")]) {
+      $(this).addClass("is-invalid");
+      $(this).next("small.text-danger").text(e[$(this).attr("name")]);
+    } else {
+      $(this).removeClass("is-invalid");
+      $(this).next("small.text-danger").text();
+    }
+  });
+}
+
+function collectData(selector) {
+  let data = {};
+  $(selector).each(function () {
+    const name = $(this).attr("name");
+    const type = $(this).attr("type");
+
+    if (type === "file") {
+      // Handle file inputs
+      const files = $(this).prop("files");
+      if (files.length > 0) {
+        data[name] = files; // Save the FileList object
+      } else {
+        data[name] = null; // No file selected
+      }
+    } else {
+      // Handle other inputs
+      data[name] = $(this).val();
+    }
+  });
+
+  // Add CSRF token if needed
+  data["csrfmiddlewaretoken"] = getCookie("csrftoken");
+
+  return data;
+}
+
+function loadData(selector, data) {
+  $(selector).each(function () {
+    $(this).val(data[$(this).attr("name")]);
+  });
+}

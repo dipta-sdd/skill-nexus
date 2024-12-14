@@ -102,9 +102,11 @@
                 </div>
 
                 <div class="ms-auto">
+                    {% if user.role == "Student" or user.role == "Freelancer" %}
                     <button type="button" class="btn btn-outline-primary ms-auto me-0">
                         Download CV
                     </button>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -287,7 +289,7 @@
     <script src="{% static 'js/profile.js' %}"></script>
     <script>
     $(document).ready(function() {
-        on_page_load(['Admin', 'Student', 'Educator', 'University', 'Freelancer', 'Employer']);
+        on_page_load();
     });
     </script>
 </body>

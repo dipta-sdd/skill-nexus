@@ -43,6 +43,7 @@ $("#btn_login").click(function (e) {
       // console.log(response);
       showToast(response.message, "info");
       createCookie("token", response.access_token, 3);
+      // window.location.href = "/";
       location.replace("/profile");
     },
     error: function (e) {

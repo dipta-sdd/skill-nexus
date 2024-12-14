@@ -1,7 +1,8 @@
-.program-con span.name{
+.program-con a.name{
     font-size: 1.2em;
     font-weight: 600;
     text-transform: uppercase;
+    text-decoration: none;
 }
 .program-con span.type{
     font-size: 1em;

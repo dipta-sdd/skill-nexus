@@ -5,13 +5,13 @@
 }
 .profile-pic{
     display: inline-block;
-    padding: 2px;
-    border: 2px solid;
-    border-radius: 10px;
-    background-color: #dbdbdb;
+    padding: 4px;
+    border: 1px solid var(--bs-body-color);
+    border-radius: 5px;
+    background-color: var(--bs-body-bg);
     overflow: hidden;
-    height: 200px;
-    width: 200px;
+    /* height: 200px; */
+    /* width: 200px; */
     min-width: 200px;
     position: relative;
 }
@@ -23,6 +23,7 @@
 .profile-pic img{
     width: 200px;
     height: auto;
+    border-radius: 5px;
 }
 b.flex-grow-1 {
     font-size: 1.4rem;
@@ -53,4 +54,8 @@ b.flex-grow-1 {
 /* cropper width fix */
 .cropper-bg{
     width: 99%!important;
+}
+.input-group-text {
+
+    min-width: 7rem;
 }

@@ -219,7 +219,7 @@ $(document).ready(function () {
       },
       error: function (err) {
         res = err.responseJSON;
-        $(".personal-details").html(`
+        $(".personal-details").html(`+
         <div class="col-lg-6">
           <div class="input-group mb-3">
             <span class="input-group-text">Father's Name</span>
