@@ -5,3 +5,4 @@
 /data/migrations/
 /data/__pycache__
 db.sqlite3
+/skillNexus/db.sqlite3

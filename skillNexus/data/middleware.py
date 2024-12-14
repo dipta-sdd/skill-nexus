@@ -9,13 +9,20 @@ class JWTAuthenticationMiddleware:
     def __call__(self, request):
         # Check for the JWT token in the cookie
         token = request.COOKIES.get('token')
+
         if token:
             try:
                 # Authenticate the token
                 jwt_auth = JWTAuthentication()
+                #  get current headers
+                headers = jwt_auth.get_header(request)
+                # token not added
+                if not headers:
+                    # added to header from cokkie
+                    request.META['HTTP_AUTHORIZATION'] = f"Bearer {token}"
                 user, _ = jwt_auth.authenticate(request)
-
                 # Log the user in using Django's authentication system
+                print(user)
                 if user:
                     login(request, user)
             except Exception as e:

@@ -276,7 +276,7 @@ border: none;
 ================================== */
 
 .breadcrumb {
-    margin: 0px;
+    margin: 2px;
     padding: 4px;
 }
 .breadcrumb a{
@@ -296,7 +296,7 @@ border: none;
 
 .my-row{
     margin: 8px 0.5px;
-    padding: 10px;
+    padding: 12px;
 }
 
 

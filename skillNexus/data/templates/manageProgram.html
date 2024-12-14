@@ -292,39 +292,39 @@
 
 
       <!-- Metrics and Insights Section -->
-      <div class="col-lg-4 ps-lg-2">
-        <div class="card  my-row rounded-0  mybg">
-          <div class="card-body">
-            <h3 class="card-title my-color">Enrollment Metrics</h3>
-            <p class="my-color">Total Enrollments: <strong>{{ program.total_enrollments }}</strong></p>
-            <p class="my-color">Current Applications:</p>
-            <ul class="my-color">
-              <li>Pending: {{ program.pending_applications }}</li>
-              <li>Approved: {{ program.approved_applications }}</li>
-              <li>Rejected: {{ program.rejected_applications }}</li>
-            </ul>
+      <!-- Charts -->
+      <div class="col-12 row my-row my-0 py-0" >
+
+        <div class="col-lg-6 px-0 mb-2 pe-lg-2">
+          <div class="card  rounded-0  mybg">
+            <div class="card-body">
+              <h3 class="card-title my-color"> </h3>
+              <canvas id=""></canvas>
+            </div>
           </div>
         </div>
-
-        <!-- Charts -->
-        <div class="card  my-row rounded-0  mybg">
-          <div class="card-body">
-            <h3 class="card-title my-color">Enrollment Trends</h3>
-            <canvas id="enrollmentTrends"></canvas>
+        <div class="col-lg-6 px-0">
+          <div class="card  rounded-0  mybg">
+            <div class="card-body">
+              <h3 class="card-title my-color"> </h3>
+              <canvas id=""></canvas>
+            </div>
           </div>
         </div>
-
-        <div class="card  my-row rounded-0  mybg">
-          <div class="card-body">
-            <h3 class="card-title my-color">Student Demographics</h3>
-            <canvas id="demographicsPie"></canvas>
+        <div class="col-lg-6 px-0 mb-2 pe-lg-2">
+          <div class="card  rounded-0  mybg">
+            <div class="card-body">
+              <h3 class="card-title my-color"> </h3>
+              <canvas id=""></canvas>
+            </div>
           </div>
         </div>
-
-        <div class="card  my-row rounded-0  mybg">
-          <div class="card-body">
-            <h3 class="card-title my-color">Application Statuses</h3>
-            <canvas id="applicationStatusBar"></canvas>
+        <div class="col-lg-6 px-0 mb-2 ">
+          <div class="card  rounded-0  mybg">
+            <div class="card-body">
+              <h3 class="card-title my-color"> </h3>
+              <canvas id=""></canvas>
+            </div>
           </div>
         </div>
       </div>
@@ -352,7 +352,7 @@
       $('.application-view').click(function (e) { 
         e.preventDefault();
         $(this).addClass('loading');
-        
+
       });
     });
   </script>
