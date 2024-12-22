@@ -42,7 +42,7 @@ urlpatterns = [
     path('admin/users', views.allUsers),
     path('admin/user/status', views.editStatus),
     path('student/university/apply', views.applyUniversity),
-    path('university/application/<int:application_id>',
+    path('university/program/application/<int:application_id>',
          views.unuiversityApplication),
 
 

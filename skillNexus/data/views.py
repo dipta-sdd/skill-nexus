@@ -77,9 +77,32 @@ def training(request):
     return render(request, 'training.php')
 
 
-def programs(request):
-
-    return render(request, 'programs.php')
+def university_programs(request):
+    user = getUser(request)
+    students = run_raw_sql(""" SELECT 
+    data_programapplication.id as application_id ,
+    data_user.first_name || ' ' || data_user.last_name as student_name ,
+    data_user.id as student_id , 
+    data_user.email ,
+    data_user.mobile ,
+    data_user.profile_picture,
+    data_user.country,
+    data_universityprogram.name as program_name,
+    data_programapplication.status as status,
+    data_universityprogramsession.session_name as session_name,
+    data_programapplication.comment as comment,
+    data_programapplication.created_at,
+    data_programapplication.updated_at
+    FROM data_programapplication 
+    LEFT JOIN data_user 
+    ON data_programapplication.user_id = data_user.id
+    LEFT JOIN data_universityprogramsession 
+    ON data_programapplication.session_id = data_universityprogramsession.id
+    LEFT JOIN data_universityprogram 
+    ON data_universityprogramsession.program_id = data_universityprogram.id
+    WHERE data_universityprogram.user_id = %s 
+    ORDER BY data_programapplication.updated_at DESC""", (user['id'],))
+    return render(request, 'university_programs.php', {'applicants': students})
 
 
 def users(request):
@@ -89,11 +112,6 @@ def users(request):
 
 def suspended(request):
     return render(request, 'sus.html')
-
-
-def program(request):  # Assuming you want to display a specific program
-
-    return render(request, 'program.php')
 
 
 def lecture_up(request):
@@ -162,6 +180,7 @@ def manageProgram(request, program_id):
     data_user.first_name || ' ' || data_user.last_name as student_name ,
     data_user.id as student_id , 
     data_user.email ,
+    data_user.mobile ,
     data_user.profile_picture,
     data_user.country,
     data_programapplication.status as status,
@@ -176,13 +195,34 @@ def manageProgram(request, program_id):
     ON data_programapplication.session_id = data_universityprogramsession.id
     WHERE data_universityprogramsession.program_id = %s 
     ORDER BY data_programapplication.updated_at DESC""", (program_id,))
+
     return render(request, 'manageProgram.html', {'program': program.data, 'sessions': sessions.data, 'applicants': students})
 
 
 def university_session(request, session_id):
     session = run_raw_sql(
         "SELECT data_universityprogramsession.* , data_universityprogram.name as program_name FROM data_universityprogramsession LEFT JOIN data_universityprogram ON data_universityprogramsession.program_id = data_universityprogram.id WHERE data_universityprogramsession.id = %s", (session_id,))
-    return render(request, 'university_session.html', {'session': session[0]})
+    students = run_raw_sql(""" SELECT 
+    data_programapplication.id as application_id ,
+    data_user.first_name || ' ' || data_user.last_name as student_name ,
+    data_user.id as student_id , 
+    data_user.email ,
+    data_user.mobile ,
+    data_user.profile_picture,
+    data_user.country,
+    data_programapplication.status as status,
+    data_universityprogramsession.session_name as session_name,
+    data_programapplication.comment as comment,
+    data_programapplication.created_at,
+    data_programapplication.updated_at
+    FROM data_programapplication 
+    LEFT JOIN data_user 
+    ON data_programapplication.user_id = data_user.id
+    LEFT JOIN data_universityprogramsession 
+    ON data_programapplication.session_id = data_universityprogramsession.id
+    WHERE data_programapplication.session_id = %s 
+    ORDER BY data_programapplication.updated_at DESC""", (session_id,))
+    return render(request, 'university_session.html', {'session': session[0], 'applicants': students})
 
 
 def student_programs(request):
@@ -211,6 +251,7 @@ def student_programs(request):
             ON data_universityprogram.user_id = data_university.user_id 
             WHERE data_universityprogramsession.admission_end_date > date('now')"""
     else:
+
         sql = """SELECT 
             data_universityprogramsession.session_name , 
             data_universityprogramsession.id, 
@@ -223,23 +264,23 @@ def student_programs(request):
             data_universityprogram.duration_year , 
             data_universityprogram.duration_month , 
             data_university.name as university ,
-            CASE WHEN data_universityprogramsession.admission_start_date <= date('now')
+            CASE WHEN data_universityprogramsession.admission_start_date >= date('now')
                 THEN 'upcoming' ELSE 
                 CASE WHEN data_universityprogramsession.admission_end_date >= date('now')
                     THEN 'ongoing' ELSE 'completed' END END as status,
             data_user.id as applied
             FROM data_universityprogramsession 
-            LEFT JOIN data_universityprogram 
-            ON data_universityprogramsession.program_id = data_universityprogram.id 
-            LEFT JOIN data_university 
-            ON data_universityprogram.user_id = data_university.user_id 
+            INNER JOIN data_universityprogram 
+                ON data_universityprogramsession.program_id = data_universityprogram.id 
+            INNER JOIN data_university 
+                ON data_universityprogram.user_id = data_university.user_id 
             LEFT JOIN  data_programapplication 
-                ON data_programapplication.session_id = data_universityprogramsession.id
-            LEFT JOIN  data_user 
-                ON data_programapplication.user_id = data_user.id AND data_user.id = %s
-            WHERE data_universityprogramsession.admission_end_date > date('now')""" % (user['id'],)
+                ON ( data_programapplication.session_id = data_universityprogramsession.id and data_programapplication.user_id = %s )
+            LEFT JOIN  data_user
+                ON  data_programapplication.user_id = data_user.id
+            WHERE data_universityprogramsession.admission_end_date > date('now')"""
     sessions = run_raw_sql(
-        sql,)
+        sql, (user['id'], ))
 
     return render(request, 'student_programs.html', {'programs': sessions})
 
@@ -257,16 +298,13 @@ def student_myprograms(request):
         data_universityprogramsession.id, 
         data_universityprogramsession.start_date, 
         data_universityprogramsession.end_date , 
-        data_universityprogramsession.admission_start_date, 
-        data_universityprogramsession.admission_end_date , 
         data_universityprogram.name as program_name, 
         data_universityprogram.duration_year , 
         data_universityprogram.duration_month , 
+        data_universityprogram.type , 
         data_university.name as university ,
-        CASE WHEN data_universityprogramsession.admission_start_date <= date('now')
-            THEN 'upcoming' ELSE 
-            CASE WHEN data_universityprogramsession.admission_end_date >= date('now')
-                THEN 'ongoing' ELSE 'completed' END END as status
+        data_programapplication.status,
+        data_programapplication.comment
         FROM data_universityprogramsession 
         LEFT JOIN data_universityprogram 
         ON data_universityprogramsession.program_id = data_universityprogram.id 

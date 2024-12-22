@@ -194,7 +194,8 @@
         </div>
         <!-- main body-->
     </div>
-    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+   
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
     <script src="{% static 'js/script.js' %}"></script>
     <script>

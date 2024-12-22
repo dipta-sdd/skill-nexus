@@ -29,3 +29,7 @@
 .program-con hr{
     margin-top: 10px;
 }
+
+td{
+    text-transform: capitalize;
+}

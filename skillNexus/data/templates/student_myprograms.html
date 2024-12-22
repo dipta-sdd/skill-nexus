@@ -50,12 +50,25 @@
           </div>
           <div class="card-body m-0 p-0 bg-transparent">
             {% for program in programs %}
-            <div class="card  my-row rounded-0  mybg">
+            <div class="card  my-row rounded-0  mybg pb-0">
               <div class="card-header" style="margin: -10px -10px 0 -10px">
 
                 <div class="d-flex justify-content-between">
-                  <h3 class="card-title mb-0">{{program.program_name}} <small>({{program.session_name}})</small></h3>
-                  <!-- <button class="btn btn-primary ms-2 rounded-0" type="button">Apply Now</button> -->
+                  <h3 class="card-title mb-0">
+                    {{program.program_name}} <small>({{program.session_name}})</small>
+                    <br>
+                    <span class="text-secondary" style="font-size:.9rem; display: block; "><i class="fa-solid fa-graduation-cap"></i> Type:
+                      {{program.type}}
+                    </span>
+                  </h3>
+                  {% if program.status == 'Pending' %}
+                    <span class="badge bg-info" style="height:max-content">{{ program.status }}</span>
+                  {% elif program.status == 'Accepted' %}
+                    <span class="badge bg-success" style="height:max-content">{{ program.status }}</span>
+                  {% elif program.status == 'Rejected' %}
+                    <span class="badge bg-danger" style="height:max-content">{{ program.status }}</span>
+                  {% endif %}
+
                 </div>
               </div>
               <div class="card-body row py-2">
@@ -63,16 +76,22 @@
                 <span class="card-text col-12"><i class="fa-solid fa-building-columns"></i> University:
                   {{program.university}}
                 </span>
+                
                 <span class="card-text col-lg-6"><i class="fa-solid fa-calendar-days"></i> Duration:
                   {{program.duration_year}}
                   {% if program.duration_year > 1 %} years {% else %} year {% endif %}
                   {% if program.duration_month > 0 %} and {{ program.duration_month }}
                   {% if program.duration_month > 1 %} months {% else %} month {% endif %}
                   {% endif %} </span>
-                <span class="card-text col-lg-6"><i class="fa-solid fa-calendar-check"></i> Admission Date:
-                  {{program.admission_start_date}} -
-                  {{program.admission_end_date}}
+                <span class="card-text col-lg-6"><i class="fa-solid fa-calendar-check"></i> 
+                  {{program.start_date}} -
+                  {{program.end_date}}
                 </span>
+                {% if program.comment %}
+                <hr class="my-1">
+                  <span class="card-text col-12"><i class="fa-regular fa-comment"></i> {{program.comment}} </span>
+                {% endif %}
+                
               </div>
             </div>
             {% endfor %}
@@ -97,9 +116,11 @@
 
 
   </div>
+  
   </div>
 
-  <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+ 
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 
   <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

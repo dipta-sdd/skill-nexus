@@ -19,31 +19,6 @@ function toObj(arr) {
   return obj;
 }
 
-function showToast(msg, bgc) {
-  $(".toast-container").append(`<div
-          class="toast align-items-center text-bg-${bgc} border-0"
-          role="alert"
-          aria-live="assertive"
-          aria-atomic="true"
-        >
-          <div class="d-flex">
-            <div class="toast-body">${msg}</div>
-            <button
-              type="button"
-              class="btn-close btn-close-white me-2 m-auto"
-              data-bs-dismiss="toast"
-              aria-label="Close"
-            ></button>
-          </div>
-        </div>`);
-  var newToast = $(".toast:last");
-  newToast.toast("show");
-  setTimeout(function () {
-    newToast.toast("hide");
-    newToast.remove(); // Remove the toast from the DOM after hiding
-  }, 3000);
-}
-
 // Function to create a cookie
 function createCookie(name, value, days) {
   let expires = "";
@@ -85,7 +60,10 @@ function on_page_load(reqs) {
   $(`#sidebar ul li`).each(function () {
     a = this.child;
   });
-
+  if (Array.isArray(reqs) && reqs.length) {
+  } else {
+    hide_loader();
+  }
   $.ajax({
     type: "GET",
     url: apiLink + "/api/current_user",
@@ -104,6 +82,7 @@ function on_page_load(reqs) {
       //   `);
       // }
       // check requierd user type
+
       if (reqs == "auth") {
         setTimeout(() => {
           if (user.status == "Suspended") {
@@ -112,7 +91,7 @@ function on_page_load(reqs) {
           location.replace("/profile");
           hide_loader();
         }, 10);
-      } else if (reqs.length) {
+      } else if (Array.isArray(reqs) && reqs.length) {
         if (user.status == "Suspended") {
           location.replace("/suspended");
         }
@@ -136,9 +115,9 @@ function on_page_load(reqs) {
     .catch(function (error) {
       //console.log(error);
       localStorage.removeItem("user");
-      $(".logged-out").removeClass("d-none");
+      // $(".logged-out").removeClass("d-none");
       hide_loader();
-      if (reqs.length && reqs != "auth") {
+      if (Array.isArray(reqs) && reqs.length && reqs != "auth") {
         location.replace("/login");
       }
     });
@@ -162,7 +141,7 @@ $(".logout").click(function (e) {
 // hide loader
 function hide_loader() {
   // $(".loader-container").delay(10000).addClass("d-none");
-  $(".loader-container").delay(1000).fadeOut(100);
+  $(".loader-container").delay(10).fadeOut(100);
 }
 
 //profile pic click
@@ -349,6 +328,7 @@ $("#body").append(`
       </div>
     </footer>
 `);
+
 $(`#sidebar ul li`).each(function () {
   a = $(this).find("a");
   let linkUrl = a.attr("href");
@@ -407,3 +387,91 @@ function loadData(selector, data) {
     $(this).val(data[$(this).attr("name")]);
   });
 }
+
+function formatDateTime(datetimeString) {
+  // Parse the input datetime string
+  const date = new Date(datetimeString);
+
+  // Extract components
+  let hours = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const isPM = hours >= 12;
+
+  // Convert hours to 12-hour format
+  hours = hours % 12 || 12;
+
+  // Format the date string
+  const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
+
+  // Combine date and time
+  return `${formattedDate} ${hours}:${minutes} ${isPM ? "PM" : "AM"}`;
+}
+
+function showToast(
+  message,
+  color = "primary",
+  autohide = true,
+  timeout = 5000
+) {
+  $(".toast-container").append(`
+    <div class="toast align-items-center text-bg-${color} border-0 "
+        role="alert"
+        aria-live="assertive"
+        data-bs-animation="true"
+        data-bs-autohide="${autohide}"
+        aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                ${message}
+            </div>
+            <button
+                type="button"
+                class="btn-close btn-close-white me-2 m-auto"
+                data-bs-dismiss="toast"
+                aria-label="Close" 
+            ></button>
+        </div>
+    </div>
+    `);
+  if (autohide) {
+    var newToast = $(".toast:last");
+
+    newToast.show(1000);
+    setTimeout(function () {
+      newToast.hide(1000);
+    }, timeout);
+  }
+}
+$(document).on("click", ".toast button.btn-close", function (e) {
+  e.preventDefault();
+  $(this).closest(".toast").hide(1000);
+});
+
+// oldToastld toast
+
+// function showToast(msg, bgc) {
+//   $(".toast-container").append(`<div
+//           class="toast align-items-center text-bg-${bgc} border-0"
+//           role="alert"
+//           aria-live="assertive"
+//           aria-atomic="true"
+//         >
+//           <div class="d-flex">
+//             <div class="toast-body">${msg}</div>
+//             <button
+//               type="button"
+//               class="btn-close btn-close-white me-2 m-auto"
+//               data-bs-dismiss="toast"
+//               aria-label="Close"
+//             ></button>
+//           </div>
+//         </div>`);
+//   var newToast = $(".toast:last");
+//   newToast.toast("show");
+//   setTimeout(function () {
+//     newToast.toast("hide");
+//     newToast.remove(); // Remove the toast from the DOM after hiding
+//   }, 3000);
+// }

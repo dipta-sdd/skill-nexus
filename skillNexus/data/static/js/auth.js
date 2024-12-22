@@ -44,7 +44,8 @@ $("#btn_login").click(function (e) {
       showToast(response.message, "info");
       createCookie("token", response.access_token, 3);
       // window.location.href = "/";
-      location.replace("/profile");
+      if (response.user.is_superuser) window.location.href = "/admin/";
+      else window.location.href = "/profile";
     },
     error: function (e) {
       const data = e.responseJSON;

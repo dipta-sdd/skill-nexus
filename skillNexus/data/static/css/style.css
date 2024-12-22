@@ -276,7 +276,7 @@ border: none;
 ================================== */
 
 .breadcrumb {
-    margin: 2px;
+    margin: 0px;
     padding: 4px;
 }
 .breadcrumb a{
@@ -405,6 +405,16 @@ input:checked+.slider:before {
 /* fix toast conatainer */
 .toast-container{
     position: fixed !important;
+    & .text-bg-primary {
+        background-image: linear-gradient(to right, #3581bf, #392f57);
+    }
+    & .text-bg-success {
+        background-image: linear-gradient(to right, #2fb631, #2f5757);
+    }
+
+    & .text-bg-danger {
+        background-image: linear-gradient(to right, #b62f2f, #572f2f);
+    }
 }
 
 .btn-outline{
@@ -423,7 +433,9 @@ input:checked+.slider:before {
             --bs-btn-disabled-border-color: var(--color);
             --bs-gradient: none;
 }
-
+.btn {
+    border-radius: 0;
+}
 .input-group-text{
     padding: .175rem 0.75rem;
     border-radius: 0;

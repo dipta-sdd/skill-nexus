@@ -114,7 +114,7 @@ def login_view(request):
                 refresh = RefreshToken.for_user(user)
                 access_token = str(refresh.access_token)
 
-                return Response({"message": "Login successful", "access_token": access_token}, status=status.HTTP_200_OK)
+                return Response({"message": "Login successful", "access_token": access_token, "user": user_data}, status=status.HTTP_200_OK)
             else:
                 return Response({"message": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -1677,11 +1677,79 @@ def applyUniversity(req):
     responses={200: 'University Application Data', 404: 'Not Found'},
     security=[{"Bearer": []}]
 )
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def unuiversityApplication(req, application_id):
-    try:
-        application = ProgramApplication.objects.get(id=application_id)
-        serializer = ProgramApplicationSerializer(application)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    except ProgramApplication.DoesNotExist:
-        return Response({'detail': 'Application not found.'}, status=status.HTTP_404_NOT_FOUND)
+    if req.method == 'GET':
+        try:
+            data = run_raw_sql(
+                """
+                SELECT
+                data_programapplication.id as application_id ,
+                data_user.first_name || ' ' || data_user.last_name as student_name ,
+                data_user.id as student_id ,
+                data_user.email ,
+                data_user.mobile ,
+                data_user.profile_picture,
+                data_user.country,
+                data_programapplication.status as status,
+                data_universityprogramsession.session_name as session_name,
+                data_programapplication.comment as comment,
+                data_programapplication.created_at,
+                data_programapplication.updated_at,
+                CASE WHEN data_universityprogramsession.admission_end_date >= date('now') THEN true ELSE false END as editable
+                FROM data_programapplication
+                LEFT JOIN data_user
+                ON data_programapplication.user_id = data_user.id
+                LEFT JOIN data_universityprogramsession
+                ON data_programapplication.session_id = data_universityprogramsession.id
+                WHERE data_programapplication.id = %s
+                """,
+                [application_id]
+            )
+
+            educations = run_raw_sql(
+                """
+                SELECT
+                data_education.id as education_id,
+                data_edu_level.name as level,
+                data_edu_degree.name as degree,
+                data_edu_group_or_major.name as major,
+                data_education.institute,
+                data_education.passing_year,
+                data_education.result_type,
+                data_education.result,
+                data_education.gpa,
+                data_education.gpa_scale
+                FROM data_education
+                LEFT JOIN data_edu_level
+                ON data_education.level_id = data_edu_level.id
+                LEFT JOIN data_edu_degree
+                ON data_education.degree_id = data_edu_degree.id
+                LEFT JOIN data_edu_group_or_major
+                ON data_education.group_id = data_edu_group_or_major.id
+                WHERE data_education.user_id = %s
+                ORDER BY data_education.level_id
+                """,
+                [data[0]['student_id']]
+            )
+            trainings = Training.objects.filter(user=data[0]['student_id'])
+            experiences = Experience.objects.filter(user=data[0]['student_id'])
+            trainings = TrainingSerializer(trainings, many=True).data
+            experiences = ExperienceSeriallizer(experiences, many=True).data
+            return Response({'applicant': data[0], 'educations': educations, 'trainings': trainings, 'experiences': experiences}, status=status.HTTP_200_OK)
+        except ProgramApplication.DoesNotExist:
+            return Response({'detail': 'Application not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+    elif req.method == 'POST':
+        try:
+            obj = ProgramApplication.objects.get(id=application_id)
+            serializer = ProgramApplicationSerializer(
+                obj, data=req.data, partial=True)
+        except ProgramApplication.DoesNotExist:
+            return Response({'detail': 'Application not found.'}, status=status.HTTP_404_NOT_FOUND)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    return Response({'detail': 'Method not allowed.'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)

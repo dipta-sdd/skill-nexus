@@ -111,7 +111,7 @@
                     <a href="/course_list"><span class="fa-solid fa-book"></span> &nbsp; Course List</a>
                 </li>
                 <li>
-                    <a href="/program"><span class="fa-solid fa-play"></span> &nbsp; Program</a>
+                    <a href="/programs"><span class="fa-solid fa-play"></span> &nbsp; Program</a>
                 </li>
                 <li>
                     <a href="/my_skills"><span class="fa-solid fa-tools"></span> &nbsp; Skills</a>
@@ -129,7 +129,7 @@
 
             {% if user.role == 'University' %}
                 <li>
-                    <a href="/programs"><span class="fa-solid fa-wand-magic-sparkles"></span> &nbsp; Programs</a>
+                    <a href="/university/programs"><span class="fa-solid fa-wand-magic-sparkles"></span> &nbsp; Programs</a>
                 </li>
             {% endif %}
 

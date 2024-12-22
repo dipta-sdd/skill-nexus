@@ -36,7 +36,7 @@
           <nav aria-label="breadcrumb" class="mybg-t breadcrumb">
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="/">Home</a></li>
-              <li class="breadcrumb-item" aria-current="page">Login</li>
+              <li class="breadcrumb-item" aria-current="page">Programs</li>
             </ol>
           </nav>
             <!-- Modal -->
@@ -113,7 +113,7 @@
           <!-- main body-->
           <!-- main body-->
           <!-- main body-->
-          <!-- main body-->
+          
           <div class="row my-color mybg my-row">
             <div class="d-flex">
               <h2 class="flex-grow-1 mb-2 text-primary"><b>Programs & Courses</b></h2>
@@ -170,20 +170,94 @@
                   </div>
                 </div>
               </div>
+           
             </div>
-          </div>
-          <!-- main body-->
-          <!-- main body-->
-          <!-- main body-->
-          <!-- main body-->
-          <!-- main body-->
-          <!-- main body-->
-          <!-- main body-->
+          
+          
+
+            <div class="card my-row rounded-0 mybg m-0 border-0 mb-2">
+              <div class="card-header" style="margin: -10px -10px 0 -10px">
+                <div class="d-flex justify-content-between">
+                  <h3 class="card-title mb-0">Applicant List</h3>
+      
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="applicantSearch"
+                    placeholder="Search applicants..."
+                  />
+                </div>
+                <div class="table-responsive">
+                  <table class="table table-striped table-bordered">
+                    <thead>
+                      <tr class="my-color">
+                        <th>#</th>
+                        <!-- <th></th> -->
+                        <th>Student Name</th>
+                        <th>Student ID</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Country</th>
+                        <th>Status</th>
+                        <th>Program Name</th>
+                        <th>Session Name</th>
+                        <th>Comment</th>
+                        <th>Submission Date</th>
+                        <th>Last Updated</th>
+                      </tr>
+                    </thead>
+                    <tbody id="applicantsTable">
+                      {% for applicant in applicants %}
+                      <tr class="my-color">
+                        <td>{{ forloop.counter }}</td>
+                        <!-- <td><img src="/{{ applicant.profile_picture }}" alt=" Picture" width="50" height="50"></td> -->
+                        <td>{{ applicant.student_name }}</td>
+                        <td>{{ applicant.student_id }}</td>
+                        <td style="text-transform: unset">{{ applicant.email }}</td>
+                        <td>{{ applicant.mobile }}</td>
+                        <td>{{ applicant.country }}</td>
+                        <td>
+                          <span
+                            class="badge {% if applicant.status == 'Approved' %}bg-success{% elif applicant.status == 'Rejected' %}bg-danger{% else %}bg-warning{% endif %}"
+                          >
+                            {{ applicant.status }}
+                          </span>
+                        </td>
+                        <td>{{ applicant.program_name }}</td>
+                        <td>{{ applicant.session_name }}</td>
+                        <td>{{ applicant.comment }}</td>
+                        <td>{{ applicant.created_at|date:"Y-m-d h:i A" }}</td>
+                        <td>{{ applicant.updated_at|date:"Y-m-d h:i A" }}</td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+                <!-- Pagination controls would go here -->
+              </div>
+            </div>
+
+
+
+          <!-- end main body-->
+          <!-- end main body-->
+          <!-- end main body-->
+          <!-- end main body-->
+          </div> 
+          <!-- end main body-->
+          <!-- end main body-->
+          <!-- end main body-->
+          <!-- end main body-->
         </div>
       </div>
     </div>
 
-    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+   
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 
     <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
     <script src="{% static 'js/script.js' %}"></script>
@@ -191,6 +265,22 @@
     <script>
       $(document).ready(function () {
         on_page_load(['University']);
+        $(document).on('keyup', '#applicantSearch', function (e) {
+          var search = $(this).val().toLowerCase();
+          const rows = $('#applicantsTable tr');
+          $.each(rows, function (indexInArray, row) { 
+             const cells = $(row).find('td');
+             if (cells.eq(1).text().toLowerCase().includes(search)) $(row).show();
+             else if (cells.eq(2).text().toLowerCase().includes(search)) $(row).show();
+             else if (cells.eq(3).text().toLowerCase().includes(search)) $(row).show();
+             else if (cells.eq(4).text().toLowerCase().includes(search)) $(row).show();
+             else if (cells.eq(5).text().toLowerCase().includes(search)) $(row).show();
+             else if (cells.eq(6).text().toLowerCase().includes(search)) $(row).show();
+             else if (cells.eq(7).text().toLowerCase().includes(search)) $(row).show();
+             else if (cells.eq(8).text().toLowerCase().includes(search)) $(row).show();
+             else $(row).hide();
+          });
+        });
       });
     </script>
   </body>

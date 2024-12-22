@@ -209,23 +209,23 @@ class Enrollment(models.Model):
         unique_together = ('user', 'course')
 
 
-class Jobs(models.Model):
-    employer = models.ForeignKey(
-        User, on_delete=models.CASCADE, limit_choices_to={'role': 'Employer'})
-    title = models.CharField(max_length=255)
-    description = models.TextField()
-    skills_required = models.ManyToManyField(
-        Skill)  # Many-to-many for multiple skills
-    experience_required = models.PositiveIntegerField(
-        help_text="Experience required in years")
-    price = models.DecimalField(
-        max_digits=10, decimal_places=2)  # Added price field
-    deadline = models.DateTimeField()  # Added deadline field
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+# class Jobs(models.Model):
+#     employer = models.ForeignKey(
+#         User, on_delete=models.CASCADE, limit_choices_to={'role': 'Employer'})
+#     title = models.CharField(max_length=255)
+#     description = models.TextField()
+#     skills_required = models.ManyToManyField(
+#         Skill)  # Many-to-many for multiple skills
+#     experience_required = models.PositiveIntegerField(
+#         help_text="Experience required in years")
+#     price = models.DecimalField(
+#         max_digits=10, decimal_places=2)  # Added price field
+#     deadline = models.DateTimeField()  # Added deadline field
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return f"{self.title} - {self.employer.company.name}"
+#     def __str__(self):
+#         return f"{self.title} - {self.employer.company.name}"
 
 
 class UniversityProgram(models.Model):
@@ -295,3 +295,72 @@ class ProgramApplication(models.Model):
 
     class Meta:
         unique_together = ('session', 'user')
+
+
+# freelencing
+
+class Payment(models.Model):
+    sender = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='sent_payments')
+    receiver = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='received_payments')
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    transaction_id = models.CharField(max_length=255)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+
+class Job(models.Model):
+    employer = models.ForeignKey(
+        User, on_delete=models.CASCADE, limit_choices_to={'role': 'Employer'})
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    skill = models.ManyToManyField(Skill)
+    location = models.CharField(
+        max_length=255, default="Remote")  # For remote jobs
+    project_duration = models.CharField(
+        max_length=255)  # E.g., "2 weeks", "1 month"
+
+    freelencer = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='freelancer_jobs', null=True, blank=True),
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    deadline = models.DateTimeField()
+    payment = models.ForeignKey(
+        Payment, on_delete=models.SET_NULL, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.title} - {self.employer.company.name}"
+
+
+class Message(models.Model):
+    sender = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='sent_messages')
+    receiver = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='received_messages')
+    # Optional, for job-related messages
+    job = models.ForeignKey(
+        Job, on_delete=models.CASCADE, null=True, blank=True)
+    content = models.TextField()
+
+    timestamp = models.DateTimeField(auto_now_add=True)
+    seen = models.DateTimeField(null=True, blank=True)
+
+
+class JobOffer(models.Model):
+    job = models.ForeignKey(Job, on_delete=models.CASCADE)
+    employer = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='employer_offers')
+    freelancer = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='freelancer_offers')
+    proposed_rate = models.DecimalField(max_digits=10, decimal_places=2)
+    proposal = models.TextField(blank=True)
+    proposed_deadline = models.DateTimeField()
+    status = models.CharField(max_length=50, choices=[
+        ('Pending', 'Pending'),
+        ('Accepted', 'Accepted'),
+        ('Rejected', 'Rejected')
+    ], default='Pending')
+
+    class Meta:
+        unique_together = ('job', 'freelancer')
