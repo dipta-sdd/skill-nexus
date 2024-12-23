@@ -1,0 +1,122 @@
+[
+  {
+    "model": "data.company",
+    "pk": 100,  
+    "fields": {
+      "user": 100, 
+      "name": "Harris Industries",
+      "industry": "Manufacturing",
+      "description": "A leading manufacturer of industrial equipment.",
+      "address": "123 Industrial Way, Anytown USA",
+      "url": "https://www.harrisindustries.com"
+    }
+  },
+  {
+    "model": "data.company",
+    "pk": 101,  
+    "fields": {
+      "user": 101,
+      "name": "Tech Solutions Inc.",
+      "industry": "Technology",
+      "description": "Providing innovative software solutions for businesses.",
+      "address": "456 Elm St, Toronto, Canada",
+      "url": "https://www.techsolutions.ca"
+    }
+  },
+  {
+    "model": "data.company",
+    "pk": 102,  
+    "fields": {
+      "user": 102,
+      "name": "Wilson Consulting",
+      "industry": "Consulting",
+      "description": "Helping businesses achieve their goals through strategic consulting.",
+      "address": "789 Oak Ave, London, UK",
+      "url": "https://www.wilsonconsulting.co.uk"
+    }
+  },
+  {
+    "model": "data.company",
+    "pk": 103,  
+    "fields": {
+      "user": 103,
+      "name": "Brown Marketing Group",
+      "industry": "Marketing",
+      "description": "A full-service marketing agency specializing in digital marketing.",
+      "address": "101 Pine St, Sydney, Australia",
+      "url": "https://www.brownmarketing.com.au"
+    }
+  },
+  {
+    "model": "data.company",
+    "pk": 104,  
+    "fields": {
+      "user": 104,
+      "name": "Davis Startups",
+      "industry": "Technology",
+      "description": "Incubating and launching innovative startups.",
+      "address": "222 Maple Lane, Berlin, Germany",
+      "url": "https://www.davisstartups.de"
+    }
+  },
+  {
+    "model": "data.company",
+    "pk": 105,  
+    "fields": {
+      "user": 105,
+      "name": "Garcia Enterprises",
+      "industry": "Finance",
+      "description": "Providing financial services to individuals and businesses.",
+      "address": "333 Cedar Rd, Paris, France",
+      "url": "https://www.garciaenterprises.fr"
+    }
+  },
+  {
+    "model": "data.company",
+    "pk": 106,  
+    "fields": {
+      "user": 106,
+      "name": "Miller Manufacturing",
+      "industry": "Manufacturing",
+      "description": "Producing high-quality goods for various industries.",
+      "address": "444 Birch St, Rio de Janeiro, Brazil",
+      "url": "https://www.millermanufacturing.com.br"
+    }
+  },
+  {
+    "model": "data.company",
+    "pk": 107,  
+    "fields": {
+      "user": 107,
+      "name": "Martinez Innovations",
+      "industry": "Technology",
+      "description": "Developing cutting-edge technology solutions.",
+      "address": "555 Oak Ave, Tokyo, Japan",
+      "url": "https://www.martinezinnovations.jp"
+    }
+  },
+  {
+    "model": "data.company",
+    "pk": 108,  
+    "fields": {
+      "user": 108,
+      "name": "Taylor Consulting Group",
+      "industry": "Consulting",
+      "description": "Offering expert consulting services to businesses of all sizes.",
+      "address": "666 Pine St, Mumbai, India",
+      "url": "https://www.taylorconsulting.in"
+    }
+  },
+  {
+    "model": "data.company",
+    "pk": 109,  
+    "fields": {
+      "user": 109,
+      "name": "Anderson Ventures",
+      "industry": "Venture Capital",
+      "description": "Investing in promising startups and entrepreneurs.",
+      "address": "777 Cedar Rd, Cape Town, South Africa",
+      "url": "https://www.andersonventures.co.za"
+    }
+  }
+]

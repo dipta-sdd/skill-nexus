@@ -38,104 +38,17 @@
 
 
     <!-- Modal -->
-    <div class="modal fade modal-lg" id="programSessionModal" tabindex="-1" aria-labelledby="programSessionModalLabel"
+    <div class="modal fade modal-lg" id="" tabindex="-1" aria-labelledby="programSessionModalLabel"
       aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <form id="programSessionForm">
             <div class="modal-header">
-              <h5 class="modal-title" id="programSessionModalLabel">Add Program Session</h5>
+              <h5 class="modal-title" id="">Add Program Session</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              <div class="row">
-                <div class="col-lg-6">
-                  <div class="mb-3">
-                    <label for="program" class="form-label">Program</label>
-                    <select id="program" name="program" class="form-control" required>
-                      <option selected value="{{ program.id }}">{{ program.name }}</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="mb-3">
-                    <label for="session_name" class="form-label">Session Name</label>
-                    <input type="text" class="form-control" id="session_name" name="session_name" maxlength="200"
-                      required>
-                  </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="mb-3">
-                    <label for="start_date" class="form-label">Start Date</label>
-                    <input type="date" class="form-control" id="start_date" name="start_date" required>
-                  </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="mb-3">
-                    <label for="end_date" class="form-label">End Date</label>
-                    <input type="date" class="form-control" id="end_date" name="end_date" required>
-                  </div>
-                </div>
-                <div class="col-lg-12">
-                  <div class="mb-3">
-                    <label for="requirements" class="form-label">Requirements</label>
-                    <textarea class="form-control" id="requirements" name="requirements" rows="3"></textarea>
-                  </div>
-                </div>
-                <div class="col-lg-12">
-                  <div class="mb-3">
-                    <label for="syllabus" class="form-label">Syllabus</label>
-                    <input type="file" class="form-control" id="syllabus" name="syllabus" accept="application/pdf">
-                  </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="mb-3">
-                    <label for="admission_start_date" class="form-label">Admission Start Date</label>
-                    <input type="date" class="form-control" id="admission_start_date" name="admission_start_date"
-                      required>
-                  </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="mb-3">
-                    <label for="admission_end_date" class="form-label">Admission End Date</label>
-                    <input type="date" class="form-control" id="admission_end_date" name="admission_end_date" required>
-                  </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="mb-3">
-                    <label for="fee" class="form-label">Fee</label>
-                    <input type="number" class="form-control" id="fee" name="fee" step="0.01" max="9999999999.99">
-                  </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="mb-3">
-                    <label for="admission_fee" class="form-label">Admission Fee</label>
-                    <input type="number" class="form-control" name="admission_fee" id="admission_fee" step="0.01"
-                      max="9999999999.99" required>
-                  </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="mb-3">
-                    <label for="registration_fee" class="form-label">Registration Fee</label>
-                    <input type="number" class="form-control" id="registration_fee" name="registration_fee" step="0.01"
-                      max="9999999999.99">
-                  </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="mb-3">
-                    <label for="application_fee" class="form-label">Application Fee</label>
-                    <input type="number" class="form-control" id="application_fee" name="application_fee" step="0.01"
-                      max="9999999999.99" required>
-                  </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="mb-3">
-                    <label for="other_fees" class="form-label">Other Fees</label>
-                    <input type="number" class="form-control" id="other_fees" name="other_fees" step="0.01"
-                      max="9999999999.99">
-                  </div>
-                </div>
-              </div>
+
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

@@ -1,0 +1,557 @@
+[
+  
+  {
+    "model": "data.job",
+    "pk": 1,
+    "fields": {
+      "employer": 100,
+      "title": "Frontend Developer (React)",
+      "description": "Build user interfaces for our new web application using React.js.",
+      "skill": [1, 23, 32], 
+      "location": "Remote",
+      "project_duration": "3 months",
+      "price": 5000.00,
+      "deadline": "2025-03-31T23:59:59Z",
+    "created_at": "2024-12-24T10:00:00Z",
+    "updated_at": "2024-12-24T10:00:00Z"
+    }
+  },
+  {
+    "model": "data.job",
+    "pk": 2,
+    "fields": {
+      "employer": 100,
+      "title": "Backend Developer (Python/Django)",
+      "description": "Develop and maintain the backend of our web application using Python and Django.",
+      "skill": [2, 22, 31],
+      "location": "Remote",
+      "project_duration": "4 months",
+      "price": 8000.00,
+      "deadline": "2025-04-30T23:59:59Z",
+    "created_at": "2024-12-24T10:00:00Z",
+    "updated_at": "2024-12-24T10:00:00Z"
+    }
+  },
+  {
+    "model": "data.job",
+    "pk": 3,
+    "fields": {
+      "employer": 100,
+      "title": "UI/UX Designer",
+      "description": "Design user interfaces and user experiences for our mobile app.",
+      "skill": [71, 42, 43],
+      "location": "Remote",
+      "project_duration": "2 months",
+      "price": 3000.00,
+      "deadline": "2025-02-28T23:59:59Z",
+    "created_at": "2024-12-24T10:00:00Z",
+    "updated_at": "2024-12-24T10:00:00Z"
+    }
+  },
+
+  
+  {
+    "model": "data.job",
+    "pk": 4,
+    "fields": {
+      "employer": 101,
+      "title": "Mobile App Developer (Android)",
+      "description": "Develop a native Android app for our online store.",
+      "skill": [5, 24, 30], 
+      "location": "Remote",
+      "project_duration": "5 months",
+      "price": 12000.00,
+      "deadline": "2025-05-31T23:59:59Z",
+    "created_at": "2024-12-24T10:00:00Z",
+    "updated_at": "2024-12-24T10:00:00Z"
+    }
+  },
+  {
+    "model": "data.job",
+    "pk": 5,
+    "fields": {
+      "employer": 101,
+      "title": "Data Analyst",
+      "description": "Analyze customer data to identify trends and insights.",
+      "skill": [7, 78, 22], 
+      "location": "Remote",
+      "project_duration": "3 months",
+      "price": 6000.00,
+      "deadline": "2025-03-31T23:59:59Z",
+    "created_at": "2024-12-24T10:00:00Z",
+    "updated_at": "2024-12-24T10:00:00Z"
+    }
+  },
+  {
+    "model": "data.job",
+    "pk": 6,
+    "fields": {
+      "employer": 101,
+      "title": "Digital Marketing Specialist",
+      "description": "Develop and execute digital marketing campaigns to increase brand awareness.",
+      "skill": [73, 74, 75], 
+      "location": "Remote",
+      "project_duration": "4 months",
+      "price": 7000.00,
+      "deadline": "2025-04-30T23:59:59Z",
+    "created_at": "2024-12-24T10:00:00Z",
+    "updated_at": "2024-12-24T10:00:00Z"
+    }
+  },
+  {
+    "model": "data.job",
+    "pk": 7,
+    "fields": {
+      "employer": 101,
+      "title": "Content Writer",
+      "description": "Create engaging and informative content for our website and blog.",
+      "skill": [53, 54, 55], 
+      "location": "Remote",
+      "project_duration": "2 months",
+      "price": 4000.00,
+      "deadline": "2025-02-28T23:59:59Z",
+    "created_at": "2024-12-24T10:00:00Z",
+    "updated_at": "2024-12-24T10:00:00Z"
+    }
+  },
+
+  
+  {
+    "model": "data.job",
+    "pk": 8,
+    "fields": {
+      "employer": 102,
+      "title": "Full-Stack Developer",
+      "description": "Build and maintain web applications using a variety of technologies.",
+      "skill": [3, 22, 23, 31], 
+      "location": "Remote",
+      "project_duration": "6 months",
+      "price": 15000.00,
+      "deadline": "2025-06-30T23:59:59Z",
+    "created_at": "2024-12-24T10:00:00Z",
+    "updated_at": "2024-12-24T10:00:00Z"
+    }
+  },
+  {
+    "model": "data.job",
+    "pk": 9,
+    "fields": {
+      "employer": 102,
+      "title": "Project Manager",
+      "description": "Manage software development projects, ensuring on-time and within budget delivery.",
+      "skill": [18, 80, 81], 
+      "location": "Remote",
+      "project_duration": "4 months",
+      "price": 9000.00,
+      "deadline": "2025-04-30T23:59:59Z",
+    "created_at": "2024-12-24T10:00:00Z",
+    "updated_at": "2024-12-24T10:00:00Z"
+    }
+  },
+  {
+    "model": "data.job",
+    "pk": 10,
+    "fields": {
+      "employer": 102,
+      "title": "Business Analyst",
+      "description": "Gather and analyze business requirements for software development projects.",
+      "skill": [79, 82, 83], 
+      "location": "Remote",
+      "project_duration": "3 months",
+      "price": 7000.00,
+      "deadline": "2025-03-31T23:59:59Z",
+    "created_at": "2024-12-24T10:00:00Z",
+    "updated_at": "2024-12-24T10:00:00Z"
+    }
+  },
+    
+  {
+    "model": "data.job",
+    "pk": 11,
+    "fields": {
+      "employer": 103,
+      "title": "UI/UX Designer",
+      "description": "Design user interfaces and user experiences for our mobile app.",
+      "skill": [71, 42, 43], 
+      "location": "Remote",
+      "project_duration": "2 months",
+      "price": 3000.00,
+      "deadline": "2025-02-28T23:59:59Z",
+    "created_at": "2024-12-24T10:00:00Z",
+    "updated_at": "2024-12-24T10:00:00Z"
+    }
+  },
+  {
+    "model": "data.job",
+    "pk": 12,
+    "fields": {
+      "employer": 103,
+      "title": "Mobile App Developer (Android)",
+      "description": "Develop a native Android app for our online store.",
+      "skill": [5, 24, 30], 
+      "location": "Remote",
+      "project_duration": "5 months",
+      "price": 8000.00,
+      "deadline": "2025-05-31T23:59:59Z",
+    "created_at": "2024-12-24T10:00:00Z",
+    "updated_at": "2024-12-24T10:00:00Z"
+    }
+  },
+  {
+    "model": "data.job",
+    "pk": 13,
+    "fields": {
+      "employer": 103,
+      "title": "Data Analyst",
+      "description": "Analyze customer data to identify trends and insights.",
+      "skill": [7, 78, 22], 
+      "location": "Remote",
+      "project_duration": "3 months",
+      "price": 6000.00,
+      "deadline": "2025-03-31T23:59:59Z",
+    "created_at": "2024-12-24T10:00:00Z",
+    "updated_at": "2024-12-24T10:00:00Z"
+    }
+  },
+  {
+    "model": "data.job",
+    "pk": 14,
+    "fields": {
+      "employer": 103,
+      "title": "Digital Marketing Specialist",
+      "description": "Develop and execute digital marketing campaigns to increase brand awareness.",
+      "skill": [73, 74, 75], 
+      "location": "Remote",
+      "project_duration": "4 months",
+      "price": 7000.00,
+      "deadline": "2025-04-30T23:59:59Z",
+    "created_at": "2024-12-24T10:00:00Z",
+    "updated_at": "2024-12-24T10:00:00Z"
+    }
+  },
+   {
+    "model": "data.job",
+    "pk": 31,  
+    "fields": {
+      "employer": 104,
+      "title": "Machine Learning Engineer",
+      "description": "Develop and implement machine learning models for our data analytics platform.",
+      "skill": [8, 22, 37],  
+      "location": "Remote",
+      "project_duration": "5 months",
+      "price": 12000.00,
+      "deadline": "2025-05-31T23:59:59Z",
+    "created_at": "2024-12-24T10:00:00Z",
+    "updated_at": "2024-12-24T10:00:00Z"
+    }
+  },
+  {
+    "model": "data.job",
+    "pk": 32,
+    "fields": {
+      "employer": 104,
+      "title": "Data Scientist",
+      "description": "Analyze large datasets to extract meaningful insights and build predictive models.",
+      "skill": [7, 8, 9], 
+      "location": "Remote",
+      "project_duration": "4 months",
+      "price": 10000.00,
+      "deadline": "2025-04-30T23:59:59Z",
+    "created_at": "2024-12-24T10:00:00Z",
+    "updated_at": "2024-12-24T10:00:00Z"
+    }
+  },
+  {
+    "model": "data.job",
+    "pk": 33,
+    "fields": {
+      "employer": 104,
+      "title": "Big Data Engineer",
+      "description": "Design and implement big data solutions using Hadoop and Spark.",
+      "skill": [9, 24, 13],  
+      "location": "Remote",
+      "project_duration": "6 months",
+      "price": 15000.00,
+      "deadline": "2025-06-30T23:59:59Z",
+    "created_at": "2024-12-24T10:00:00Z",
+    "updated_at": "2024-12-24T10:00:00Z"
+    }
+  },
+
+  
+  {
+    "model": "data.job",
+    "pk": 34,
+    "fields": {
+      "employer": 105,
+      "title": "Financial Analyst",
+      "description": "Analyze financial data and provide recommendations for investment strategies.",
+      "skill": [7, 79, 81], 
+      "location": "Remote",
+      "project_duration": "3 months",
+      "price": 8000.00,
+      "deadline": "2025-03-31T23:59:59Z",
+    "created_at": "2024-12-24T10:00:00Z",
+    "updated_at": "2024-12-24T10:00:00Z"
+    }
+  },
+  {
+    "model": "data.job",
+    "pk": 35,
+    "fields": {
+      "employer": 105,
+      "title": "Investment Analyst",
+      "description": "Research and evaluate investment opportunities in various sectors.",
+      "skill": [79, 83, 84],  
+      "location": "Remote",
+      "project_duration": "4 months",
+      "price": 10000.00,
+      "deadline": "2025-04-30T23:59:59Z",
+    "created_at": "2024-12-24T10:00:00Z",
+    "updated_at": "2024-12-24T10:00:00Z"
+    }
+  },
+  {
+    "model": "data.job",
+    "pk": 36,
+    "fields": {
+      "employer": 105,
+      "title": "Accountant",
+      "description": "Manage financial records and prepare financial reports.",
+      "skill": [79, 82, 85], 
+      "location": "Remote",
+      "project_duration": "2 months",
+      "price": 6000.00,
+      "deadline": "2025-02-28T23:59:59Z",
+    "created_at": "2024-12-24T10:00:00Z",
+    "updated_at": "2024-12-24T10:00:00Z"
+    }
+  },
+  {
+    "model": "data.job",
+    "pk": 37,
+    "fields": {
+      "employer": 105,
+      "title": "Tax Consultant",
+      "description": "Provide tax advice and prepare tax returns for individuals and businesses.",
+      "skill": [79, 81, 84], 
+      "location": "Remote",
+      "project_duration": "3 months",
+      "price": 7000.00,
+      "deadline": "2025-03-31T23:59:59Z",
+    "created_at": "2024-12-24T10:00:00Z",
+    "updated_at": "2024-12-24T10:00:00Z"
+    }
+  },
+
+  
+  {
+    "model": "data.job",
+    "pk": 38,
+    "fields": {
+      "employer": 106,
+      "title": "Mechanical Engineer",
+      "description": "Design and develop mechanical systems for our manufacturing plant.",
+      "skill": [47, 48, 26],  
+      "location": "Remote",
+      "project_duration": "6 months",
+      "price": 14000.00,
+      "deadline": "2025-06-30T23:59:59Z",
+    "created_at": "2024-12-24T10:00:00Z",
+    "updated_at": "2024-12-24T10:00:00Z"
+    }
+  },
+  {
+    "model": "data.job",
+    "pk": 39,
+    "fields": {
+      "employer": 106,
+      "title": "Electrical Engineer",
+      "description": "Design and implement electrical systems for our new product line.",
+      "skill": [21, 25, 19],  
+      "location": "Remote",
+      "project_duration": "5 months",
+      "price": 12000.00,
+      "deadline": "2025-05-31T23:59:59Z",
+    "created_at": "2024-12-24T10:00:00Z",
+    "updated_at": "2024-12-24T10:00:00Z"
+    }
+  },
+  {
+    "model": "data.job",
+    "pk": 40,
+    "fields": {
+      "employer": 106,
+      "title": "Quality Assurance Engineer",
+      "description": "Develop and execute test plans to ensure the quality of our products.",
+      "skill": [70, 83, 85],  
+      "location": "Remote",
+      "project_duration": "4 months",
+      "price": 9000.00,
+      "deadline": "2025-04-30T23:59:59Z",
+    "created_at": "2024-12-24T10:00:00Z",
+    "updated_at": "2024-12-24T10:00:00Z"
+    }
+  },
+  {
+    "model": "data.job",
+    "pk": 41, 
+    "fields": {
+      "employer": 107,
+      "title": "UX/UI Designer",
+      "description": "Design intuitive and user-friendly interfaces for our new mobile app.",
+      "skill": [71, 42, 43], 
+      "location": "Remote",
+      "project_duration": "3 months",
+      "price": 7000.00,
+      "deadline": "2025-03-31T23:59:59Z",
+    "created_at": "2024-12-24T10:00:00Z",
+    "updated_at": "2024-12-24T10:00:00Z"
+    }
+  },
+  {
+    "model": "data.job",
+    "pk": 42,
+    "fields": {
+      "employer": 107,
+      "title": "Frontend Developer (Vue.js)",
+      "description": "Develop and maintain the frontend of our web application using Vue.js.",
+      "skill": [1, 23, 34],  
+      "location": "Remote",
+      "project_duration": "4 months",
+      "price": 9000.00,
+      "deadline": "2025-04-30T23:59:59Z",
+    "created_at": "2024-12-24T10:00:00Z",
+    "updated_at": "2024-12-24T10:00:00Z"
+    }
+  },
+  {
+    "model": "data.job",
+    "pk": 43,
+    "fields": {
+      "employer": 107,
+      "title": "Backend Developer (Node.js)",
+      "description": "Build and maintain the backend of our web application using Node.js.",
+      "skill": [2, 23, 35],  
+      "location": "Remote",
+      "project_duration": "5 months",
+      "price": 11000.00,
+      "deadline": "2025-05-31T23:59:59Z",
+    "created_at": "2024-12-24T10:00:00Z",
+    "updated_at": "2024-12-24T10:00:00Z"
+    }
+  },
+  {
+    "model": "data.job",
+    "pk": 44,
+    "fields": {
+      "employer": 107,
+      "title": "Mobile App Developer (React Native)",
+      "description": "Develop a cross-platform mobile app using React Native.",
+      "skill": [5, 6, 23, 32], 
+      "location": "Remote",
+      "project_duration": "6 months",
+      "price": 14000.00,
+      "deadline": "2025-06-30T23:59:59Z",
+    "created_at": "2024-12-24T10:00:00Z",
+    "updated_at": "2024-12-24T10:00:00Z"
+    }
+  },
+  {
+    "model": "data.job",
+    "pk": 45,
+    "fields": {
+      "employer": 108,
+      "title": "Project Manager",
+      "description": "Manage and coordinate software development projects, ensuring timely delivery.",
+      "skill": [18, 80, 82],  
+      "location": "Remote",
+      "project_duration": "4 months",
+      "price": 9000.00,
+      "deadline": "2025-04-30T23:59:59Z",
+    "created_at": "2024-12-24T10:00:00Z",
+    "updated_at": "2024-12-24T10:00:00Z"
+    }
+  },
+  {
+    "model": "data.job",
+    "pk": 46,
+    "fields": {
+      "employer": 108,
+      "title": "Business Analyst",
+      "description": "Gather and analyze business requirements for software development projects.",
+      "skill": [79, 82, 83], 
+      "location": "Remote",
+      "project_duration": "3 months",
+      "price": 7000.00,
+      "deadline": "2025-03-31T23:59:59Z",
+    "created_at": "2024-12-24T10:00:00Z",
+    "updated_at": "2024-12-24T10:00:00Z"
+    }
+  },
+  {
+    "model": "data.job",
+    "pk": 47,
+    "fields": {
+      "employer": 108,
+      "title": "Software Tester",
+      "description": "Develop and execute test cases to ensure the quality of our software products.",
+      "skill": [70, 83, 85], 
+      "location": "Remote",
+      "project_duration": "2 months",
+      "price": 5000.00,
+      "deadline": "2025-02-28T23:59:59Z",
+    "created_at": "2024-12-24T10:00:00Z",
+    "updated_at": "2024-12-24T10:00:00Z"
+    }
+  },
+  {
+    "model": "data.job",
+    "pk": 48,
+    "fields": {
+      "employer": 109,
+      "title": "Investment Analyst",
+      "description": "Research and evaluate potential investment opportunities for our venture capital firm.",
+      "skill": [79, 81, 84], 
+      "location": "Remote",
+      "project_duration": "4 months",
+      "price": 10000.00,
+      "deadline": "2025-04-30T23:59:59Z",
+    "created_at": "2024-12-24T10:00:00Z",
+    "updated_at": "2024-12-24T10:00:00Z"
+    }
+  },
+  {
+    "model": "data.job",
+    "pk": 49,
+    "fields": {
+      "employer": 109,
+      "title": "Financial Analyst",
+      "description": "Analyze financial data and provide insights to support investment decisions.",
+      "skill": [7, 79, 83],  
+      "location": "Remote",
+      "project_duration": "3 months",
+      "price": 8000.00,
+      "deadline": "2025-03-31T23:59:59Z",
+    "created_at": "2024-12-24T10:00:00Z",
+    "updated_at": "2024-12-24T10:00:00Z"
+    }
+  },
+  {
+    "model": "data.job",
+    "pk": 50,
+    "fields": {
+      "employer": 109,
+      "title": "Marketing Specialist",
+      "description": "Develop and execute marketing campaigns to promote our portfolio companies.",
+      "skill": [73, 74, 76],  
+      "location": "Remote",
+      "project_duration": "5 months",
+      "price": 12000.00,
+      "deadline": "2025-05-31T23:59:59Z",
+    "created_at": "2024-12-24T10:00:00Z",
+    "updated_at": "2024-12-24T10:00:00Z"
+    }
+  }
+
+]

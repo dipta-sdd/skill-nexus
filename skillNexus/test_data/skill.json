@@ -1,0 +1,121 @@
+[
+  {
+    "model": "data.skill",
+    "pk": 69,
+    "fields": {
+      "name": "Agile Methodologies"
+    }
+  },
+  {
+    "model": "data.skill",
+    "pk": 70,
+    "fields": {
+      "name": "Software Testing"
+    }
+  },
+  {
+    "model": "data.skill",
+    "pk": 71,
+    "fields": {
+      "name": "UI/UX Design"
+    }
+  },
+  {
+    "model": "data.skill",
+    "pk": 72,
+    "fields": {
+      "name": "Graphic Design"
+    }
+  },
+  {
+    "model": "data.skill",
+    "pk": 73,
+    "fields": {
+      "name": "Digital Marketing"
+    }
+  },
+  {
+    "model": "data.skill",
+    "pk": 74,
+    "fields": {
+      "name": "Social Media Marketing"
+    }
+  },
+  {
+    "model": "data.skill",
+    "pk": 75,
+    "fields": {
+      "name": "Search Engine Optimization (SEO)"
+    }
+  },
+  {
+    "model": "data.skill",
+    "pk": 76,
+    "fields": {
+      "name": "Content Marketing"
+    }
+  },
+  {
+    "model": "data.skill",
+    "pk": 77,
+    "fields": {
+      "name": "Email Marketing"
+    }
+  },
+  {
+    "model": "data.skill",
+    "pk": 78,
+    "fields": {
+      "name": "Data Visualization"
+    }
+  },
+  {
+    "model": "data.skill",
+    "pk": 79,
+    "fields": {
+      "name": "Business Analysis"
+    }
+  },
+  {
+    "model": "data.skill",
+    "pk": 80,
+    "fields": {
+      "name": "Project Planning"
+    }
+  },
+  {
+    "model": "data.skill",
+    "pk": 81,
+    "fields": {
+      "name": "Risk Management"
+    }
+  },
+  {
+    "model": "data.skill",
+    "pk": 82,
+    "fields": {
+      "name": "Communication"
+    }
+  },
+  {
+    "model": "data.skill",
+    "pk": 83,
+    "fields": {
+      "name": "Problem-Solving"
+    }
+  },
+  {
+    "model": "data.skill",
+    "pk": 84,
+    "fields": {
+      "name": "Leadership"
+    }
+  },
+  {
+    "model": "data.skill",
+    "pk": 85,
+    "fields": {
+      "name": "Teamwork"
+    }
+  }
+]

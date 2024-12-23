@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views  # Assuming your views are in views.py within the same directory
+from . import jobs
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -39,4 +40,18 @@ urlpatterns = [
          views.university_session, name='university_session'),
     path('student/my_programs', views.student_myprograms,
          name='student_myprograms'),
+
+    # jobs
+    path('profile/jobs', jobs.profile_jobs, name='profile_jobs'),
+    path('jobs', jobs.jobs, name='jobs'),
+    path('job/<int:job_id>', jobs.job, name='job'),
+    path('employer/jobs', jobs.employer_jobs, name='employer_jobs'),
+    path('employer/job/<int:job_id>', jobs.employer_job, name='employer_job'),
+    path('employer/jobs/offers', jobs.employer_jobs_offers,
+         name='employer_jobs_offers'),
+    path('employer/job/<int:job_id>/offers', jobs.employer_job_offers,
+         name='employer_jobs_offers'),
+    path('employer/job/offer/<int:offer_id>', jobs.employer_job_offer,
+         name='employer_job_offer'),
+
 ]

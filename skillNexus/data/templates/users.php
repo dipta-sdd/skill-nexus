@@ -66,9 +66,9 @@
                             <input value="Student" type="checkbox" class="mx-2 role" autocomplete="off" /> <label
                                 class="my-color">
                                 Student </label>
-                            <input value="Frelencer" type="checkbox" class="mx-2 role" autocomplete="off" /> <label
+                            <input value="Freelancer" type="checkbox" class="mx-2 role" autocomplete="off" /> <label
                                 class="my-color">
-                                Frelencer </label>
+                                Freelancer </label>
                             <input value="Educator" type="checkbox" class="mx-2 role" autocomplete="off" /> <label
                                 class="my-color">
                                 Educator </label>

@@ -116,6 +116,12 @@
                 <li>
                     <a href="/my_skills"><span class="fa-solid fa-tools"></span> &nbsp; Skills</a>
                 </li>
+                <li>
+                    <a href="/profile/jobs"><span class="fa-solid fa-book"></span> &nbsp; My Jobs</a>
+                </li>
+                <li>
+                    <a href="/jobs"><span class="fa-solid fa-hammer"></span> &nbsp; Jobs </a>
+                </li>
             {% endif %}
 
             {% if user.role == 'Educator' %}
@@ -124,6 +130,22 @@
                 </li>
                 <li>
                     <a href="/all_course_detail"><span class="fa-solid fa-hammer"></span> &nbsp; See Details</a>
+                </li>
+            {% endif %}
+            {% if user.role == 'Freelancer' %}
+                <li>
+                    <a href="/profile/jobs"><span class="fa-solid fa-book"></span> &nbsp; My Jobs</a>
+                </li>
+                <li>
+                    <a href="/jobs"><span class="fa-solid fa-hammer"></span> &nbsp; Jobs </a>
+                </li>
+            {% endif %}
+            {% if user.role == 'Employer' %}
+                <li>
+                    <a href="/employer/jobs"><span class="fa-solid fa-book"></span> &nbsp; My Jobs</a>
+                </li>
+                <li>
+                    <a href="/employer/jobs/offers"><span class="fa-solid fa-hammer"></span> &nbsp; Job Offers </a>
                 </li>
             {% endif %}
 

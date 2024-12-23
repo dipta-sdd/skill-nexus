@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'api',
     'data',
+    'django_seed',
 ]
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {

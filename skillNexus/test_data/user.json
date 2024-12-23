@@ -1,0 +1,202 @@
+[
+  {
+    "model": "data.user",
+    "pk": 100,
+    "fields": {
+      "first_name": "Anthony",
+      "last_name": "Harris",
+      "username": "employer1",
+      "email": "anthony.harris@example.com",
+      "password": "pbkdf2_sha256$600000$0g5EBQ4DSuUSxT9Qd3Gis8$gqjupPoGmt4mVn89Q8CE6dcKzDmOIna8jB43lhf9bXQ=",
+      "bio": "Experienced business owner seeking talented individuals.",
+      "mobile": "5551112222",
+      "country": "USA",
+      "profile_picture": "",
+      "rating": 4.2,
+      "role": "Employer",
+      "status": "Active",
+      "last_login": "2024-12-23T10:00:00Z",
+      "date_joined": "2024-11-20T14:30:00Z"
+    }
+  },
+  {
+    "model": "data.user",
+    "pk": 101,
+    "fields": {
+      "first_name": "Maria",
+      "last_name": "Rodriguez",
+      "username": "employer2",
+      "email": "maria.rodriguez@example.com",
+      "password": "pbkdf2_sha256$600000$0g5EBQ4DSuUSxT9Qd3Gis8$gqjupPoGmt4mVn89Q8CE6dcKzDmOIna8jB43lhf9bXQ=",
+      "bio": "HR manager at a growing tech company.",
+      "mobile": "5559876543",
+      "country": "Canada",
+      "profile_picture": "",
+      "rating": 4.7,
+      "role": "Employer",
+      "status": "Active",
+      "last_login": "2024-12-23T11:15:00Z",
+      "date_joined": "2024-10-15T09:45:00Z"
+    }
+  },
+  {
+    "model": "data.user",
+    "pk": 102,
+    "fields": {
+      "first_name": "James",
+      "last_name": "Wilson",
+      "username": "employer3",
+      "email": "james.wilson@example.com",
+      "password": "pbkdf2_sha256$600000$0g5EBQ4DSuUSxT9Qd3Gis8$gqjupPoGmt4mVn89Q8CE6dcKzDmOIna8jB43lhf9bXQ=",
+      "bio": "Looking for skilled developers to join our team.",
+      "mobile": "5551239876",
+      "country": "UK",
+      "profile_picture": "",
+      "rating": 4.0,
+      "role": "Employer",
+      "status": "Active",
+      "last_login": "2024-12-23T09:30:00Z",
+      "date_joined": "2024-11-02T16:20:00Z"
+    }
+  },
+  {
+    "model": "data.user",
+    "pk": 103,
+    "fields": {
+      "first_name": "Emily",
+      "last_name": "Brown",
+      "username": "employer4",
+      "email": "emily.brown@example.com",
+      "password": "pbkdf2_sha256$600000$0g5EBQ4DSuUSxT9Qd3Gis8$gqjupPoGmt4mVn89Q8CE6dcKzDmOIna8jB43lhf9bXQ=",
+      "bio": "Hiring for various positions in marketing and sales.",
+      "mobile": "5554567890",
+      "country": "Australia",
+      "profile_picture": "",
+      "rating": 4.9,
+      "role": "Employer",
+      "status": "Active",
+      "last_login": "2024-12-22T14:45:00Z",
+      "date_joined": "2024-10-28T10:10:00Z"
+    }
+  },
+  {
+    "model": "data.user",
+    "pk": 104,
+    "fields": {
+      "first_name": "Michael",
+      "last_name": "Davis",
+      "username": "employer5",
+      "email": "michael.davis@example.com",
+      "password": "pbkdf2_sha256$600000$0g5EBQ4DSuUSxT9Qd3Gis8$gqjupPoGmt4mVn89Q8CE6dcKzDmOIna8jB43lhf9bXQ=",
+      "bio": "Seeking talented individuals to join our startup.",
+      "mobile": "5557890123",
+      "country": "Germany",
+      "profile_picture": "",
+      "rating": 4.6,
+      "role": "Employer",
+      "status": "Active",
+      "last_login": "2024-12-23T12:30:00Z",
+      "date_joined": "2024-11-10T11:55:00Z"
+    }
+  },
+  {
+    "model": "data.user",
+    "pk": 105,
+    "fields": {
+      "first_name": "Jessica",
+      "last_name": "Garcia",
+      "username": "employer6",
+      "email": "jessica.garcia@example.com",
+      "password": "pbkdf2_sha256$600000$0g5EBQ4DSuUSxT9Qd3Gis8$gqjupPoGmt4mVn89Q8CE6dcKzDmOIna8jB43lhf9bXQ=",
+      "bio": "We're hiring! Check out our open positions.",
+      "mobile": "5552345678",
+      "country": "France",
+      "profile_picture": "",
+      "rating": 4.3,
+      "role": "Employer",
+      "status": "Active",
+      "last_login": "2024-12-23T10:45:00Z",
+      "date_joined": "2024-11-08T15:10:00Z"
+    }
+  },
+  {
+    "model": "data.user",
+    "pk": 106,
+    "fields": {
+      "first_name": "Christopher",
+      "last_name": "Miller",
+      "username": "employer7",
+      "email": "christopher.miller@example.com",
+      "password": "pbkdf2_sha256$600000$0g5EBQ4DSuUSxT9Qd3Gis8$gqjupPoGmt4mVn89Q8CE6dcKzDmOIna8jB43lhf9bXQ=",
+      "bio": "Looking for talented individuals to join our team.",
+      "mobile": "5556789012",
+      "country": "Brazil",
+      "profile_picture": "",
+      "rating": 4.8,
+      "role": "Employer",
+      "status": "Active",
+      "last_login": "2024-12-22T16:00:00Z",
+      "date_joined": "2024-10-20T09:55:00Z"
+    }
+  },
+  {
+    "model": "data.user",
+    "pk": 107,
+    "fields": {
+      "first_name": "Ashley",
+      "last_name": "Martinez",
+      "username": "employer8",
+      "email": "ashley.martinez@example.com",
+      "password": "pbkdf2_sha256$600000$0g5EBQ4DSuUSxT9Qd3Gis8$gqjupPoGmt4mVn89Q8CE6dcKzDmOIna8jB43lhf9bXQ=",
+      "bio": "Passionate about building innovative products.",
+      "mobile": "5553456789",
+      "country": "Japan",
+      "profile_picture": "",
+      "rating": 4.1,
+      "role": "Employer",
+      "status": "Active",
+      "last_login": "2024-12-23T11:30:00Z",
+      "date_joined": "2024-11-12T14:20:00Z"
+    }
+  },
+  {
+    "model": "data.user",
+    "pk": 108,
+    "fields": {
+      "first_name": "Matthew",
+      "last_name": "Taylor",
+      "username": "employer9",
+      "email": "matthew.taylor@example.com",
+      "password": "pbkdf2_sha256$600000$0g5EBQ4DSuUSxT9Qd3Gis8$gqjupPoGmt4mVn89Q8CE6dcKzDmOIna8jB43lhf9bXQ=",
+      "bio": "Seeking talented individuals for our growing team.",
+      "mobile": "5558901234",
+      "country": "India",
+      "profile_picture": "",
+      "rating": 4.5,
+      "role": "Employer",
+      "status": "Active",
+      "last_login": "2024-12-23T09:45:00Z",
+      "date_joined": "2024-11-05T10:50:00Z"
+    }
+  },
+  {
+    "model": "data.user",
+    "pk": 109,
+    "fields": {
+      "first_name": "Sarah",
+      "last_name": "Anderson",
+      "username": "employer10",
+      "email": "sarah.anderson@example.com",
+      "password": "pbkdf2_sha256$600000$0g5EBQ4DSuUSxT9Qd3Gis8$gqjupPoGmt4mVn89Q8CE6dcKzDmOIna8jB43lhf9bXQ=",
+      "bio": "Experienced entrepreneur with a passion for technology.",
+      "mobile": "5550123456",
+      "country": "South Africa",
+      "profile_picture": "",
+      "rating": 4.7,
+      "role": "Employer",
+      "status": "Active",
+      "last_login": "2024-12-22T15:30:00Z",
+      "date_joined": "2024-10-18T12:15:00Z"
+    }
+  }
+]
