@@ -28,7 +28,16 @@ def employer_jobs(request):
         """
         SELECT DISTINCT job.* , 
         GROUP_CONCAT(skill.name) as skills,
-        COUNT(offer.id) as offer_count 
+        COUNT(offer.id) as offer_count ,
+        CASE WHEN job.freelencer_id IS NULL 
+            THEN 'open' 
+            ELSE 
+                CASE WHEN job.payment_id IS NULL 
+                    THEN 'in progress' 
+                    ELSE 'completed' 
+                END 
+            END 
+        as status
         FROM data_job as job
         INNER JOIN data_job_skill as js ON job.id = js.job_id
         INNER JOIN data_skill as skill ON skill.id = js.skill_id
