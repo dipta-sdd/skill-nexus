@@ -43,7 +43,7 @@ $(document).ready(function () {
       },
       success: function (company) {
         console.log(company);
-        showDetails(".company", company);
+        if (company) showDetails(".company", company);
       },
     });
   } else {
@@ -81,6 +81,11 @@ $(document).ready(function () {
           showDetails(".company", company);
           $(".company button.btn-edit").removeClass("d-none");
           $(".company button.btn-save").addClass("d-none");
+        },
+        error: function (error) {
+          if (error.responseJSON) {
+            labelErrors(".company .form-control", error.responseJSON);
+          }
         },
       });
     }
