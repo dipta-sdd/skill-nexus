@@ -7,3 +7,7 @@
 db.sqlite3
 /skillNexus/db.sqlite3
 skillNexus/db.sqlite3
+skillNexus/api/__pycache__
+skillNexus/data/__pycache__
+skillNexus/backend/__pycache__
+skillNexus/db.sqlite3
