@@ -3,5 +3,5 @@
 /project.code-workspace
 /venv
 migrations
-__pycache__
+/__pycache__
 db.sqlite3
