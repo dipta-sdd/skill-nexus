@@ -104,35 +104,48 @@
               <div class="table-responsive">
                 <table class="table table-striped">
                   <thead>
-                    <tr class="my-color">
-                      <th>Name</th>
+                    <tr>
+                      <th>Title</th>
+                      <th>Location</th>
+                      <th>Project Duration</th>
+                      <th>Price</th>
+                      <th>Deadline</th>
+                      <th>Skills</th>
+                      <th>Offer Count</th>
+                      <th>Created At</th>
                       <th>Status</th>
-                      <th>Submission Date</th>
-                      <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {% for job in jobs %}
                     <tr>
-                      <td>{{job.title}}</td>
-                      <td>{{job.status}}</td>
-                      <td>{{job.created_at}}</td>
+                      <td>{{ job.title }}</td>
+                      <td>{{ job.location }}</td>
+                      <td>{{ job.project_duration }}</td>
+                      <td>{{ job.price }}</td>
+                      <td>{{ job.deadline }}</td>
+                      <td>{{ job.skills }}</td>
+                      <td>{{ job.offer_count }}</td>
+                      <td>{{ job.created_at }}</td>
                       <td>
-                        <a href="/job/{{job.id}}" class="btn btn-primary"
-                          >View</a
-                        >
-                        <a href="/job/{{job.id}}/edit" class="btn btn-warning"
-                          >Edit</a
-                        >
-                        <a href="/job/{{job.id}}/delete" class="btn btn-danger"
-                          >Delete</a
-                        >
+                        {% if job.status == 'open' %}
+                        <span class="badge bg-info">Open</span>
+                        {% elif job.status == 'in_progress' %}
+                        <span class="badge bg-primary">In Progress</span>
+                        {% elif job.status == 'completed' %}
+                        <span class="badge bg-success">Completed</span>
+                        {% elif job.status == 'cancelled' %}
+                        <span class="badge bg-danger">Cancelled</span>
+                        {% else %}
+                        <span class="badge bg-secondary">{{ job.status }}</span>
+                        {% endif %}
                       </td>
                     </tr>
                     {% endfor %}
                   </tbody>
                 </table>
               </div>
+              {{jobs}}
             </div>
           </div>
         </div>
@@ -149,47 +162,6 @@
       $(document).ready(function () {
         on_page_load([]);
       });
-    </script>
-    <script>
-      // JavaScript for charts and interactivity would go here
-      // Example:
-      document.addEventListener("DOMContentLoaded", function () {
-        // Enrollment Trends Chart
-        var ctx = document.getElementById("enrollmentTrends").getContext("2d");
-        new Chart(ctx, {
-          type: "line",
-          data: {
-            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-            datasets: [
-              {
-                label: "Enrollments",
-                data: [12, 19, 3, 5, 2, 3],
-                borderColor: "rgb(75, 192, 192)",
-                tension: 0.1,
-              },
-            ],
-          },
-        });
-
-        // Add other charts and interactivity here
-      });
-
-      // Error handling
-      function showError(message) {
-        var errorContainer = document.getElementById("errorContainer");
-        errorContainer.textContent = message;
-        errorContainer.classList.remove("d-none");
-      }
-
-      document
-        .getElementById("retryButton")
-        .addEventListener("click", function (e) {
-          e.preventDefault();
-          // Implement retry logic here
-        });
-
-      // Responsive design is handled by Bootstrap classes
-      // Additional custom responsive styles can be added in your CSS file
     </script>
   </body>
 </html>
