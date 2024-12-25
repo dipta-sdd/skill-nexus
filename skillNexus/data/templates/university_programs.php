@@ -230,8 +230,8 @@
                         <td>{{ applicant.program_name }}</td>
                         <td>{{ applicant.session_name }}</td>
                         <td>{{ applicant.comment }}</td>
-                        <td>{{ applicant.created_at|date:"Y-m-d h:i A" }}</td>
-                        <td>{{ applicant.updated_at|date:"Y-m-d h:i A" }}</td>
+                        <td>{{ applicant.created_at|date:"M d, Y, h:i A" }}</td>
+                        <td>{{ applicant.updated_at|date:"M d, Y, h:i A" }}</td>
                       </tr>
                       {% endfor %}
                     </tbody>

@@ -12,8 +12,30 @@ def profile_jobs(request):
 
 
 def jobs(request):
-    # Implementation for displaying a list of jobs
-    pass
+    user = getUser(request)
+    jobs = run_raw_sql(
+        """
+        SELECT DISTINCT job.* , 
+        GROUP_CONCAT(skill.name) as skills,
+        COUNT(offer.id) as offer_count ,
+        CASE WHEN job.freelencer_id IS NULL 
+            THEN 'open' 
+            ELSE 
+                CASE WHEN job.payment_id IS NULL 
+                    THEN 'in progress' 
+                    ELSE 'completed' 
+                END 
+            END 
+        as status
+        FROM data_job as job
+        INNER JOIN data_job_skill as js ON job.id = js.job_id
+        INNER JOIN data_skill as skill ON skill.id = js.skill_id
+        LEFT JOIN data_joboffer as offer ON job.id = offer.job_id
+        GROUP BY job.id
+        """)
+    skills = Skill.objects.all()
+    skills = SkillSeriallizer(skills, many=True).data
+    return render(request, 'jobs.html', {'jobs': jobs, 'skills': skills})
 
 
 def job(request, job_id):
@@ -47,7 +69,9 @@ def employer_jobs(request):
         """,
         (user['id'],)
     )
-    return render(request, 'employer_jobs.html', {'jobs': jobs})
+    skills = Skill.objects.all()
+    skills = SkillSeriallizer(skills, many=True).data
+    return render(request, 'employer_jobs.html', {'jobs': jobs, 'skills': skills})
 
 
 def employer_job(request, job_id):

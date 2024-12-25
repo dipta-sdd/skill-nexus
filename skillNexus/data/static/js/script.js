@@ -389,24 +389,20 @@ function loadData(selector, data) {
 }
 
 function formatDateTime(datetimeString) {
-  // Parse the input datetime string
   const date = new Date(datetimeString);
 
-  // Extract components
-  let hours = date.getHours();
-  const minutes = date.getMinutes().toString().padStart(2, "0");
-  const isPM = hours >= 12;
+  const options = {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  };
 
-  // Convert hours to 12-hour format
-  hours = hours % 12 || 12;
+  const formattedDateTime = date.toLocaleString("en-US", options);
 
-  // Format the date string
-  const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1)
-    .toString()
-    .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
-
-  // Combine date and time
-  return `${formattedDate} ${hours}:${minutes} ${isPM ? "PM" : "AM"}`;
+  return formattedDateTime.replace(",", "");
 }
 
 function showToast(

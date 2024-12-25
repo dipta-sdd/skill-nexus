@@ -163,3 +163,27 @@ class ProgramApplicationSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProgramApplication
         fields = '__all__'
+
+
+class PaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
+        fields = '__all__'
+
+
+class JobSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Job
+        fields = '__all__'
+
+
+class JobOfferSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = JobOffer
+        fields = '__all__'
+
+
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = '__all__'

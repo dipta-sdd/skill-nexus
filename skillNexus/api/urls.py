@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import views
+from . import views, jobs
 
 
 urlpatterns = [
@@ -70,6 +70,9 @@ urlpatterns = [
     path('enrolled_course_video/get', views.getEnrolledCourseVideo),
     path('enrollment/get', views.get_enrolled_users, name='get_enrolled_users'),
     path('enrollment/delete', views.ban_user_from_course,
-         name='ban_user_from_course')
+         name='ban_user_from_course'),
 
+    #     jobs _____________________________
+    path('employer/job/new', jobs.employer_job_new, name='employer_job_new'),
+    path('jobs', jobs.jobs, name='jobs'),
 ]

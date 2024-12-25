@@ -49,16 +49,16 @@
       <!-- Modal -->
       <div
         class="modal fade modal-lg"
-        id=""
+        id="addJobModal"
         tabindex="-1"
         aria-labelledby="programSessionModalLabel"
         aria-hidden="true"
       >
         <div class="modal-dialog">
           <div class="modal-content">
-            <form id="programSessionForm">
+            <form id="addJobForm">
               <div class="modal-header">
-                <h5 class="modal-title" id="">Add Program Session</h5>
+                <h5 class="modal-title" id="">Offer New Job</h5>
                 <button
                   type="button"
                   class="btn-close"
@@ -66,7 +66,75 @@
                   aria-label="Close"
                 ></button>
               </div>
-              <div class="modal-body"></div>
+              <div class="modal-body row">
+                <div class="col-12 form-group mb-2">
+                  <label for="title">Job Title:</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="title"
+                    maxlength="255"
+                    required
+                  />
+                </div>
+                <div class="col-12 form-group mb-2">
+                  <label for="description">Job Description:</label>
+                  <textarea
+                    class="form-control"
+                    name="description"
+                    rows="4"
+                    required
+                  ></textarea>
+                </div>
+                <div class="col-12 form-group mb-2">
+                  <label for="skill">Required Skills:</label>
+                  <select multiple class="form-control" name="skill">
+                    {% for skill in skills %}
+                    <option value="{{skill.id}}">{{skill.name}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="form-group d-none">
+                  <label for="location">Location:</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="location"
+                    maxlength="255"
+                    value="Remote"
+                  />
+                </div>
+                <div class="col-xl-4 form-group mb-2">
+                  <label for="project_duration">Project Duration:</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="project_duration"
+                    maxlength="255"
+                    required
+                  />
+                </div>
+                <div class="col-xl-4 form-group mb-2">
+                  <label for="price">Price:</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    name="price"
+                    step="0.01"
+                    required
+                  />
+                </div>
+                <div class="col-xl-4 form-group mb-2">
+                  <label for="deadline">Deadline: {% now "Y-m-d" %}</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    name="deadline"
+                    min='{% now "Y-m-d" %}'
+                    required
+                  />
+                </div>
+              </div>
               <div class="modal-footer">
                 <button
                   type="button"
@@ -90,6 +158,13 @@
             <div class="card-header" style="margin: -10px -10px 0 -10px">
               <div class="d-flex justify-content-between">
                 <h3 class="card-title mb-0">My Jobs</h3>
+                <button
+                  class="btn btn-primary ms-2 rounded-0"
+                  data-bs-toggle="modal"
+                  data-bs-target="#addJobModal"
+                >
+                  Offer New Job
+                </button>
               </div>
             </div>
             <div class="card-body">
@@ -114,21 +189,25 @@
                       <th>Offer Count</th>
                       <th>Created At</th>
                       <th>Status</th>
-                      <th>Submission Date</th>
-                      <th>Actions</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody id="jobs">
                     {% for job in jobs %}
                     <tr>
-                      <td>{{ job.title }}</td>
+                      <td>
+                        <a
+                          class="text-decoration-none"
+                          href="/employer/job/{{ job.id }}"
+                          >{{ job.title }}</a
+                        >
+                      </td>
                       <td>{{ job.location }}</td>
                       <td>{{ job.project_duration }}</td>
                       <td>{{ job.price }}</td>
-                      <td>{{ job.deadline }}</td>
+                      <td>{{ job.deadline |date:"M d, Y, h:i A" }}</td>
                       <td>{{ job.skills }}</td>
                       <td>{{ job.offer_count }}</td>
-                      <td>{{ job.created_at }}</td>
+                      <td>{{ job.created_at|date:"M d, Y, h:i A" }}</td>
                       <td>
                         {% if job.status == 'open' %}
                         <span class="badge bg-info">Open</span>
@@ -147,7 +226,6 @@
                   </tbody>
                 </table>
               </div>
-              {{jobs}}
             </div>
           </div>
         </div>
@@ -159,10 +237,54 @@
     <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{% static 'js/script.js' %}"></script>
-    <script src="{% static 'js/manageProgram.js' %}"></script>
     <script>
       $(document).ready(function () {
         on_page_load([]);
+        // Search functionality
+        $("#tableSearch").on("input", function () {
+          var searchQuery = $(this).val().toLowerCase();
+          $(".table tbody tr").each(function () {
+            var rowText = $(this).text().toLowerCase();
+            $(this).toggle(rowText.includes(searchQuery));
+          });
+        });
+        // save new job
+        $("#addJobModal .modal-footer button.save").on("click", function (e) {
+          e.preventDefault();
+          let data = collectData("#addJobModal .form-control");
+          data.skill = JSON.stringify(data.skill);
+          $.ajax({
+            type: "post",
+            url: "/api/employer/job/new",
+            data: data,
+            success: function (res) {
+              $("#addJobModal .form-control:not(.d-none)").val("");
+              $("#addJobModal").modal("hide");
+              showToast("Job added successfully", "success");
+              $("#jobs").append(`
+                <tr>
+                  <td><a class="text-decoration-none" href="/employer/job/${
+                    res.id
+                  }">${res.title}</a></td>
+                  <td>${res.location}</td>
+                  <td>${res.project_duration}</td>
+                  <td>${res.price}</td>
+                  <td>${formatDateTime(res.deadline)}</td>
+                  <td>${res.skills}</td>
+                  <td>${res.offer_count}</td>
+                  <td>${formatDateTime(res.created_at)}</td>
+                  <td><span class="badge bg-info">Open</span></td>
+                </tr>
+              `);
+            },
+            error: function (xhr, status, error) {
+              if (xhr.responseJSON) {
+                labelErrors("#addJobModal .form-control", xhr.responseJSON); // display error messages
+              }
+              showToast("Error adding job", "danger");
+            },
+          });
+        });
       });
     </script>
   </body>

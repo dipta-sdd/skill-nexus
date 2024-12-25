@@ -30,21 +30,20 @@
     <nav aria-label="breadcrumb" class="mybg-t breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/" class="my-color">Home</a></li>
-        <li class="breadcrumb-item"><a href="/programs" class="my-color">Programs</a></li>
-        <li class="breadcrumb-item active my-color" aria-current="page">{{ }}</li>
+        <li class="breadcrumb-item active my-color" aria-current="page"> </li>
       </ol>
     </nav>
     <!-- Program Print Section -->
 
 
     <!-- Modal -->
-    <div class="modal fade modal-lg" id="" tabindex="-1" aria-labelledby="programSessionModalLabel"
+    <div class="modal fade modal-lg" id="modal1" tabindex="-1" aria-labelledby="programSessionModalLabel"
       aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
-          <form id="programSessionForm">
+          <form id="">
             <div class="modal-header">
-              <h5 class="modal-title" id="">Add Program Session</h5>
+              <h5 class="modal-title" id=""></h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -58,45 +57,30 @@
         </div>
       </div>
     </div>
-    <!-- Program Overview Section -->
+    <!--  Overview Section -->
     <div class="row ">
       <div class="col-lg-12">
         <div class="card my-row rounded-0 mybg">
           <div class="card-header" style="margin: -10px -10px 0 -10px">
             <div class="d-flex justify-content-between">
-              <h3 class="card-title mb-0">All Programs</h3>
-              <a class="btn btn-primary ms-2 rounded-0" href="/student/my_programs">My Programs</a>
+              <h3 class="card-title mb-0">main title </h3>
+              <button type="button" class="btn btn-primary ms-2 rounded-0" data-bs-toggle="modal"
+                data-bs-target="#modal1">Button</button>
             </div>
           </div>
           <div class="card-body m-0 p-0 bg-transparent">
-            {% for program in programs %}
+            <!-- for loop to load multiple items -->
+            {% for x in xs %}
             <div class="card  my-row rounded-0  mybg">
               <div class="card-header" style="margin: -10px -10px 0 -10px">
 
                 <div class="d-flex justify-content-between">
-                  <h3 class="card-title mb-0">{{program.program_name}} <small>({{program.session_name}})</small></h3>
-                  {% if program.status == 'upcoming' %}
-                  <button class="btn btn-info ms-2 rounded-0" disabled>Admission Starting Soon</button>
-                  {% else %}
-                  <button class="btn btn-primary ms-2 rounded-0" type="button">Apply Now</button>
-                  {% endif %}
+                  <h3 class="card-title mb-0">title1</h3>
+                  
                 </div>
               </div>
               <div class="card-body row py-2">
 
-                <span class="card-text col-12"><i class="fa-solid fa-building-columns"></i> University:
-                  {{program.university}}
-                </span>
-                <span class="card-text col-lg-6"><i class="fa-solid fa-calendar-days"></i> Duration:
-                  {{program.duration_year}}
-                  {% if program.duration_year > 1 %} years {% else %} year {% endif %}
-                  {% if program.duration_month > 0 %} and {{ program.duration_month }}
-                  {% if program.duration_month > 1 %} months {% else %} month {% endif %}
-                  {% endif %} </span>
-                <span class="card-text col-lg-6"><i class="fa-solid fa-calendar-check"></i> Admission Date:
-                  {{program.admission_start_date}} -
-                  {{program.admission_end_date}}
-                </span>
               </div>
             </div>
             {% endfor %}
@@ -107,9 +91,9 @@
           <div class="card-header" style="margin: -10px -10px 0 -10px">
 
             <div class="d-flex justify-content-between">
-              <h3 class="card-title mb-0">Sessions</h3>
+              <h3 class="card-title mb-0"> title </h3>
               <button class="btn btn-primary ms-2 rounded-0" type="button" data-bs-toggle="modal"
-                data-bs-target="#programSessionModal">Add Session</button>
+                data-bs-target="#programSessionModal"> button</button>
             </div>
           </div>
           <div class="card-body">
@@ -133,22 +117,19 @@
           <div class="card  my-row rounded-0 mybg">
             <div class="card-header" style="margin: -10px -10px 0 -10px">
               <div class="d-flex justify-content-between">
-                <h3 class="card-title mb-0">Applicant List</h3>
+                <h3 class="card-title mb-0"></h3>
 
               </div>
             </div>
             <div class="card-body">
               <div class="mb-3">
-                <input type="text" class="form-control" id="applicantSearch" placeholder="Search applicants...">
+                <input type="text" class="form-control" id="" placeholder="Search applicants...">
               </div>
               <div class="table-responsive">
                 <table class="table table-striped">
                   <thead>
                     <tr class="my-color">
-                      <th>Name</th>
-                      <th>Status</th>
-                      <th>Submission Date</th>
-                      <th>Actions</th>
+                      
                     </tr>
                   </thead>
                   <tbody>
@@ -225,43 +206,7 @@
       on_page_load([]);
     });
   </script>
-  <script>
-    // JavaScript for charts and interactivity would go here
-    // Example:
-    document.addEventListener('DOMContentLoaded', function () {
-      // Enrollment Trends Chart
-      var ctx = document.getElementById('enrollmentTrends').getContext('2d');
-      new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-          datasets: [{
-            label: 'Enrollments',
-            data: [12, 19, 3, 5, 2, 3],
-            borderColor: 'rgb(75, 192, 192)',
-            tension: 0.1
-          }]
-        }
-      });
 
-      // Add other charts and interactivity here
-    });
-
-    // Error handling
-    function showError(message) {
-      var errorContainer = document.getElementById('errorContainer');
-      errorContainer.textContent = message;
-      errorContainer.classList.remove('d-none');
-    }
-
-    document.getElementById('retryButton').addEventListener('click', function (e) {
-      e.preventDefault();
-      // Implement retry logic here
-    });
-
-    // Responsive design is handled by Bootstrap classes
-    // Additional custom responsive styles can be added in your CSS file
-  </script>
 </body>
 
 </html>

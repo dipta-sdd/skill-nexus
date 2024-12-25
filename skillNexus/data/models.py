@@ -331,12 +331,12 @@ class Job(models.Model):
     freelencer = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='freelancer_jobs', null=True, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    deadline = models.DateTimeField()
+    deadline = models.DateField()
     payment = models.ForeignKey(
         Payment, on_delete=models.SET_NULL, null=True, blank=True)
     freelancer_proposed_rate = models.DecimalField(
         max_digits=10, decimal_places=2, null=True, blank=True)
-    freelancer_proposed_deadline = models.DateTimeField(null=True, blank=True)
+    freelancer_proposed_deadline = models.DateField(null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -367,7 +367,7 @@ class JobOffer(models.Model):
         User, on_delete=models.CASCADE, related_name='freelancer_offers')
     proposed_rate = models.DecimalField(max_digits=10, decimal_places=2)
     proposal = models.TextField(blank=True)
-    proposed_deadline = models.DateTimeField()
+    proposed_deadline = models.DateField()
     status = models.CharField(max_length=50, choices=[
         ('Pending', 'Pending'),
         ('Accepted', 'Accepted'),
