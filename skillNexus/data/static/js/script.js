@@ -388,6 +388,17 @@ function loadData(selector, data) {
   });
 }
 
+function formatDate(datetimeString) {
+  const date = new Date(datetimeString);
+
+  const options = {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+  };
+
+  return date.toLocaleDateString("en-US", options);
+}
 function formatDateTime(datetimeString) {
   const date = new Date(datetimeString);
 

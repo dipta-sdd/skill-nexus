@@ -281,7 +281,7 @@ border: none;
 }
 .breadcrumb a{
     text-decoration: none;
-    color: #1207e6;
+    color: var(--color);
 }
 .breadcrumb-item+.breadcrumb-item::before{
     color: #1207e6;
@@ -295,7 +295,7 @@ border: none;
 /* middele body */
 
 .my-row{
-    margin: 8px 0.5px;
+    margin: 8px 0px;
     padding: 12px;
 }
 
@@ -447,7 +447,7 @@ input:checked+.slider:before {
     transition: none;
 }
 .form-control:focus{
-     border:var(--bs-border-width) solid var(--bs-border-color);
+    /* border:var(--bs-border-width) solid var(--bs-border-color); */
     border-bottom: 1px solid #0066ffc9;
     box-shadow: none;
     /* box-shadow: 0 0 0 .05rem rgba(0, 102, 255, 0.25); */

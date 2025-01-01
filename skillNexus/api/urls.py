@@ -75,4 +75,7 @@ urlpatterns = [
     #     jobs _____________________________
     path('employer/job/new', jobs.employer_job_new, name='employer_job_new'),
     path('jobs', jobs.jobs, name='jobs'),
+    path('job/<int:job_id>/apply', jobs.job_apply, name='job_apply'),
+    path('employer/job/offer/withdraw/<int:offer_id>',
+         jobs.offer_withdraw, name='offer_withdraw'),
 ]

@@ -49,8 +49,7 @@ urlpatterns = [
     path('employer/job/<int:job_id>', jobs.employer_job, name='employer_job'),
     path('employer/jobs/offers', jobs.employer_jobs_offers,
          name='employer_jobs_offers'),
-    path('employer/job/<int:job_id>/offers', jobs.employer_job_offers,
-         name='employer_jobs_offers'),
+
     path('employer/job/offer/<int:offer_id>', jobs.employer_job_offer,
          name='employer_job_offer'),
 

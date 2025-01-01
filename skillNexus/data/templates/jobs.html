@@ -36,7 +36,9 @@
       <nav aria-label="breadcrumb" class="mybg-t breadcrumb">
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="/" class="my-color">Home</a></li>
-          <li class="breadcrumb-item active my-color" aria-current="page"></li>
+          <li class="breadcrumb-item active my-color" aria-current="page">
+            Jobs
+          </li>
         </ol>
       </nav>
       <!-- Program Print Section -->
@@ -126,10 +128,10 @@
                         <option value="cancelled">Cancelled</option>
                       </select>
                     </div>
-
+                    <!-- AIzaSyAObQ8rysRXRHxOuKcxfuXcUrprIsTlwPY -->
                     <p class="">
                       <a
-                        class="btn btn-primary"
+                        class="btn btn-outline"
                         data-bs-toggle="collapse"
                         href="#collapseExample"
                         role="button"
@@ -141,7 +143,7 @@
                     </p>
                   </div>
                   <div class="collapse" id="collapseExample">
-                    <div class="card card-body bg-transparent border-0">
+                    <div class="card card-body bg-transparent border-0 pt-0">
                       <form method="GET" action="/jobs">
                         <div class="row" id="skills">
                           {% for skill in skills %}
@@ -174,9 +176,8 @@
                     </div>
                   </div>
                 </div>
-
                 <div class="card-body m-0 p-0 bg-transparent">
-                  <table class="table table-striped border">
+                  <table class="table table-striped border table-bordered">
                     <thead>
                       <tr id="sort">
                         <th>
@@ -254,9 +255,9 @@
                         <td>{{ job.location }}</td>
                         <td>{{ job.project_duration }}</td>
                         <td>{{ job.price }}</td>
-                        <td>{{ job.deadline }}</td>
+                        <td>{{ job.deadline|date:"M d, Y" }}</td>
                         <td>{{ job.skills }}</td>
-                        <td>{{ job.created_at }}</td>
+                        <td>{{ job.created_at|date:"M d, Y, h:i A" }}</td>
                         <td>
                           {% if job.status == 'open' %}
                           <span class="badge bg-info">Open</span>
@@ -303,16 +304,16 @@
             ? "ASC"
             : $(this).hasClass("fa-sort-down")
             ? "DESC"
-            : "";
+            : "ASC";
 
           // Determine new sort order
           var newOrder = currentOrder === "ASC" ? "DESC" : "ASC";
 
           // Update sort icons
-          $("#sort .sort").removeClass("fa-sort-up fa-sort-down"); // Reset all icons
-          $(this).addClass(
-            "fa-" + (newOrder === "ASC" ? "sort-up" : "sort-down")
-          );
+          $("#sort .sort").removeClass("fa-sort-up fa-sort-down");
+          $("#sort .sort").addClass("fa-sort");
+          $(this).removeClass("fa-sort");
+          $(this).addClass(newOrder === "ASC" ? "fa-sort-up" : "fa-sort-down");
 
           // Apply filters and sorting
           loadjobs();
@@ -351,6 +352,7 @@
         $("#collapseExample .apply , #searchBtn").click(function (e) {
           e.preventDefault();
           loadjobs();
+          $("#collapseExample").collapse("hide");
         });
         function loadjobs() {
           var filters = getFilters();
@@ -362,12 +364,70 @@
             data: filters,
             success: function (res) {
               console.table(res);
-              // showJobs(res);
+              showJobs(res);
             },
             error: function (error) {
               console.log(error);
             },
           });
+        } // end loadjobs
+
+        function showJobs(jobs) {
+          var tbody = $("tbody"); // Get the table body element
+          tbody.empty(); // Clear existing table rows
+
+          if (jobs.length === 0) {
+            // Display a message if no jobs are found
+            var row = $("<tr>");
+            row.append(
+              $('<td colspan="8" class="text-center">No jobs found.</td>')
+            );
+            tbody.append(row);
+          } else {
+            // Loop through the jobs and create table rows
+            $.each(jobs, function (index, job) {
+              var row = $("<tr>");
+              row.append(
+                $("<td>").append(
+                  $(
+                    '<a href="/job/' +
+                      job.id +
+                      '" class="text-decoration-none">' +
+                      job.title +
+                      "</a>"
+                  )
+                )
+              );
+              row.append($("<td>").text(job.location));
+              row.append($("<td>").text(job.project_duration));
+              row.append($("<td>").text(job.price));
+              row.append($("<td>").text(formatDate(job.deadline)));
+              row.append($("<td>").text(job.skills));
+              row.append($("<td>").text(formatDateTime(job.created_at)));
+
+              // Create the status badge
+              var statusBadge = $('<span class="badge">').text(job.status);
+              switch (job.status) {
+                case "open":
+                  statusBadge.addClass("bg-info");
+                  break;
+                case "in_progress":
+                  statusBadge.addClass("bg-primary");
+                  break;
+                case "completed":
+                  statusBadge.addClass("bg-success");
+                  break;
+                case "cancelled":
+                  statusBadge.addClass("bg-danger");
+                  break;
+                default:
+                  statusBadge.addClass("bg-secondary");
+              }
+              row.append($("<td>").append(statusBadge));
+
+              tbody.append(row);
+            });
+          }
         }
       });
     </script>

@@ -28,9 +28,9 @@ def employer_job_new(req):
         job = run_raw_sql(
             """
         SELECT DISTINCT job.* , 
-        GROUP_CONCAT(skill.name) as skills,
+        GROUP_CONCAT(CONCAT(' ' , skill.name)) as skills,
         COUNT(offer.id) as offer_count ,
-        CASE WHEN job.freelencer_id IS NULL 
+        CASE WHEN job.freelancer_id IS NULL 
             THEN 'open' 
             ELSE 
                 CASE WHEN job.payment_id IS NULL 
@@ -73,7 +73,7 @@ def jobs(req):
         j.created_at,
         j.updated_at,
         j.employer_id,
-        j.freelencer_id,
+        j.freelancer_id,
         j.payment_id
         FROM data_job as j
         INNER JOIN data_job_skill as js ON j.id = js.job_id
@@ -84,9 +84,9 @@ def jobs(req):
     table += """ ORDER BY j.created_at DESC"""
     query = """ SELECT * FROM
         ( SELECT DISTINCT job.* ,
-        GROUP_CONCAT(skill.name) as skills,
+        GROUP_CONCAT(CONCAT(' ' , skill.name)) as skills,
         COUNT(offer.id) as offer_count ,
-        CASE WHEN job.freelencer_id IS NULL
+        CASE WHEN job.freelancer_id IS NULL
             THEN 'open'
             ELSE
                 CASE WHEN job.payment_id IS NULL
@@ -100,12 +100,56 @@ def jobs(req):
         INNER JOIN data_skill as skill ON skill.id = js.skill_id
         LEFT JOIN data_joboffer as offer ON job.id = offer.job_id
         GROUP BY job.id ) as jobs
+        WHERE 1 = 1 
         """
     if 'search' in data:
-        query += """ WHERE jobs.title LIKE '%""" + data['search'] + """%' """
+        query += """ and jobs.title LIKE '%""" + data['search'] + """%' """
+    if 'status' in data and data['status']:
+        query += """ and jobs.status = '""" + data['status'] + """' """
     query += """ ORDER BY """ + sort_by + """ """ + sort_order
     jobs = run_raw_sql(
         query,
     )
     # [data['sortby'], data['sortorder']]
     return Response(jobs, status=status.HTTP_201_CREATED)
+
+
+@api_view(['POST'])
+def job_apply(req, job_id):
+    user = getUser(req)
+    data = req.data.dict()
+    data['freelancer'] = user['id']
+    data['job'] = job_id
+    if 'id' in data:
+        obj = JobOffer.objects.get(id=data['id'])
+        serializer = JobOfferSerializer(obj, data=data, partial=True)
+    else:
+        serializer = JobOfferSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def offer_withdraw(req, offer_id):
+    user = getUser(req)
+    try:
+        offer = JobOffer.objects.get(id=offer_id, employer=user['id'])
+    except JobOffer.DoesNotExist:
+        return Response({'message': 'Offer not found or you do not have permission to withdraw it.'}, status=status.HTTP_404_NOT_FOUND)
+
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                UPDATE data_joboffer
+                SET status = 'Rejected'
+                WHERE id = %s
+                """,
+                (offer_id,)
+            )
+            return Response({'message': 'Offer withdrawn successfully.'}, status=status.HTTP_200_OK)
+    except Exception as e:
+        # print(f"Error updating job offer status: {e}")
+        return Response({'message': 'Error updating job offer status.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

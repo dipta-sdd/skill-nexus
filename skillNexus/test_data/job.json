@@ -11,7 +11,7 @@
       "location": "Remote",
       "project_duration": "3 months",
       "price": 5000.00,
-      "deadline": "2025-03-31T23:59:59Z",
+      "deadline": "2025-03-31",
     "created_at": "2024-12-24T10:00:00Z",
     "updated_at": "2024-12-24T10:00:00Z"
     }
@@ -27,7 +27,7 @@
       "location": "Remote",
       "project_duration": "4 months",
       "price": 8000.00,
-      "deadline": "2025-04-30T23:59:59Z",
+      "deadline": "2025-04-30",
     "created_at": "2024-12-24T10:00:00Z",
     "updated_at": "2024-12-24T10:00:00Z"
     }
@@ -43,7 +43,7 @@
       "location": "Remote",
       "project_duration": "2 months",
       "price": 3000.00,
-      "deadline": "2025-02-28T23:59:59Z",
+      "deadline": "2025-02-28",
     "created_at": "2024-12-24T10:00:00Z",
     "updated_at": "2024-12-24T10:00:00Z"
     }
@@ -61,7 +61,7 @@
       "location": "Remote",
       "project_duration": "5 months",
       "price": 12000.00,
-      "deadline": "2025-05-31T23:59:59Z",
+      "deadline": "2025-05-31",
     "created_at": "2024-12-24T10:00:00Z",
     "updated_at": "2024-12-24T10:00:00Z"
     }
@@ -77,7 +77,7 @@
       "location": "Remote",
       "project_duration": "3 months",
       "price": 6000.00,
-      "deadline": "2025-03-31T23:59:59Z",
+      "deadline": "2025-03-31",
     "created_at": "2024-12-24T10:00:00Z",
     "updated_at": "2024-12-24T10:00:00Z"
     }
@@ -93,7 +93,7 @@
       "location": "Remote",
       "project_duration": "4 months",
       "price": 7000.00,
-      "deadline": "2025-04-30T23:59:59Z",
+      "deadline": "2025-04-30",
     "created_at": "2024-12-24T10:00:00Z",
     "updated_at": "2024-12-24T10:00:00Z"
     }
@@ -109,7 +109,7 @@
       "location": "Remote",
       "project_duration": "2 months",
       "price": 4000.00,
-      "deadline": "2025-02-28T23:59:59Z",
+      "deadline": "2025-02-28",
     "created_at": "2024-12-24T10:00:00Z",
     "updated_at": "2024-12-24T10:00:00Z"
     }
@@ -127,7 +127,7 @@
       "location": "Remote",
       "project_duration": "6 months",
       "price": 15000.00,
-      "deadline": "2025-06-30T23:59:59Z",
+      "deadline": "2025-06-30",
     "created_at": "2024-12-24T10:00:00Z",
     "updated_at": "2024-12-24T10:00:00Z"
     }
@@ -143,7 +143,7 @@
       "location": "Remote",
       "project_duration": "4 months",
       "price": 9000.00,
-      "deadline": "2025-04-30T23:59:59Z",
+      "deadline": "2025-04-30",
     "created_at": "2024-12-24T10:00:00Z",
     "updated_at": "2024-12-24T10:00:00Z"
     }
@@ -159,7 +159,7 @@
       "location": "Remote",
       "project_duration": "3 months",
       "price": 7000.00,
-      "deadline": "2025-03-31T23:59:59Z",
+      "deadline": "2025-03-31",
     "created_at": "2024-12-24T10:00:00Z",
     "updated_at": "2024-12-24T10:00:00Z"
     }
@@ -176,7 +176,7 @@
       "location": "Remote",
       "project_duration": "2 months",
       "price": 3000.00,
-      "deadline": "2025-02-28T23:59:59Z",
+      "deadline": "2025-02-28",
     "created_at": "2024-12-24T10:00:00Z",
     "updated_at": "2024-12-24T10:00:00Z"
     }
@@ -192,7 +192,7 @@
       "location": "Remote",
       "project_duration": "5 months",
       "price": 8000.00,
-      "deadline": "2025-05-31T23:59:59Z",
+      "deadline": "2025-05-31",
     "created_at": "2024-12-24T10:00:00Z",
     "updated_at": "2024-12-24T10:00:00Z"
     }
@@ -208,7 +208,7 @@
       "location": "Remote",
       "project_duration": "3 months",
       "price": 6000.00,
-      "deadline": "2025-03-31T23:59:59Z",
+      "deadline": "2025-03-31",
     "created_at": "2024-12-24T10:00:00Z",
     "updated_at": "2024-12-24T10:00:00Z"
     }
@@ -224,7 +224,7 @@
       "location": "Remote",
       "project_duration": "4 months",
       "price": 7000.00,
-      "deadline": "2025-04-30T23:59:59Z",
+      "deadline": "2025-04-30",
     "created_at": "2024-12-24T10:00:00Z",
     "updated_at": "2024-12-24T10:00:00Z"
     }
@@ -240,7 +240,7 @@
       "location": "Remote",
       "project_duration": "5 months",
       "price": 12000.00,
-      "deadline": "2025-05-31T23:59:59Z",
+      "deadline": "2025-05-31",
     "created_at": "2024-12-24T10:00:00Z",
     "updated_at": "2024-12-24T10:00:00Z"
     }
@@ -256,7 +256,7 @@
       "location": "Remote",
       "project_duration": "4 months",
       "price": 10000.00,
-      "deadline": "2025-04-30T23:59:59Z",
+      "deadline": "2025-04-30",
     "created_at": "2024-12-24T10:00:00Z",
     "updated_at": "2024-12-24T10:00:00Z"
     }
@@ -272,7 +272,7 @@
       "location": "Remote",
       "project_duration": "6 months",
       "price": 15000.00,
-      "deadline": "2025-06-30T23:59:59Z",
+      "deadline": "2025-06-30",
     "created_at": "2024-12-24T10:00:00Z",
     "updated_at": "2024-12-24T10:00:00Z"
     }
@@ -290,7 +290,7 @@
       "location": "Remote",
       "project_duration": "3 months",
       "price": 8000.00,
-      "deadline": "2025-03-31T23:59:59Z",
+      "deadline": "2025-03-31",
     "created_at": "2024-12-24T10:00:00Z",
     "updated_at": "2024-12-24T10:00:00Z"
     }
@@ -306,7 +306,7 @@
       "location": "Remote",
       "project_duration": "4 months",
       "price": 10000.00,
-      "deadline": "2025-04-30T23:59:59Z",
+      "deadline": "2025-04-30",
     "created_at": "2024-12-24T10:00:00Z",
     "updated_at": "2024-12-24T10:00:00Z"
     }
@@ -322,7 +322,7 @@
       "location": "Remote",
       "project_duration": "2 months",
       "price": 6000.00,
-      "deadline": "2025-02-28T23:59:59Z",
+      "deadline": "2025-02-28",
     "created_at": "2024-12-24T10:00:00Z",
     "updated_at": "2024-12-24T10:00:00Z"
     }
@@ -338,7 +338,7 @@
       "location": "Remote",
       "project_duration": "3 months",
       "price": 7000.00,
-      "deadline": "2025-03-31T23:59:59Z",
+      "deadline": "2025-03-31",
     "created_at": "2024-12-24T10:00:00Z",
     "updated_at": "2024-12-24T10:00:00Z"
     }
@@ -356,7 +356,7 @@
       "location": "Remote",
       "project_duration": "6 months",
       "price": 14000.00,
-      "deadline": "2025-06-30T23:59:59Z",
+      "deadline": "2025-06-30",
     "created_at": "2024-12-24T10:00:00Z",
     "updated_at": "2024-12-24T10:00:00Z"
     }
@@ -372,7 +372,7 @@
       "location": "Remote",
       "project_duration": "5 months",
       "price": 12000.00,
-      "deadline": "2025-05-31T23:59:59Z",
+      "deadline": "2025-05-31",
     "created_at": "2024-12-24T10:00:00Z",
     "updated_at": "2024-12-24T10:00:00Z"
     }
@@ -388,7 +388,7 @@
       "location": "Remote",
       "project_duration": "4 months",
       "price": 9000.00,
-      "deadline": "2025-04-30T23:59:59Z",
+      "deadline": "2025-04-30",
     "created_at": "2024-12-24T10:00:00Z",
     "updated_at": "2024-12-24T10:00:00Z"
     }
@@ -404,7 +404,7 @@
       "location": "Remote",
       "project_duration": "3 months",
       "price": 7000.00,
-      "deadline": "2025-03-31T23:59:59Z",
+      "deadline": "2025-03-31",
     "created_at": "2024-12-24T10:00:00Z",
     "updated_at": "2024-12-24T10:00:00Z"
     }
@@ -420,7 +420,7 @@
       "location": "Remote",
       "project_duration": "4 months",
       "price": 9000.00,
-      "deadline": "2025-04-30T23:59:59Z",
+      "deadline": "2025-04-30",
     "created_at": "2024-12-24T10:00:00Z",
     "updated_at": "2024-12-24T10:00:00Z"
     }
@@ -436,7 +436,7 @@
       "location": "Remote",
       "project_duration": "5 months",
       "price": 11000.00,
-      "deadline": "2025-05-31T23:59:59Z",
+      "deadline": "2025-05-31",
     "created_at": "2024-12-24T10:00:00Z",
     "updated_at": "2024-12-24T10:00:00Z"
     }
@@ -452,7 +452,7 @@
       "location": "Remote",
       "project_duration": "6 months",
       "price": 14000.00,
-      "deadline": "2025-06-30T23:59:59Z",
+      "deadline": "2025-06-30",
     "created_at": "2024-12-24T10:00:00Z",
     "updated_at": "2024-12-24T10:00:00Z"
     }
@@ -468,7 +468,7 @@
       "location": "Remote",
       "project_duration": "4 months",
       "price": 9000.00,
-      "deadline": "2025-04-30T23:59:59Z",
+      "deadline": "2025-04-30",
     "created_at": "2024-12-24T10:00:00Z",
     "updated_at": "2024-12-24T10:00:00Z"
     }
@@ -484,7 +484,7 @@
       "location": "Remote",
       "project_duration": "3 months",
       "price": 7000.00,
-      "deadline": "2025-03-31T23:59:59Z",
+      "deadline": "2025-03-31",
     "created_at": "2024-12-24T10:00:00Z",
     "updated_at": "2024-12-24T10:00:00Z"
     }
@@ -500,7 +500,7 @@
       "location": "Remote",
       "project_duration": "2 months",
       "price": 5000.00,
-      "deadline": "2025-02-28T23:59:59Z",
+      "deadline": "2025-02-28",
     "created_at": "2024-12-24T10:00:00Z",
     "updated_at": "2024-12-24T10:00:00Z"
     }
@@ -516,7 +516,7 @@
       "location": "Remote",
       "project_duration": "4 months",
       "price": 10000.00,
-      "deadline": "2025-04-30T23:59:59Z",
+      "deadline": "2025-04-30",
     "created_at": "2024-12-24T10:00:00Z",
     "updated_at": "2024-12-24T10:00:00Z"
     }
@@ -532,7 +532,7 @@
       "location": "Remote",
       "project_duration": "3 months",
       "price": 8000.00,
-      "deadline": "2025-03-31T23:59:59Z",
+      "deadline": "2025-03-31",
     "created_at": "2024-12-24T10:00:00Z",
     "updated_at": "2024-12-24T10:00:00Z"
     }
@@ -548,7 +548,7 @@
       "location": "Remote",
       "project_duration": "5 months",
       "price": 12000.00,
-      "deadline": "2025-05-31T23:59:59Z",
+      "deadline": "2025-05-31",
     "created_at": "2024-12-24T10:00:00Z",
     "updated_at": "2024-12-24T10:00:00Z"
     }

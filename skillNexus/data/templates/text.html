@@ -2,36 +2,215 @@
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>SkilNexus</title>
-    <link
-      href="http://127.0.0.1:8000/static/css/bootstrap.min.css"
-      rel="stylesheet"
-       
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-    <link rel="stylesheet" href="http://127.0.0.1:8000/static/css/style.css" />
-    <link rel="stylesheet" href="http://127.0.0.1:8000/static/css/programs.css" />
-  </head>
-  <body>
-    <div aria-live="polite" aria-atomic="true" class="position-relative">
-      <div class="toast-container top-0 end-0 p-3">
-        <!-- Then put toasts within -->
-      </div>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SkilNexus</title>
+  <link href="http://127.0.0.1:8000/static/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="http://127.0.0.1:8000/static/css/style.css" />
+  <style>
+    #chat_container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: row;
+      gap:10px;
+      & #chat_card {
+        height: 500px;
+        width: min( 100vw , 400px);
+        margin: 0;
+        border-radius:28px !important;
+      }
+      & #chat_messages_input_container{
+        position: relative;
+        height: 443px !important;
+        padding-bottom: 45px;
+      }
+      & #chat_input_container{
+        display: flex;
+        width: 100%;
+        position: absolute;
+        bottom: 0px;
+        height: 44px;
+        padding: 2px;
+        border-radius: 21px;
+        gap: 5px;
+        background-color: var(--bg2);
+        & input{
+          width: 100%;
+          height: 100%;
+          border-radius: 20px;
+        }
+        & button{
+          /* overflow: hidden; */
+          display: block;
+          padding: 0;
+          margin: 0;
+          width: 40px;
+          height: 40px;
+          border: none;
+          & img{
+            height: 40px;
+            aspect-ratio: 1/1;
+            object-fit: contain;
+          }
+        }
+        
+      }
+      & #chat_messages_container{
+        overflow-y: scroll;
+        scrollbar-width: none;
+        scrollbar-color: rgba(var(--bs-secondary-rgb),var(--bs-text-opacity))!important transparent;
+        height: 100px;
+        display: flex;
+        flex-direction: column-reverse;
+        &::-webkit-scrollbar-button {
+          display: none;
+        }
+      }
+      & #chat_messages{
+        margin-bottom: 2px;
+        /* height: 100%; */
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        & .message{
+          margin: 3px 0;
+          max-width: 70%;
+          padding: 4px 15px;
+          border-radius: 25px;
+          border: 1px solid rgba(var(--bs-secondary-rgb),.5)!important;
+          &.send{ 
+            align-self: flex-end;
+            background-color: var(--bs-secondary-bg);
+          }
+          &.receive{ 
+            align-self: flex-start;
+            background-color: var(--bs-tertiary-bg);
+          }
+        }
+        & .time{
+          display: inline-block;
+          position: relative;
+          margin-left: -5px;
+          text-align: end;
+          width: max-content;
+          margin-right: 20px;
+          transform: scale(0.8);
+        }
+        & .seen .time{
+          
+          &::after, &::before{
+            content: "";
+            display: inline;
+            position: absolute;
+            right: -15px;
+            bottom: 6px;
+            width: 8px;
+            height: 14px;
+            border-right: 2px solid rgba(var(--bs-secondary-rgb),var(--bs-text-opacity))!important;
+            border-bottom: 2px solid rgba(var(--bs-secondary-rgb),var(--bs-text-opacity))!important;
+            transform: rotate(45deg);
+
+          }
+          &::before{
+            right: -20px;
+          }
+        }
+      }
+
+      #chat_head_container{
+        width: 50px;
+        /* height: 100px !important; */
+        /* background-color: var(--bg); */
+        display: flex;
+        flex-direction: column;
+        justify-content: end;
+        align-items: center;
+        
+        & ul{
+          list-style: none;
+          margin: 0;
+          padding: 0;
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          /* justify-content: center; */
+          align-items: center;
+          gap: 5px;
+          & *{
+            width: 100%;
+            height: 100%;
+            aspect-ratio: 1/1;
+            bottom: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+          }
+          &:has(input:checked){
+            /* background-color: #fff; */
+            & li{
+              margin-bottom: 0px;
+            }
+
+          }
+          & li{
+            aspect-ratio: 1/1;
+            background-color: var(--bg);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: -30px;
+            border: 1px solid rgba(var(--bs-secondary-rgb),1)!important;
+            transition: margin-bottom .3s ease-in-out;
+            & img{
+              height: 100%;
+              aspect-ratio: 1/1;
+              object-fit: contain;
+            }
+            &:last-child{
+              margin-bottom: 0px;
+              position: relative;
+              & input{
+                z-index: 1;
+                border: none;
+                border-radius: 50%;
+                opacity: 0;
+              }
+              & .icon{
+                  position: absolute;
+                  bottom: 0;
+                  background: var(--bg);
+                }
+            }
+            
+          }
+        }
+      }
+      
+    }
+  </style>
+</head>
+
+<body>
+  <div aria-live="polite" aria-atomic="true" class="position-relative">
+    <div class="toast-container top-0 end-0 p-3">
+      <!-- Then put toasts within -->
     </div>
-    <!-- start sidebar  -->
+  </div>
+  <!-- start sidebar  -->
 <!-- start sidebar  -->
 <!-- start sidebar  -->
 <!-- start sidebar  -->
@@ -77,7 +256,9 @@
             <div class="profile-con ms-1">
               
               
-                <img src="/profile_pictures/uni_BbdPVsf.jpg" alt="profile pic" />
+              <div class="icon">
+                <i class="fa-solid fa-user fa-xl" style="color: #00eeff"></i>
+              </div>
               
               <ul class="dropdown-menu bg-dar">
                 <li>
@@ -118,11 +299,16 @@
             
 
             
-
+            
             
                 <li>
-                    <a href="/university/programs"><span class="fa-solid fa-wand-magic-sparkles"></span> &nbsp; Programs</a>
+                    <a href="/employer/jobs"><span class="fa-solid fa-book"></span> &nbsp; My Jobs</a>
                 </li>
+                <li>
+                    <a href="/employer/jobs/offers"><span class="fa-solid fa-hammer"></span> &nbsp; Job Offers </a>
+                </li>
+            
+
             
 
             <li class="logout">
@@ -171,281 +357,175 @@
     <!-- end sidebar  -->
     <!-- end sidebar  -->
     <!-- end sidebar  -->
-  
-        <div class="my-round" id="body">
-          <nav aria-label="breadcrumb" class="mybg-t breadcrumb">
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="/">Home</a></li>
-              <li class="breadcrumb-item" aria-current="page">Programs</li>
-            </ol>
-          </nav>
-            <!-- Modal -->
-            <div class="modal fade modal-lg" style="z-index: 6000" id="addProgram" tabindex="-1" aria-labelledby="myModel" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h1 class="modal-title fs-5 my-color" id="myModel">Add Program/Course</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body">
-                    <div class="row">
-                      <p><small class="text-danger d-none">* Please state your all academic degrees</small></p>
-                      
-                      <div class=" mb-3 col-lg-12">
-                        <label class="my-color"> Program or Course Title
-                          <span class="text-danger">*</span></label>
-                        <input class="form-control py-0 form-control-sm " name="name" placeholder="Program/Coures Title"/>
-                      </div>
-                      <div class=" mb-3 col-lg-12">
-                        <label class="my-color">Description
-                          <span class="text-danger">*</span></label>
-                        <textarea class="form-control py-0 form-control-sm " name="description" placeholder="Description"></textarea>
-                      </div>
-                      <div class=" mb-3 col-lg-6">
-                        <label class="my-color">Type
-                          <span class="text-danger">*</span></label>
-                        <select class="form-control py-0 form-control-sm " name="type" placeholder=" Please Select One">
-                          <option value="">Please Select One</option>
-                          <option value="Graduate">Graduate</option>
-                          <option value="Undergraduate">Undergraduate</option>
-                          <option value="Professional">Professional</option>
-                          <option value="Certificate">Certificate</option>
-                          <option value="Doctoral">Doctoral</option>
-                        </select>
-                      </div>
-                      <div class=" mb-3 col-lg-6">
-                        <label class="my-color ">Duration
-                          <span class="text-danger">*</span></label>
-                        <div class="form-control">
-                          <div class="row">
-                            <div class=" mb-3 col-lg-6">
-                              <label class="my-color"> Year
-                                <span class="text-danger">*</span></label>
-                              <input type="number" class="form-control py-0 form-control-sm " name="duration_year" placeholder=" "/>
-                            </div>
-                            <div class=" mb-3 col-lg-6">
-                              <label class="my-color">Month
-                                <span class="text-danger">*</span></label>
-                              <input number class="form-control py-0 form-control-sm " name="duration_month" placeholder=" "/>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      
+
+  <div class="my-round" id="body">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mybg-t breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/" class="my-color">Home</a></li>
+        <li class="breadcrumb-item active my-color" aria-current="page"> </li>
+      </ol>
+    </nav>
 
 
-                    </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                  </div>
-                </div>
-              </div>
+
+    
+    <div class="row ">
+      <div class="col-12">
+        <div class="card my-row rounded-0 mybg">
+          <div class="card-header" style="margin: -10px -10px 0 -10px">
+            <div class="d-flex justify-content-between">
+              <h3 class="card-title mb-0">Frontend Developer (React)</h3>
+              <span style="height: max-content;" class="badge bg-warning text-capitalize" id="status-badge"><strong>Status:</strong> Pending</span>
+
             </div>
-          <!-- Modal -->
-          <!-- Modal -->
-          <!-- Modal -->
-          <!-- Modal -->
-          <!-- main body-->
-          <!-- main body-->
-          <!-- main body-->
-          <!-- main body-->
-          <!-- main body-->
-          <!-- main body-->
-          
-          <div class="row my-color mybg my-row">
-            <div class="d-flex">
-              <h2 class="flex-grow-1 mb-2 text-primary"><b>Programs & Courses</b></h2>
-              <div class="mb-2">
-                <button type="button" class="btn btn-outline-primary btn-add" data-bs-toggle="modal" data-bs-target="#addProgram">
-                  <i class="fa-solid fa-plus me-2"> </i>Add New
-                </button>
+          </div>
+          <div class="card-body m-0 p-0 bg-transparent">
+            <div class="my-3 row">
+              <p class="col-12"><strong>Description:</strong> Build user interfaces for our new web application using React.js.</p>
+              <p class="col-xl-3 col-lg-6"><strong>Skills:</strong>  Frontend Development, JavaScript, React</p>
+              <p class="col-xl-3 col-lg-6"><strong>Project Duration:</strong> 3 months</p>
+              <p class="col-xl-3 col-lg-6"><strong>Price:</strong> $5000</p>
+              <p class="col-xl-3 col-lg-6"><strong>Deadline:</strong> March 31, 2025</p>
+              <p class="col-xl-3 col-lg-6"><strong>Location:</strong> Remote</p>
+              <p class="col-xl-3 col-lg-6"><strong>Freelancer:</strong> Jessica Davis</p> 
+              <p class="col-xl-3 col-lg-6"><strong>Proposed Rate:</strong> $4564</p> 
+              <p class="col-xl-3 col-lg-6"><strong>Proposal:</strong> fghjfcj</p> 
+              
+              
+              <div class="mt-2 col-12 d-flex justify-content-end">
+                
+                <button class="btn btn-success btn-sm me-2">Accept Offer</button> 
+                <button class="btn btn-danger btn-sm me-2" onclick="withdrawOffer(4)">Reject Offer</button>
+                <button class="btn btn-danger btn-sm" onclick="toggleChat()">Chat with Freelancer</button>
+                
               </div>
-            </div>
-            <hr class="profile-hr" />
-            <div class="col-12">
-              <div class="row details">
-                <div class="col ">
-                  <div class="row px-5 program-con">
-                    <div class="row" id="program22">
-                      <div class="col-xl-9 ">
-                        <span class="name">
-                          Program
-                        </span>
-                        <br>
-                        <span class="type">
-                          type
-                        </span>
-                      </div>
-                      <div class="col-xl-3 pt-1 ">
-                        <div class="row">
-                          <div class="col-xl-12 col-6 smaller_details-con">
-                            <span class="smaller-details"><svg class="Icon_icon__2UXCa" width="14" height="14" viewBox="0 0 14 15" xmlns="http://www.w3.org/2000/svg"><title>86017104-411A-4112-AC71-935BCF9B16F1</title><path d="M9.691 10.881a.913.913 0 1 1 1.827 0 .913.913 0 0 1-1.827 0zm-3.604 0a.913.913 0 1 1 1.827 0 .913.913 0 0 1-1.827 0zm-3.604 0a.913.913 0 1 1 1.826 0 .913.913 0 0 1-1.826 0zm7.208-2.978a.913.913 0 1 1 1.827 0 .913.913 0 0 1-1.827 0zm-3.604 0a.913.913 0 1 1 1.827 0 .913.913 0 0 1-1.827 0zm-3.604 0a.913.913 0 1 1 1.826 0 .913.913 0 0 1-1.826 0zm10.641-3.544H.876v-1.31c0-.648.528-1.176 1.177-1.176h.84v.504a.439.439 0 0 0 .878 0v-.504h6.46v.504a.439.439 0 0 0 .875 0v-.504h.84c.65 0 1.178.528 1.178 1.176v1.31zm0 8.34c0 .65-.528 1.178-1.177 1.178H2.053c-.65 0-1.177-.528-1.177-1.177V5.235h12.248V12.7zM11.947.997h-.84V.438a.437.437 0 1 0-.877 0v.558H3.771V.438a.438.438 0 1 0-.877 0v.558h-.84A2.055 2.055 0 0 0 0 3.05v9.65c0 1.134.921 2.055 2.053 2.055h9.894A2.055 2.055 0 0 0 14 12.7V3.05c0-1.133-.92-2.054-2.053-2.054z" fill="#B8B8B8" fill-rule="evenodd"></path></svg>
-                            &nbsp; 0 Year 6 Months</span>
-                          </div>
-                          <div class="col-xl-12 col-6 mb-2">
-                            <div class="smaller_details-con pt-3">
-                                <i class="fa-solid fa-pen fa-xl my-color btn-edit" target="22"></i>
-                                <i class="fa-solid fa-trash fa-xl my-color btn-del" target="22"></i>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <hr class="mb-1">
-                      <div class="col-12">
-                        <strong>Dscription: </strong> description
-                      </div>
-                      
-                    </div>
-                    
-                    <hr>
-                    
+              
 
-                  </div>  
-
-
-
-
-                  </div>
-                </div>
-              </div>
-           
-            </div>
-          
-          
-
-            <div class="card my-row rounded-0 mybg m-0 border-0 mb-2">
-              <div class="card-header" style="margin: -10px -10px 0 -10px">
-                <div class="d-flex justify-content-between">
-                  <h3 class="card-title mb-0">Applicant List</h3>
-      
-                </div>
-              </div>
-              <div class="card-body">
-                <div class="mb-3">
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="applicantSearch"
-                    placeholder="Search applicants..."
-                  />
-                </div>
-                <div class="table-responsive">
-                  <table class="table table-striped table-bordered">
-                    <thead>
-                      <tr class="my-color">
-                        <th>#</th>
-                        <!-- <th></th> -->
-                        <th>Student Name</th>
-                        <th>Student ID</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Country</th>
-                        <th>Status</th>
-                        <th>Program Name</th>
-                        <th>Session Name</th>
-                        <th>Comment</th>
-                        <th>Submission Date</th>
-                        <th>Last Updated</th>
-                      </tr>
-                    </thead>
-                    <tbody id="applicantsTable">
-                      
-                      <tr class="my-color">
-                        <td>1</td>
-                        <!-- <td><img src="/profile_pictures/dipta.jpg" alt=" Picture" width="50" height="50"></td> -->
-                        <td>dipta das</td>
-                        <td>11</td>
-                        <td style="text-transform: unset">diptasdd5160@gmail.com</td>
-                        <td></td>
-                        <td>Bangladesh</td>
-                        <td>
-                          <span
-                            class="badge bg-danger"
-                          >
-                            Rejected
-                          </span>
-                        </td>
-                        <td>BBA</td>
-                        <td>Spring 25</td>
-                        <td></td>
-                        <td>2024-12-13 06:59 PM</td>
-                        <td>2024-12-21 03:36 PM</td>
-                      </tr>
-                      
-                      <tr class="my-color">
-                        <td>2</td>
-                        <!-- <td><img src="/profile_pictures/diptasdd.jpg" alt=" Picture" width="50" height="50"></td> -->
-                        <td>Dipta Das</td>
-                        <td>4</td>
-                        <td style="text-transform: unset">dipta5160@gmail.com</td>
-                        <td>01908066138</td>
-                        <td>None</td>
-                        <td>
-                          <span
-                            class="badge bg-warning"
-                          >
-                            Pending
-                          </span>
-                        </td>
-                        <td>BBA</td>
-                        <td>Spring 25</td>
-                        <td>dfghfhgf</td>
-                        <td>2024-12-14 03:20 PM</td>
-                        <td>2024-12-21 03:36 PM</td>
-                      </tr>
-                      
-                    </tbody>
-                  </table>
-                </div>
-                <!-- Pagination controls would go here -->
-              </div>
             </div>
 
-
-
-          <!-- end main body-->
-          <!-- end main body-->
-          <!-- end main body-->
-          <!-- end main body-->
-          </div> 
-          <!-- end main body-->
-          <!-- end main body-->
-          <!-- end main body-->
-          <!-- end main body-->
+            
+          </div>
         </div>
       </div>
     </div>
 
-   
-<script src="http://127.0.0.1:8000/static//js/bootstrap.bundle.min.js"></script>
+    <div id="chat_container">
+      <div class="card my-row  mybg p-0" id="chat_card">
+        <div class="card-header ps-2 pe-0" >
+          <div class="d-flex justify-content-between">
+            <h3 class="card-title mb-0">Chat</h3>
+            <button class="btn btn-danger btn-sm btn-close" onclick="toggleChat()"></button>
+          </div>
+        </div>
+        <div class="card-body m-0 bg-transparent" style="padding: 0px 4px 4px 4px;">
+          <div class="d-flex flex-column h-100" id="chat_messages_input_container">
+            <div class="flex-grow-1" id="chat_messages_container" >
+              <div id="chat_messages">
+                <div class="message seen send">Hello, how can I help you today? 
+                  <small class="time text-secondary"> 12:00 AM</small>
+                </div>
+                <div class="message seen receive">Hi, I have a question regarding my account. 
+                  <small class="time text-secondary"> 12:00 AM</small>
+                </div>
+                <div class="message seen send">Sure, what would you like to know? 
+                  <small class="time text-secondary"> 12:00 AM</small>
+                </div>
+                <div class="message seen receive">I need help with resetting my password. 
+                  <small class="time text-secondary"> 12:00 AM</small>
+                </div>
+                <div class="message seen send">No problem, I'll guide you through the process. 
+                  <small class="time text-secondary"> 12:00 AM</small>
+                </div>
+                <div class="message seen send">Enter your email address associated with your account. 
+                  <small class="time text-secondary"> 12:00 AM</small>
+                </div>
+                <div class="message seen receive">Is it okay to send a password reset link to test@gmail.com? 
+                  <small class="time text-secondary"> 12:00 AM</small>
+                </div>
+                <div class="message seen send">Yes, that is correct. 
+                  <small class="time text-secondary"> 12:00 AM</small>
+                </div>
+                <div class="message seen receive">We've sent you an email with a link to reset your password. 
+                  <small class="time text-secondary"> 12:00 AM</small>
+                </div>
+                <div class="message seen send">Thank you, I have reset my password. 
+                  <small class="time text-secondary"> 12:00 AM</small>
+                </div>
+                <div class="message seen receive">You're welcome! If you have any other questions, feel free to ask. 
+                  <small class="time text-secondary"> 12:00 AM</small>
+                </div>
+                <div class="message seen send">I need help with my billing information. 
+                  <small class="time text-secondary"> 12:00 AM</small>
+                </div>
+              </div>
+            </div>
+            <div id="chat_input_container">
+              <input type="text" id="" class="form-control " placeholder="Type message...">
+              <button class="btn" onclick="sendMessage()"><img src="http://127.0.0.1:8000/static/images/send.png"  alt=""></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="chat_head_container">
+        <ul>
+          <li class="my-color"> <i class="fa-regular fa-user fa-lg"></i></li>
+          <li class="my-color"> <i class="fa-regular fa-user fa-lg"></i></li>
+          <li class="my-color"> <i class="fa-regular fa-user fa-lg"></i></li>
+          <li class="my-color"> <input type="checkbox" name="" id=""><span class="icon"><i class="fa-regular fa-comment-dots fa-2xl"></i></span></li>
+          
+        </ul>
+      </div>
+    </div>
 
-    <script src="http://127.0.0.1:8000/static//js/jquery-3.7.1.min.js"></script>
-    <script src="http://127.0.0.1:8000/static//js/script.js"></script>
-    <script src="http://127.0.0.1:8000/static//js/programs.js"></script>
-    <script>
-      $(document).ready(function () {
-        on_page_load([]);
-        $(document).on('keyup', '#applicantSearch', function (e) {
-          var search = $(this).val().toLowerCase();
-          const rows = $('#applicantsTable tr');
-          $.each(rows, function (indexInArray, row) { 
-             const cells = $(row).find('td');
-             if (cells.eq(1).text().toLowerCase().includes(search)) $(row).show();
-             else if (cells.eq(2).text().toLowerCase().includes(search)) $(row).show();
-             else if (cells.eq(3).text().toLowerCase().includes(search)) $(row).show();
-             else if (cells.eq(4).text().toLowerCase().includes(search)) $(row).show();
-             else if (cells.eq(5).text().toLowerCase().includes(search)) $(row).show();
-             else if (cells.eq(6).text().toLowerCase().includes(search)) $(row).show();
-             else if (cells.eq(7).text().toLowerCase().includes(search)) $(row).show();
-             else if (cells.eq(8).text().toLowerCase().includes(search)) $(row).show();
-             else $(row).hide();
-          });
-        });
-        
-      });
-    </script>
-  </body>
-</html>
+
+
+  </div>
+  </div>
+
  
+<script src="http://127.0.0.1:8000/static/js/bootstrap.bundle.min.js"></script>
+
+  <script src="http://127.0.0.1:8000/static/js/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="http://127.0.0.1:8000/static/js/script.js"></script>
+  <script src="http://127.0.0.1:8000/static/js/manageProgram.js"></script>
+  <script>
+    $(document).ready(function () {
+      on_page_load([]);
+
+      function withdrawOffer(offerId) {
+        let e = event;
+        event.target.classList.add('loading');
+        $.ajax({
+          type: "post",
+          url: "/api/employer/job/offer/withdraw/"+offerId,
+          data: {
+            csrfmiddlewaretoken : getCookie("csrftoken")
+          },
+          success: function (response) {
+            showToast("Offer Withdrawn", "success");
+            e.target.classList.remove('loading');
+            badge=  document.getElementById('status-badge');
+            badge.classList.remove('bg-primary');
+            badge.classList.add('bg-danger');
+            badge.innerHTML = '<strong>Status:</strong> Rejected';
+            e.target.remove();
+          },
+          error: function (xhr, status, error) {
+            showToast("Error withdrawing offer", "danger");
+            e.target.classList.remove('loading');
+          }
+        });
+      }
+
+      
+    });
+    function toggleChat() {
+        $('#chat_card').slideToggle(300);
+      }
+  </script>
+
+</body>
+
+</html>
