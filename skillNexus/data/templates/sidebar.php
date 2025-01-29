@@ -114,6 +114,9 @@
                     <a href="/programs"><span class="fa-solid fa-play"></span> &nbsp; Program</a>
                 </li>
                 <li>
+                    <a href="/student/my_programs"><span class="fa-solid fa-play"></span> &nbsp; My Programs</a>
+                </li>
+                <li>
                     <a href="/my_skills"><span class="fa-solid fa-tools"></span> &nbsp; Skills</a>
                 </li>
                 <li>
@@ -144,9 +147,7 @@
                 <li>
                     <a href="/employer/jobs"><span class="fa-solid fa-book"></span> &nbsp; My Jobs</a>
                 </li>
-                <li>
-                    <a href="/employer/jobs/offers"><span class="fa-solid fa-hammer"></span> &nbsp; Job Offers </a>
-                </li>
+                
             {% endif %}
 
             {% if user.role == 'University' %}

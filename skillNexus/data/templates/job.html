@@ -15,6 +15,116 @@
     integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="{%  static 'css/style.css' %}" />
+  <style>
+    #chat_container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 9999;
+      & #chat_card {
+        height: 500px;
+        width: min( 100vw , 400px);
+      }
+      & #chat_messages_input_container{
+        position: relative;
+        height: 457px !important;
+        padding-bottom: 45px;
+      }
+      & #chat_input_container{
+        display: flex;
+        width: 100%;
+        position: absolute;
+        bottom: 0px;
+        height: 44px;
+        padding: 2px;
+        border-radius: 21px;
+        gap: 5px;
+        background-color: var(--bg2);
+        & input{
+          width: 100%;
+          height: 100%;
+          border-radius: 20px;
+        }
+        & button{
+          /* overflow: hidden; */
+          display: block;
+          padding: 0;
+          margin: 0;
+          width: 40px;
+          height: 40px;
+          border: none;
+          & img{
+            height: 40px;
+            aspect-ratio: 1/1;
+            object-fit: contain;
+          }
+        }
+        
+      }
+      & #chat_messages_container{
+        overflow-y: scroll;
+        scrollbar-width: none;
+        scrollbar-color: rgba(var(--bs-secondary-rgb),var(--bs-text-opacity))!important transparent;
+        height: 100px;
+        display: flex;
+        flex-direction: column-reverse;
+        &::-webkit-scrollbar-button {
+          display: none;
+        }
+      }
+      & #chat_messages{
+        margin-bottom: 2px;
+        /* height: 100%; */
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        & .message{
+          margin: 3px 0;
+          max-width: 70%;
+          padding: 4px 15px;
+          border-radius: 25px;
+          border: 1px solid rgba(var(--bs-secondary-rgb),.5)!important;
+          &.send{ 
+            align-self: flex-end;
+            background-color: var(--bs-secondary-bg);
+          }
+          &.receive{ 
+            align-self: flex-start;
+            background-color: var(--bs-tertiary-bg);
+          }
+        }
+        & .time{
+          display: inline-block;
+          position: relative;
+          margin-left: -5px;
+          text-align: end;
+          width: max-content;
+          margin-right: 20px;
+          transform: scale(0.8);
+        }
+        & .seen .time{
+          
+          &::after, &::before{
+            content: "";
+            display: inline;
+            position: absolute;
+            right: -15px;
+            bottom: 6px;
+            width: 8px;
+            height: 14px;
+            border-right: 2px solid rgba(var(--bs-secondary-rgb),var(--bs-text-opacity))!important;
+            border-bottom: 2px solid rgba(var(--bs-secondary-rgb),var(--bs-text-opacity))!important;
+            transform: rotate(45deg);
+
+          }
+          &::before{
+            right: -20px;
+          }
+        }
+      }
+      
+    }
+  </style>
 </head>
 
 <body>
@@ -46,9 +156,8 @@
           <div class="card-header" style="margin: -10px -10px 0 -10px">
             <div class="d-flex justify-content-between" id="headingOne">
               <h3 class="card-title mb-0">{{ job.title }}</h3>
-              {% if user.is_authenticated and user.role != 'Employer' and job.status == 'open' and not job.applied_status %}
-                <a href="#collapseOne" data-bs-toggle="collapse" class="btn btn-primary">Apply for Job</a> 
-              {% elif user.is_authenticated and user.role != 'Employer' and job.applied_status %}
+              
+              {% if user.is_authenticated and user.role != 'Employer' and job.applied_status %}
                 {% if job.applied_status == 'Pending' %}
                   <span class="badge bg-info" style="height: max-content;">Pending</span>
                 {% elif job.applied_status == 'Accepted' %}
@@ -66,7 +175,7 @@
           </div>
           <div class="card-body m-0 p-0 bg-transparent">
             <div class="row mt-2">
-              <div class="col-12"><p><strong>Description:</strong> {{ job.description }}</p></div>
+              <div class="col-12"><p><strong>Description:</strong> {{ job.description|linebreaksbr }}</p></div>
               <div class="col-md-8">
                 
                 <p><strong>Skills:</strong> {{ job.skills }}</p>
@@ -103,6 +212,38 @@
                   </div>
                 </div>
                 <button type="submit" class="btn btn-primary" id="apply-btn" data-id="{{job.id}}" data-employer="{{job.employer_id}}" data-offer-id="{{job.offer_id|default_if_none:''}}" {% if job.applied_status and job.applied_status != 'Pending' %} disabled {% endif %}>{% if job.applied_status %} Update Offer {% else %} Apply {% endif %}</button>
+                {% if job.applied_status %}
+                  <button type="button" class="btn btn-primary" id="chat-btn" onclick="toggleChat()">Chat with Employer</button>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="chat_container">
+        <div class="card my-row rounded-0 mybg p-0" id="chat_card">
+          <div class="card-header ps-2 pe-0" >
+            <div class="d-flex justify-content-between">
+              <h5 class="card-title mb-0">{{job.employer}}</h5>
+              <button class="btn btn-danger btn-sm btn-close" onclick="toggleChat()"></button>
+            </div>
+          </div>
+          <div class="card-body m-0 bg-transparent" style="padding: 0px 4px 4px 4px;">
+            <div class="mb-3 d-flex flex-column h-100" id="chat_messages_input_container">
+              <div class="flex-grow-1" id="chat_messages_container" >
+                <div id="chat_messages">
+                  {% for message in messages %}
+                  <div class="message {% if message.sender_id == request.user.id %}send{% else %}receive{% endif %}">
+                    {{ message.content }}
+                    <small class="time text-secondary">{{ message.created_at|date:"M d, Y, h:i A" }}</small>
+                  </div>
+                  {% endfor %}
+                  
+                </div>
+              </div>
+              <div id="chat_input_container">
+                <input type="text" id="messageInput" class="form-control" placeholder="Type message...">
+                <button class="btn" onclick="sendMessage(event)"><img src="/static/images/send.png" alt=""></button>
               </div>
             </div>
           </div>
@@ -160,7 +301,62 @@
           }
         }); 
       }); // end apply 
+
+      
     });
+    $('#chat_card').hide();
+
+    function toggleChat() {
+        $('#chat_card').slideToggle(300);
+      }
+      function sendMessage(event) {
+      event.preventDefault();
+      
+      const messageInput = document.getElementById('messageInput');
+      const messageContent = messageInput.value.trim();
+      
+      if (!messageContent) {
+        alert('Please enter a message.');
+        return;
+      }
+      
+      // Disable the button to prevent multiple submissions
+      const button = event.target;
+      button.disabled = true;
+      
+      // Send the message to the server
+      $.ajax({
+        type: 'POST',
+        url: `/api/jobs/offer/send_message`,
+        data: {
+          content: messageContent,
+          job_offer: {{ job.offer_id }},
+          receiver: {{ job.employer_id }},
+          sender: {{ user.id }},
+          csrfmiddlewaretoken: getCookie('csrftoken')  // Ensure CSRF token is included
+        },
+        success: function(response) {
+          // Append the new message to the chat
+          $('#chat_messages').append(`
+            <div class="message send">
+              ${response.data.content}
+              <small class="time text-secondary">${new Date().toLocaleTimeString()}</small>
+            </div>
+          `);
+          
+          // Clear the input field
+          messageInput.value = '';
+        },
+        error: function(xhr, status, error) {
+          alert('Error sending message: ' + error);
+        },
+        complete: function() {
+          // Re-enable the button
+          button.disabled = false;
+        }
+      });
+    }
+  
   </script>
 
 </body>

@@ -1,4 +1,3 @@
-
 from datetime import datetime
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -177,6 +176,7 @@ class Course(models.Model):
     course_fee = models.DecimalField(
         decimal_places=2, max_digits=5, blank=False)
     course_thumbnil = models.ImageField(upload_to="thumbnil/", blank=False)
+    
 
 
 class CourseLecture(models.Model):
@@ -345,19 +345,8 @@ class Job(models.Model):
         return f"{self.title} - {self.employer.company.name}"
 
 
-class Message(models.Model):
-    sender = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='sent_messages')
-    receiver = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='received_messages')
-    # Optional, for job-related messages
-    job = models.ForeignKey(
-        Job, on_delete=models.CASCADE, null=True, blank=True)
-    content = models.TextField()
 
-    timestamp = models.DateTimeField(auto_now_add=True)
-    seen = models.DateTimeField(null=True, blank=True)
-
+ 
 
 class JobOffer(models.Model):
     job = models.ForeignKey(Job, on_delete=models.CASCADE)
@@ -371,8 +360,20 @@ class JobOffer(models.Model):
     status = models.CharField(max_length=50, choices=[
         ('Pending', 'Pending'),
         ('Accepted', 'Accepted'),
-        ('Rejected', 'Rejected')
+        ('Rejected', 'Rejected'),
+        ('Completed', 'Completed')
     ], default='Pending')
 
     class Meta:
         unique_together = ('job', 'freelancer')
+class Message(models.Model):
+    sender = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='sent_messages')
+    receiver = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='received_messages')
+    job_offer = models.ForeignKey(
+        JobOffer, on_delete=models.CASCADE, null=True, blank=True)
+    content = models.TextField()
+    seen = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    # created_at = models.DateTimeField(auto_now_add=True)

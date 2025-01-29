@@ -1,3 +1,4 @@
+<!-- File: employer_job_offer.html -->
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -140,7 +141,9 @@
     <nav aria-label="breadcrumb" class="mybg-t breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/" class="my-color">Home</a></li>
-        <li class="breadcrumb-item active my-color" aria-current="page"> </li>
+        <li class="breadcrumb-item"><a href="/employer/jobs" class="my-color">Jobs</a></li>
+        <li class="breadcrumb-item"><a href="/employer/job/{{ offer.job_id }}" class="my-color">{{ offer.title }}</a></li>
+        <li class="breadcrumb-item active my-color" aria-current="page"> {{ offer.freelancer }}</li>
       </ol>
     </nav>
 
@@ -153,29 +156,37 @@
           <div class="card-header" style="margin: -10px -10px 0 -10px">
             <div class="d-flex justify-content-between">
               <h3 class="card-title mb-0">{{ offer.title }}</h3>
-              <span style="height: max-content;" class="badge {% if offer.status == 'Pending' %}bg-warning{% elif offer.status == 'Accepted' %}bg-success{% elif offer.status == 'Rejected' %}bg-danger{% endif %} text-capitalize" id="status-badge"><strong>Status:</strong> {{ offer.status }}</span>
+              <span style="height: max-content;" class="badge {% if offer.status == 'Pending' %}bg-info{% elif offer.status == 'Accepted' %}bg-success{% elif offer.status == 'Rejected' %}bg-danger{% endif %} text-capitalize" id="status-badge"> {{ offer.status }}</span>
 
             </div>
           </div>
           <div class="card-body m-0 p-0 bg-transparent">
             <div class="my-3 row">
-              <p class="col-12"><strong>Description:</strong> {{ offer.description }}</p>
-              <p class="col-xl-3 col-lg-6"><strong>Skills:</strong> {{ offer.skills }}</p>
+              <p class="col-12"><strong>Description:</strong> {{ offer.description|linebreaksbr }}</p>
+              <p class="col-12"><strong>Skills:</strong> {{ offer.skills }}</p>
               <p class="col-xl-3 col-lg-6"><strong>Project Duration:</strong> {{ offer.project_duration }}</p>
               <p class="col-xl-3 col-lg-6"><strong>Price:</strong> ${{ offer.price }}</p>
               <p class="col-xl-3 col-lg-6"><strong>Deadline:</strong> {{ offer.deadline }}</p>
               <p class="col-xl-3 col-lg-6"><strong>Location:</strong> {{ offer.location }}</p>
               <p class="col-xl-3 col-lg-6"><strong>Freelancer:</strong> {{ offer.freelancer }}</p> 
               <p class="col-xl-3 col-lg-6"><strong>Proposed Rate:</strong> ${{ offer.proposed_rate }}</p> 
-              <p class="col-xl-3 col-lg-6"><strong>Proposal:</strong> {{ offer.proposal }}</p> 
-              
+              <p class="col-xl-3 col-lg-6"><strong>Proposed Deadline:</strong> {{ offer.proposed_deadline }}</p>
+              <hr>
+
+              <p class="col-12"><strong>Proposal:</strong> {{ offer.proposal|linebreaksbr }}</p>
+            
               {% if offer.status == 'Pending' %}
-              <div class="mt-2 col-12 d-flex justify-content-end">
+              <div class="mt-2 col-12 d-flex justify-content-end" id="offer-actions">
                 
-                <button class="btn btn-success btn-sm me-2">Accept Offer</button> 
+                <button class="btn btn-success btn-sm me-2" onclick="acceptOffer({{ offer.id }}) ">Accept Offer</button> 
                 <button class="btn btn-danger btn-sm me-2" onclick="withdrawOffer({{ offer.id }})">Reject Offer</button>
-                <button class="btn btn-danger btn-sm" onclick="toggleChat()">Chat with Freelancer</button>
+                <button class="btn btn-primary btn-sm me-2" onclick="toggleChat()">Chat with Freelancer</button>
                 
+              </div>
+              {% elif offer.status == 'Accepted'%}
+              <div class="mt-2 col-12 d-flex justify-content-end" id="offer-actions">
+                <button class="btn btn-primary btn-sm me-2" onclick="toggleChat()">Chat with Freelancer</button>
+                <button class="btn btn-success btn-sm me-2" onclick="completeOrder({{ offer.id }})">Project completed & Make Payment</button>
               </div>
               {% endif %}
 
@@ -186,7 +197,6 @@
         </div>
       </div>
     </div>
-
     <div id="chat_container">
       <div class="card my-row rounded-0 mybg p-0" id="chat_card">
         <div class="card-header ps-2 pe-0" >
@@ -199,21 +209,18 @@
           <div class="mb-3 d-flex flex-column h-100" id="chat_messages_input_container">
             <div class="flex-grow-1" id="chat_messages_container" >
               <div id="chat_messages">
-                <div class="message receive">Hello, how can I help you today? 1
-                  <small class="time text-secondary"> 12:00 AM</small>
+                {% for message in messages %}
+                <div class="message {% if message.sender_id == request.user.id %}send{% else %}receive{% endif %}">
+                  {{ message.content }}
+                  <small class="time text-secondary">{{ message.created_at|date:"M d, Y, h:i A" }}</small>
                 </div>
-                <div class="message seen send">Hello, how can I help you today? 1
-                  <small class="time text-secondary"> 12:00 AM</small>
-                </div>
-                <div class="message send">Hello, how can I help you today? 
-                  <small class="time text-secondary"> 12:00 AM</small>
-                </div>
+                {% endfor %}
                 
               </div>
             </div>
             <div id="chat_input_container">
-              <input type="text" id="" class="form-control " placeholder="Type message...">
-              <button class="btn" onclick="sendMessage()"><img src="/static/images/send.png"  alt=""></button>
+              <input type="text" id="messageInput" class="form-control" placeholder="Type message...">
+              <button class="btn" onclick="sendMessage(event)"><img src="/static/images/send.png" alt=""></button>
             </div>
           </div>
         </div>
@@ -236,10 +243,46 @@
   <script>
     $(document).ready(function () {
       on_page_load([]);
-
+      $('#chat_card').hide();
       
 
     });
+
+    function completeOrder(offerId) {
+      $.ajax({
+        type: "post", 
+        url: "/api/employer/job/offer/complete/"+offerId,
+        data: {
+          csrfmiddlewaretoken : getCookie("csrftoken")
+        },
+        success: function (response) {
+          showToast("Order Completed", "success");
+          window.location.href = "/employer/job/{{ offer.job_id }}";
+        },
+        error: function (xhr, status, error) {
+          showToast("Error completing order", "danger");
+        }
+      });
+    }
+
+
+    function acceptOffer(offerId) {
+      $.ajax({
+        type: "post",
+        url: "/api/employer/job/offer/accept/"+offerId,
+        data: {
+          csrfmiddlewaretoken : getCookie("csrftoken")
+        },
+        success: function (response) {
+          showToast("Offer Accepted", "success");
+          window.location.href = "/employer/job/{{ offer.job_id }}";
+          $('#offer-actions').remove();
+        },
+        error: function (xhr, status, error) {
+          showToast("Error accepting offer", "danger");
+        }
+      });
+    }
     function withdrawOffer(offerId) {
         let e = event;
         event.target.classList.add('loading');
@@ -251,12 +294,7 @@
           },
           success: function (response) {
             showToast("Offer Withdrawn", "success");
-            e.target.classList.remove('loading');
-            badge=  document.getElementById('status-badge');
-            badge.classList.remove('bg-primary');
-            badge.classList.add('bg-danger');
-            badge.innerHTML = '<strong>Status:</strong> Rejected';
-            e.target.remove();
+            $('#offer-actions').remove();
           },
           error: function (xhr, status, error) {
             showToast("Error withdrawing offer", "danger");
@@ -265,9 +303,57 @@
         });
       }
 
-      function toggleChat() {
-        $('#chat_card').slideToggle(300);
+    function toggleChat() {
+      $('#chat_card').slideToggle(300);
+    }
+
+    function sendMessage(event) {
+      event.preventDefault();
+      
+      const messageInput = document.getElementById('messageInput');
+      const messageContent = messageInput.value.trim();
+      
+      if (!messageContent) {
+        alert('Please enter a message.');
+        return;
       }
+      
+      // Disable the button to prevent multiple submissions
+      const button = event.target;
+      button.disabled = true;
+      
+      // Send the message to the server
+      $.ajax({
+        type: 'POST',
+        url: `/api/jobs/offer/send_message`,
+        data: {
+          content: messageContent,
+          job_offer: {{ offer.id }},
+          sender: {{ offer.employer_id }},
+          receiver: {{ offer.freelancer_id }},
+          csrfmiddlewaretoken: getCookie('csrftoken')  // Ensure CSRF token is included
+        },
+        success: function(response) {
+          // Append the new message to the chat
+          $('#chat_messages').append(`
+            <div class="message send">
+              ${response.data.content}
+              <small class="time text-secondary">${new Date().toLocaleTimeString()}</small>
+            </div>
+          `);
+          
+          // Clear the input field
+          messageInput.value = '';
+        },
+        error: function(xhr, status, error) {
+          alert('Error sending message: ' + error);
+        },
+        complete: function() {
+          // Re-enable the button
+          button.disabled = false;
+        }
+      });
+    }
   </script>
 
 </body>

@@ -134,8 +134,7 @@ $(".logout").click(function (e) {
   // alert("logout");
   deleteCookie("token");
   localStorage.removeItem("user");
-
-  location.replace("/logout");
+    window.location.href = '/logout'
 });
 
 // hide loader

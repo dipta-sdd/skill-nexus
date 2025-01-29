@@ -78,4 +78,9 @@ urlpatterns = [
     path('job/<int:job_id>/apply', jobs.job_apply, name='job_apply'),
     path('employer/job/offer/withdraw/<int:offer_id>',
          jobs.offer_withdraw, name='offer_withdraw'),
+    path('employer/job/offer/accept/<int:offer_id>',
+         jobs.offer_accept, name='offer_accept'),
+    path('employer/job/offer/complete/<int:offer_id>',
+         jobs.offer_complete, name='offer_complete'),
+    path('jobs/offer/send_message', jobs.send_message, name='send_message'),
 ]

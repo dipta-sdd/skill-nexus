@@ -7,8 +7,31 @@ from .views import getUser, login_required, run_raw_sql
 
 @login_required
 def profile_jobs(request):
-    # Implementation for displaying the jobs related to the user's profile
-    pass
+    user = getUser(request)
+    jobs = run_raw_sql(
+        """
+        SELECT DISTINCT job.* , 
+        GROUP_CONCAT(CONCAT(' ' , skill.name)) as skills,
+        COUNT(offer.id) as offer_count ,
+        CASE WHEN job.freelancer_id IS NULL 
+            THEN 'open' 
+            ELSE 
+                CASE WHEN job.payment_id IS NULL 
+                    THEN 'in progress' 
+                    ELSE 'completed' 
+                END 
+            END 
+        as status
+        FROM data_job as job
+        INNER JOIN data_job_skill as js ON job.id = js.job_id
+        INNER JOIN data_skill as skill ON skill.id = js.skill_id
+        LEFT JOIN data_joboffer as offer ON job.id = offer.job_id
+        WHERE job.freelancer_id = %s
+        GROUP BY job.id
+        """ % user['id'])
+    skills = Skill.objects.all()
+    skills = SkillSeriallizer(skills, many=True).data
+    return render(request, 'profile_jobs.html', {'jobs': jobs, 'skills': skills})
 
 
 def jobs(request):
@@ -73,7 +96,15 @@ def job(request, job_id):
         GROUP BY job.id
         """, (user_id, job_id,)
     )
-    return render(request, 'job.html', {'job': job[0]})
+    messages = Message.objects.filter(job_offer=job[0]['offer_id']).order_by('created_at')   
+    serializer = MessageSerializer(messages, many=True)
+
+    messages = run_raw_sql(
+        """
+        SELECT * FROM data_message WHERE job_offer_id = %s ORDER BY created_at
+        """, (job[0]['offer_id'],)
+    )
+    return render(request, 'job.html', {'job': job[0], 'messages': messages})
 
 
 def employer_jobs(request):
@@ -92,11 +123,13 @@ def employer_jobs(request):
                     ELSE 'completed' 
                 END 
             END 
-        as status
+        as status,
+        CONCAT(freelancer.first_name, ' ', freelancer.last_name) as freelancer
         FROM data_job as job
         INNER JOIN data_job_skill as js ON job.id = js.job_id
         INNER JOIN data_skill as skill ON skill.id = js.skill_id
         LEFT JOIN data_joboffer as offer ON job.id = offer.job_id
+        LEFT JOIN data_user as freelancer ON freelancer.id = job.freelancer_id
         WHERE job.employer_id = %s
         GROUP BY job.id
         """,
@@ -121,10 +154,12 @@ def employer_job(request, job_id):
                     ELSE 'completed' 
                 END 
             END 
-        as status
+        as status,
+        CONCAT(freelancer.first_name, ' ', freelancer.last_name) as freelancer
         FROM data_job as job
         INNER JOIN data_job_skill as js ON job.id = js.job_id
         INNER JOIN data_skill as skill ON skill.id = js.skill_id
+        LEFT JOIN data_user as freelancer ON freelancer.id = job.freelancer_id
         WHERE job.id = %s
         GROUP BY job.id
         """, (job_id,)
@@ -172,4 +207,9 @@ def employer_job_offer(request, offer_id):
         """,
         (offer_id,)
     )
-    return render(request, 'employer_job_offer.html', {'offer': job[0]})
+    messages = run_raw_sql( 
+        """
+        SELECT * FROM data_message WHERE job_offer_id = %s ORDER BY created_at
+        """, (offer_id,)
+    )
+    return render(request, 'employer_job_offer.html', {'offer': job[0] , 'messages': messages})

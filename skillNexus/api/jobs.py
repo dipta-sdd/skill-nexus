@@ -14,6 +14,7 @@ import json
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from .views import getUser, run_raw_sql
+from django.shortcuts import get_object_or_404
 
 
 @api_view(['POST'])
@@ -153,3 +154,59 @@ def offer_withdraw(req, offer_id):
     except Exception as e:
         # print(f"Error updating job offer status: {e}")
         return Response({'message': 'Error updating job offer status.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+def send_message(request):
+    data = request.data.dict()
+    
+    serializer = MessageSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response({'message': 'Message sent successfully.', 'data': serializer.data}, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def offer_accept(req, offer_id):
+    user = getUser(req)
+    
+    try:
+        offer = JobOffer.objects.get(id=offer_id)
+        offer.status = 'Accepted'
+        offer.save()
+        job = Job.objects.get(id=offer.job_id)
+        job.freelancer_id = offer.freelancer_id
+        job.freelancer_proposed_rate = offer.proposed_rate
+        job.freelancer_proposed_deadline = offer.proposed_deadline
+        job.save()
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                UPDATE data_joboffer
+                SET status = 'Rejected'
+                WHERE job_id = %s and id != %s
+                """,
+                (offer.job_id, offer_id)
+            )    
+            return Response({'message': 'Offer accepted successfully.'}, status=status.HTTP_200_OK)
+    except Exception as e:
+        # print(f"Error updating job offer status: {e}")
+        return Response({'message': 'Error updating job offer status.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    return Response({'message': 'Offer accepted successfully.'}, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+def offer_complete(req, offer_id):
+    user = getUser(req)
+    
+    try:
+        offer = JobOffer.objects.get(id=offer_id)
+        offer.status = 'Completed'
+        offer.save()
+        job = Job.objects.get(id=offer.job_id)
+        job.status = 'completed'
+        job.save()
+        return Response({'message': 'Job marked as completed successfully.'}, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({'message': 'Error updating job completion status.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+

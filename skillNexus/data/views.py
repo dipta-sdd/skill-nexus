@@ -196,7 +196,7 @@ def manageProgram(request, program_id):
     WHERE data_universityprogramsession.program_id = %s 
     ORDER BY data_programapplication.updated_at DESC""", (program_id,))
 
-    return render(request, 'manageProgram.html', {'program': program.data, 'sessions': sessions.data, 'applicants': students})
+    return render(request, 'university_program.html', {'program': program.data, 'sessions': sessions.data, 'applicants': students})
 
 
 def university_session(request, session_id):

@@ -1,3 +1,4 @@
+<!-- File: all_course_detail.php -->
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">

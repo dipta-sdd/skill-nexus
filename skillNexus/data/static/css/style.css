@@ -108,6 +108,11 @@ border: none;
 #body {
     margin-top: .6rem;
     margin-left: calc( var(--side-width-pos) );
+    min-height: calc( 100vh - 75px );
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
 }
 
 .my-round{
@@ -568,8 +573,9 @@ input:checked+.slider:before {
  /* footer */
 
  .footer-section {
-     background: #151414;
+     background: #101a26;
      position: relative;
+     margin-top: auto;
  }
 
  .footer-cta {
@@ -710,7 +716,7 @@ input:checked+.slider:before {
      transform: rotate(-6deg);
  }
  .copyright-area {
-     background: #202020;
+     background: #3b3b3b;
      padding: 25px 0;
  }
  .copyright-text p {
