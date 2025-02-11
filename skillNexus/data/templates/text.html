@@ -1,528 +1,70 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8" />
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SkilNexus</title>
-  <link href="http://127.0.0.1:8000/static/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="http://127.0.0.1:8000/static/css/style.css" />
-  <style>
-    #chat_container {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 9999;
-      display: flex;
-      flex-direction: row;
-      gap:10px;
-      & #chat_card {
-        height: 500px;
-        width: min( 100vw , 400px);
-        margin: 0;
-        border-radius:28px !important;
-      }
-      & #chat_messages_input_container{
-        position: relative;
-        height: 443px !important;
-        padding-bottom: 45px;
-      }
-      & #chat_input_container{
-        display: flex;
-        width: 100%;
-        position: absolute;
-        bottom: 0px;
-        height: 44px;
-        padding: 2px;
-        border-radius: 21px;
-        gap: 5px;
-        background-color: var(--bg2);
-        & input{
-          width: 100%;
-          height: 100%;
-          border-radius: 20px;
-        }
-        & button{
-          /* overflow: hidden; */
-          display: block;
-          padding: 0;
-          margin: 0;
-          width: 40px;
-          height: 40px;
-          border: none;
-          & img{
-            height: 40px;
-            aspect-ratio: 1/1;
-            object-fit: contain;
-          }
-        }
-        
-      }
-      & #chat_messages_container{
-        overflow-y: scroll;
-        scrollbar-width: none;
-        scrollbar-color: rgba(var(--bs-secondary-rgb),var(--bs-text-opacity))!important transparent;
-        height: 100px;
-        display: flex;
-        flex-direction: column-reverse;
-        &::-webkit-scrollbar-button {
-          display: none;
-        }
-      }
-      & #chat_messages{
-        margin-bottom: 2px;
-        /* height: 100%; */
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        & .message{
-          margin: 3px 0;
-          max-width: 70%;
-          padding: 4px 15px;
-          border-radius: 25px;
-          border: 1px solid rgba(var(--bs-secondary-rgb),.5)!important;
-          &.send{ 
-            align-self: flex-end;
-            background-color: var(--bs-secondary-bg);
-          }
-          &.receive{ 
-            align-self: flex-start;
-            background-color: var(--bs-tertiary-bg);
-          }
-        }
-        & .time{
-          display: inline-block;
-          position: relative;
-          margin-left: -5px;
-          text-align: end;
-          width: max-content;
-          margin-right: 20px;
-          transform: scale(0.8);
-        }
-        & .seen .time{
-          
-          &::after, &::before{
-            content: "";
-            display: inline;
-            position: absolute;
-            right: -15px;
-            bottom: 6px;
-            width: 8px;
-            height: 14px;
-            border-right: 2px solid rgba(var(--bs-secondary-rgb),var(--bs-text-opacity))!important;
-            border-bottom: 2px solid rgba(var(--bs-secondary-rgb),var(--bs-text-opacity))!important;
-            transform: rotate(45deg);
-
-          }
-          &::before{
-            right: -20px;
-          }
-        }
-      }
-
-      #chat_head_container{
-        width: 50px;
-        /* height: 100px !important; */
-        /* background-color: var(--bg); */
-        display: flex;
-        flex-direction: column;
-        justify-content: end;
-        align-items: center;
-        
-        & ul{
-          list-style: none;
-          margin: 0;
-          padding: 0;
-          width: 100%;
-          display: flex;
-          flex-direction: column;
-          /* justify-content: center; */
-          align-items: center;
-          gap: 5px;
-          & *{
-            width: 100%;
-            height: 100%;
-            aspect-ratio: 1/1;
-            bottom: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 50%;
-          }
-          &:has(input:checked){
-            /* background-color: #fff; */
-            & li{
-              margin-bottom: 0px;
-            }
-
-          }
-          & li{
-            aspect-ratio: 1/1;
-            background-color: var(--bg);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: -30px;
-            border: 1px solid rgba(var(--bs-secondary-rgb),1)!important;
-            transition: margin-bottom .3s ease-in-out;
-            & img{
-              height: 100%;
-              aspect-ratio: 1/1;
-              object-fit: contain;
-            }
-            &:last-child{
-              margin-bottom: 0px;
-              position: relative;
-              & input{
-                z-index: 1;
-                border: none;
-                border-radius: 50%;
-                opacity: 0;
-              }
-              & .icon{
-                  position: absolute;
-                  bottom: 0;
-                  background: var(--bg);
-                }
-            }
-            
-          }
-        }
-      }
-      
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSLCommerz Payment</title>
 </head>
-
 <body>
-  <div aria-live="polite" aria-atomic="true" class="position-relative">
-    <div class="toast-container top-0 end-0 p-3">
-      <!-- Then put toasts within -->
-    </div>
-  </div>
-  <!-- start sidebar  -->
-<!-- start sidebar  -->
-<!-- start sidebar  -->
-<!-- start sidebar  -->
-<!-- start sidebar  -->
-<!-- start sidebar  -->
-<!-- start sidebar  -->
-<!-- start sidebar  -->
-<!-- start sidebar  -->
-<!-- start sidebar  -->
-<div class="transition_speed m-0 p-0" id="left_side">
-  <div class="" id="nav_con">
-    <nav class="navbar navbar-expand-lg navbar-dark mybg my-round ms-0 px-2">
-      <div class="container-fluid" style="background-color: transparent">
-        <a class="navbar-brand my-color" href="#">SkillNexus</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-          aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon my-color"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <form class="d-flex ms-auto me-5" role="search">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-            <button class="btn navbar-btn btn-outline-dark" type="submit">
-              Search
-            </button>
-          </form>
-          <!-- theme switch -->
-          <!-- theme switch -->
-          <!-- theme switch -->
-          <!-- theme switch -->
-          <label class="switch">
-            <input type="checkbox" id="theme" />
-            <span class="slider"></span>
-          </label>
-          <!-- theme switch -->
-          <!-- theme switch -->
-          <!-- theme switch -->
-          <!-- theme switch -->
-          <!-- theme switch -->
-          <ul class="navbar-nav ms-1 mb-2 mb-lg-0">
-            
-            
-            <div class="profile-con ms-1">
-              
-              
-              <div class="icon">
-                <i class="fa-solid fa-user fa-xl" style="color: #00eeff"></i>
-              </div>
-              
-              <ul class="dropdown-menu bg-dar">
-                <li>
-                  <a class="dropdown-item" href="/profile">Profile</a>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="#">Another action</a>
-                </li>
-                <li>
-                  <hr class="dropdown-divider" />
-                </li>
-                <li>
-                  <a class="dropdown-item logout" href="#">Logout</a>
-                </li>
-              </ul>
-            </div>
-            
+    <h1>SSLCommerz Payment Gateway</h1>
+    <form id="paymentForm">
+        <button type="button" onclick="makePayment()">Pay Now</button>
+    </form>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
-          </ul>
-        </div>
-      </div>
-    </nav>
-
-  </div>
-<div id="sidebar" class="h-100 transition_speed">
-    <ul class="list-unstyled components mb-5">
-        <li>
-            <a href="/"><span class="fa fa-home"></span> &nbsp; Home</a>
-        </li>
-
-         
-            <li>
-                <a href="/profile"><span class="fa fa-download"></span> &nbsp; Profile</a>
-            </li>
-
-            
-
-            
-
-            
-            
-            
-                <li>
-                    <a href="/employer/jobs"><span class="fa-solid fa-book"></span> &nbsp; My Jobs</a>
-                </li>
-                <li>
-                    <a href="/employer/jobs/offers"><span class="fa-solid fa-hammer"></span> &nbsp; Job Offers </a>
-                </li>
-            
-
-            
-
-            <li class="logout">
-                <a href="/logout"><span class="fa fa-sign-out mr-3 logout"></span> &nbsp; Sign Out</a>
-            </li>
-
-        
-
-        <li>
-            <a href="#"><i class="fa-solid fa-headset"></i> &nbsp; Support</a>
-        </li>
-    </ul>
-</div>
-  <div class="sidebar_btn">
-    <i class="fa-solid fa-chevron-up fa-rotate-90 fa-2xl"></i>
-  </div>
-
-  <!-- loader code -->
-  <div class="loader-container">
-    <div class="loader">
-      <div class="bar1"></div>
-      <div class="bar2"></div>
-      <div class="bar3"></div>
-      <div class="bar4"></div>
-      <div class="bar5"></div>
-      <div class="bar6"></div>
-      <div class="bar7"></div>
-      <div class="bar8"></div>
-      <div class="bar9"></div>
-      <div class="bar10"></div>
-      <div class="bar11"></div>
-      <div class="bar12"></div>
-    </div>
-  </div>
-  <!-- side bar -->
-  <div class="container">
-
-
-
-
-
-    <!-- end sidebar  -->
-    <!-- end sidebar  -->
-    <!-- end sidebar  -->
-    <!-- end sidebar  -->
-    <!-- end sidebar  -->
-    <!-- end sidebar  -->
-    <!-- end sidebar  -->
-
-  <div class="my-round" id="body">
-    <!-- Breadcrumb -->
-    <nav aria-label="breadcrumb" class="mybg-t breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/" class="my-color">Home</a></li>
-        <li class="breadcrumb-item active my-color" aria-current="page"> </li>
-      </ol>
-    </nav>
-
-    <div class="row ">
-      <div class="col-12">
-        <div class="card my-row rounded-0 mybg">
-          <div class="card-header" style="margin: -10px -10px 0 -10px">
-            <div class="d-flex justify-content-between">
-              <h3 class="card-title mb-0">Frontend Developer (React)</h3>
-              <span style="height: max-content;" class="badge bg-warning text-capitalize" id="status-badge"><strong>Status:</strong> Pending</span>
-
-            </div>
-          </div>
-          <div class="card-body m-0 p-0 bg-transparent">
-            <div class="my-3 row">
-              <p class="col-12"><strong>Description:</strong> Build user interfaces for our new web application using React.js.</p>
-              <p class="col-xl-3 col-lg-6"><strong>Skills:</strong>  Frontend Development, JavaScript, React</p>
-              <p class="col-xl-3 col-lg-6"><strong>Project Duration:</strong> 3 months</p>
-              <p class="col-xl-3 col-lg-6"><strong>Price:</strong> $5000</p>
-              <p class="col-xl-3 col-lg-6"><strong>Deadline:</strong> March 31, 2025</p>
-              <p class="col-xl-3 col-lg-6"><strong>Location:</strong> Remote</p>
-              <p class="col-xl-3 col-lg-6"><strong>Freelancer:</strong> Jessica Davis</p> 
-              <p class="col-xl-3 col-lg-6"><strong>Proposed Rate:</strong> $4564</p> 
-              <p class="col-xl-3 col-lg-6"><strong>Proposal:</strong> fghjfcj</p> 
-              
-              
-              <div class="mt-2 col-12 d-flex justify-content-end">
-                
-                <button class="btn btn-success btn-sm me-2">Accept Offer</button> 
-                <button class="btn btn-danger btn-sm me-2" onclick="withdrawOffer(4)">Reject Offer</button>
-                <button class="btn btn-danger btn-sm" onclick="toggleChat()">Chat with Freelancer</button>
-                
-              </div>
-              
-
-            </div>
-
-            
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div id="chat_container">
-      <div class="card my-row  mybg p-0" id="chat_card">
-        <div class="card-header ps-2 pe-0" >
-          <div class="d-flex justify-content-between">
-            <h3 class="card-title mb-0">Chat</h3>
-            <button class="btn btn-danger btn-sm btn-close" onclick="toggleChat()"></button>
-          </div>
-        </div>
-        <div class="card-body m-0 bg-transparent" style="padding: 0px 4px 4px 4px;">
-          <div class="d-flex flex-column h-100" id="chat_messages_input_container">
-            <div class="flex-grow-1" id="chat_messages_container" >
-              <div id="chat_messages">
-                <div class="message seen send">Hello, how can I help you today? 
-                  <small class="time text-secondary"> 12:00 AM</small>
-                </div>
-                <div class="message seen receive">Hi, I have a question regarding my account. 
-                  <small class="time text-secondary"> 12:00 AM</small>
-                </div>
-                <div class="message seen send">Sure, what would you like to know? 
-                  <small class="time text-secondary"> 12:00 AM</small>
-                </div>
-                <div class="message seen receive">I need help with resetting my password. 
-                  <small class="time text-secondary"> 12:00 AM</small>
-                </div>
-                <div class="message seen send">No problem, I'll guide you through the process. 
-                  <small class="time text-secondary"> 12:00 AM</small>
-                </div>
-                <div class="message seen send">Enter your email address associated with your account. 
-                  <small class="time text-secondary"> 12:00 AM</small>
-                </div>
-                <div class="message seen receive">Is it okay to send a password reset link to test@gmail.com? 
-                  <small class="time text-secondary"> 12:00 AM</small>
-                </div>
-                <div class="message seen send">Yes, that is correct. 
-                  <small class="time text-secondary"> 12:00 AM</small>
-                </div>
-                <div class="message seen receive">We've sent you an email with a link to reset your password. 
-                  <small class="time text-secondary"> 12:00 AM</small>
-                </div>
-                <div class="message seen send">Thank you, I have reset my password. 
-                  <small class="time text-secondary"> 12:00 AM</small>
-                </div>
-                <div class="message seen receive">You're welcome! If you have any other questions, feel free to ask. 
-                  <small class="time text-secondary"> 12:00 AM</small>
-                </div>
-                <div class="message seen send">I need help with my billing information. 
-                  <small class="time text-secondary"> 12:00 AM</small>
-                </div>
-              </div>
-            </div>
-            <div id="chat_input_container">
-              <input type="text" id="" class="form-control " placeholder="Type message...">
-              <button class="btn" onclick="sendMessage()"><img src="http://127.0.0.1:8000/static/images/send.png"  alt=""></button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="chat_head_container">
-        <ul>
-          <li class="my-color"> <i class="fa-regular fa-user fa-lg"></i></li>
-          <li class="my-color"> <i class="fa-regular fa-user fa-lg"></i></li>
-          <li class="my-color"> <i class="fa-regular fa-user fa-lg"></i></li>
-          <li class="my-color"> <input type="checkbox" name="" id=""><span class="icon"><i class="fa-regular fa-comment-dots fa-2xl"></i></span></li>
-          
-        </ul>
-      </div>
-    </div>
-
-
-
-  </div>
-  </div>
-
- 
-<script src="http://127.0.0.1:8000/static/js/bootstrap.bundle.min.js"></script>
-
-  <script src="http://127.0.0.1:8000/static/js/jquery-3.7.1.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="http://127.0.0.1:8000/static/js/script.js"></script>
-  <script src="http://127.0.0.1:8000/static/js/manageProgram.js"></script>
-  <script>
-    $(document).ready(function () {
-      on_page_load([]);
-
-      function withdrawOffer(offerId) {
-        let e = event;
-        event.target.classList.add('loading');
-        $.ajax({
-          type: "post",
-          url: "/api/employer/job/offer/withdraw/"+offerId,
-          data: {
-            csrfmiddlewaretoken : getCookie("csrftoken")
-          },
-          success: function (response) {
-            showToast("Offer Withdrawn", "success");
-            e.target.classList.remove('loading');
-            badge=  document.getElementById('status-badge');
-            badge.classList.remove('bg-primary');
-            badge.classList.add('bg-danger');
-            badge.innerHTML = '<strong>Status:</strong> Rejected';
-            e.target.remove();
-          },
-          error: function (xhr, status, error) {
-            showToast("Error withdrawing offer", "danger");
-            e.target.classList.remove('loading');
-          }
-        });
-      }
-
-      
-    });
-    function toggleChat() {
-        $('#chat_card').slideToggle(300);
-      }
-  </script>
-
+    <script>
+        function makePayment() {
+            const data = {
+                // store_id: "skill679a98c04c089",
+                store_passwd: "skill679a98c04c089@ssl",
+                total_amount: "100.00",
+                currency: "EUR",
+                tran_id: "REF123",
+                success_url: "http://yoursite.com/success.php",
+                fail_url: "http://yoursite.com/fail.php",
+                cancel_url: "http://yoursite.com/cancel.php",
+                cus_name: "Customer Name",
+                cus_email: "cust@yahoo.com",
+                cus_add1: "Dhaka",
+                cus_add2: "Dhaka",
+                cus_city: "Dhaka",
+                cus_state: "Dhaka",
+                cus_postcode: "1000",
+                cus_country: "Bangladesh",
+                cus_phone: "01711111111",
+                cus_fax: "01711111111",
+                ship_name: "Customer Name",
+                ship_add1: "Dhaka",
+                ship_add2: "Dhaka",
+                ship_city: "Dhaka",
+                ship_state: "Dhaka",
+                ship_postcode: "1000",
+                ship_country: "Bangladesh",
+                multi_card_name: "mastercard,visacard,amexcard",
+                value_a: "ref001_A",
+                value_b: "ref002_B",
+                value_c: "ref003_C",
+                value_d: "ref004_D"
+            };
+            $.ajax({
+                url: 'https://sandbox.sslcommerz.com/gwprocess/v4/api.php',
+                type: 'POST',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                success: function(response) {
+                    console.log('Success:', response);
+                    // Handle success response
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                    // Handle error response
+                }
+            });
+        }
+    </script>
 </body>
-
 </html>
