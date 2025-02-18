@@ -345,6 +345,20 @@ class Job(models.Model):
 
     def __str__(self):
         return f"{self.title} - {self.employer.company.name}"
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -586,3 +600,8 @@ class CourseReview(models.Model):
         if self.pk:  # If review exists (editing)
             self.is_edited = True
         super().save(*args, **kwargs)
+
+
+
+
+
