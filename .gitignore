@@ -20,3 +20,4 @@ __pycache__
 skillNexus/data/__pycache__/views.cpython-312.pyc
 skillNexus/data/__pycache__/urls.cpython-312.pyc
 skillNexus/db.sqlite3
+skillNexus/backup.zip

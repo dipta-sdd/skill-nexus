@@ -1662,7 +1662,6 @@ def addEditSession(req):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
 @swagger_auto_schema(
     methods=['post'],
     operation_summary="Apply to University",
@@ -1679,6 +1678,7 @@ def applyUniversity(req):
     serializer = ProgramApplicationSerializer(data=data)
     if serializer.is_valid():
         serializer.save()
+
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
