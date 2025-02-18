@@ -1,4 +1,3 @@
-<!-- File: allvideoshow.php -->
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -76,7 +75,6 @@
     <!-- main body-->
 </div>
 
-{% include "footer.html" %}
 <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
 <script src="{% static 'js/script.js' %}"></script>

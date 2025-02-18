@@ -102,7 +102,6 @@
         <div class="col-md-6">
           <h3 style="text-align: center; margin-top: 10px;">Edit Lecture</h3>
           <form id="editForm" enctype="multipart/form-data">
-
             <input type="hidden" id="lectureId" name="id">
 
             <div class="mb-3">
@@ -132,72 +131,128 @@
     </div>
   </div>
 
- 
-<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
   <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
   <script src="{% static 'js/script.js' %}"></script>
  
   <script>
     $(document).ready(function () {
       on_page_load([]);
-      const url = window.location.href;
-      const courseId = url.split('?')[1]; // Extract the course ID from the URL
+      
+      // Get lecture ID directly from URL (format: edit_video?11)
+      const lectureId = window.location.href.split('?')[1];
+      console.log("Lecture ID:", lectureId);
 
-      // Fetch course lecture details based on the course ID
+      if (!lectureId) {
+          showToast("Invalid lecture ID", "danger");
+          return;
+      }
+
+      // Fetch lecture details
       $.ajax({
-        type: "GET",
-        url: apiLink + "/api/course_video/get",
-        headers: {
-          Authorization: "Bearer " + getCookie("token"),
-        },
-        data: {
-          course_id: courseId,
-        },
-        success: function (res) {
-          if (res.length > 0) {
-            const lecture = res[0]; // Assuming only one lecture per course_id
-            $('#lectureId').val(lecture.id);
-            $('#lectureTitle').val(lecture.title);
-            $('#lectureDescription').val(lecture.lecture_description);
-            $('#lectureMaterial').val(lecture.material);
-            $('#lectureVideo').val(lecture.video);
-            // You can handle file fields (lectureMaterial and lectureVideo) if needed
-          } else {
-            console.error('No lecture found');
-          }
-        },
-        error: function (err) {
-          console.error('Failed to fetch course lectures:', err);
-        },
-      });
-
-      // Handle form submission for updating course details
-      $('#saveChanges').on('click', function () {
-        saveChanges();
-      });
-
-      // Function to handle save changes
-      function saveChanges() {
-        const formData = new FormData($('#editForm')[0]);
-
-        $.ajax({
-          type: "POST",
-          url: apiLink + "/api/course_video/edit",
+          type: "GET",
+          url: apiLink + "/api/course_video/get",
           headers: {
-            Authorization: "Bearer " + getCookie("token"),
+              Authorization: "Bearer " + getCookie("token"),
           },
-          data: formData,
-          processData: false,
-          contentType: false,
+          data: {
+              lecture_id: lectureId,
+          },
           success: function (res) {
-          showToast('Course lecture updated successfully:', 'primary');
-            // Optionally, redirect or show a success message
+              if (res && res.length > 0) {
+                  const lecture = res[0];
+                  $('#lectureId').val(lecture.id);
+                  $('#lectureTitle').val(lecture.title);
+                  $('#lectureDescription').val(lecture.lecture_description);
+              } else {
+                  showToast("Failed to load lecture details", "danger");
+              }
           },
           error: function (err) {
-            console.error('Failed to update course lecture:', err);
+              showToast("Failed to load lecture details", "danger");
           },
-        });
-      }
+      });
+
+      // Handle form submission for updating lecture details
+      $('#saveChanges').on('click', function (e) {
+          e.preventDefault();
+          
+          // Create a new FormData object
+          const formData = new FormData();
+          
+          // Explicitly add each field with proper names
+          formData.append('id', lectureId);
+          formData.append('title', $('#lectureTitle').val());
+          formData.append('lecture_description', $('#lectureDescription').val());
+          
+          // Only append files if they are selected
+          const materialFile = $('#lectureMaterial')[0].files[0];
+          const videoFile = $('#lectureVideo')[0].files[0];
+          
+          if (materialFile) {
+              formData.append('material', materialFile);
+          }
+          if (videoFile) {
+              formData.append('video', videoFile);
+          }
+          
+          // Log the data being sent
+          console.log("Submitting lecture update:");
+          console.log("ID:", lectureId);
+          console.log("Title:", $('#lectureTitle').val());
+          console.log("Description:", $('#lectureDescription').val());
+          console.log("Material:", materialFile);
+          console.log("Video:", videoFile);
+          
+          $.ajax({
+              type: "POST",
+              url: apiLink + "/api/course_video/edit",
+              headers: {
+                  Authorization: "Bearer " + getCookie("token"),
+              },
+              data: formData,
+              processData: false,
+              contentType: false,
+              success: function (res) {
+                  console.log("Server response:", res);
+                  
+                  if (res.success) {
+                      showToast('Lecture updated successfully', 'success');
+                      
+                      // Make a verification request
+                      $.ajax({
+                          type: "GET",
+                          url: apiLink + "/api/course_video/get",
+                          headers: {
+                              Authorization: "Bearer " + getCookie("token"),
+                          },
+                          data: {
+                              lecture_id: lectureId,
+                          },
+                          success: function(verifyRes) {
+                              console.log("Verification response:", verifyRes);
+                              
+                              // Get course ID from referrer and redirect
+                              const referrer = document.referrer;
+                              const courseId = referrer.split('?')[1].split('&')[0];
+                              const timestamp = new Date().getTime();
+                              
+                              setTimeout(() => {
+                                  window.location.href = `/educator_view_lec_detail?${courseId}&${lectureId}`;
+                              }, 3000);
+                          }
+                      });
+                  } else {
+                      showToast(res.message || 'Failed to update lecture', 'danger');
+                  }
+              },
+              error: function (err) {
+                  console.error("Update error:", err);
+                  console.error("Error details:", err.responseJSON);
+                  showToast('Failed to update lecture: ' + (err.responseJSON?.message || 'Server error'), 'danger');
+              },
+          });
+      });
     });
   </script>
 </body>

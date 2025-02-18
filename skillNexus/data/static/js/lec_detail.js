@@ -106,3 +106,267 @@ $(document).ready(function () {
         }
     }
 });
+
+$(document).ready(function() {
+    const url = window.location.href;
+    const lectureId = url.split('?')[1];
+
+    function fetchComments() {
+        $.ajax({
+            type: "GET",
+            url: apiLink + "/api/lecture_comments/get",
+            headers: {
+                Authorization: "Bearer " + getCookie("token"),
+            },
+            data: {
+                lecture_id: lectureId,
+            },
+            success: function(comments) {
+                $(".comments-section").empty();
+                comments.forEach(comment => {
+                    showComment(comment);
+                });
+            },
+            error: function(err) {
+                console.error("Failed to fetch comments:", err);
+                showToast("Failed to load comments", "danger");
+            },
+        });
+    }
+
+    // Initial comment form
+    $(".comments-section").before(`
+        <div class="add-comment-form mb-4">
+            <textarea class="form-control mb-2" rows="3" placeholder="Write a comment..."></textarea>
+            <button class="btn btn-primary submit-comment">Post Comment</button>
+        </div>
+    `);
+
+    // Add new comment
+    $(document).on("click", ".submit-comment", function() {
+        const content = $(this).siblings("textarea").val().trim();
+        
+        if (!content) {
+            showToast("Please write a comment first", "warning");
+            return;
+        }
+        
+        $.ajax({
+            type: "POST",
+            url: apiLink + "/api/lecture_comments/add",
+            headers: {
+                Authorization: "Bearer " + getCookie("token"),
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify({
+                lecture_id: lectureId,
+                content: content
+            }),
+            success: function(response) {
+                fetchComments();
+                $(".add-comment-form textarea").val("");
+                showToast("Comment added successfully", "success");
+            },
+            error: function(err) {
+                console.error("Failed to add comment:", err);
+                showToast("Failed to add comment", "danger");
+            }
+        });
+    });
+
+    // Reply to comment
+    $(document).on("click", ".reply-comment", function() {
+        const commentId = $(this).data("comment-id");
+        
+        // Toggle reply form
+        const replyForm = $(`.reply-form-${commentId}`);
+        replyForm.toggle();
+        
+        if (!replyForm.find('textarea').length) {
+            replyForm.html(`
+                <div class="ms-5 mt-2">
+                    <textarea class="form-control mb-2" rows="2" placeholder="Write your reply..."></textarea>
+                    <button class="btn btn-sm btn-primary submit-reply" data-parent-id="${commentId}">Submit Reply</button>
+                </div>
+            `);
+        }
+    });
+
+    // Submit reply
+    $(document).on("click", ".submit-reply", function() {
+        const parentId = $(this).data("parent-id");
+        const content = $(this).siblings("textarea").val().trim();
+        
+        if (!content) {
+            showToast("Please write a reply first", "warning");
+            return;
+        }
+        
+        $.ajax({
+            type: "POST",
+            url: apiLink + "/api/lecture_comments/add",
+            headers: {
+                Authorization: "Bearer " + getCookie("token"),
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify({
+                lecture_id: lectureId,
+                content: content,
+                parent: parentId
+            }),
+            success: function(response) {
+                fetchComments();
+                $(`.reply-form-${parentId}`).hide();
+                showToast("Reply added successfully", "success");
+            },
+            error: function(err) {
+                console.error("Failed to add reply:", err);
+                showToast("Failed to add reply", "danger");
+            }
+        });
+    });
+
+    // Edit comment
+    $(document).on("click", ".edit-comment", function() {
+        const commentId = $(this).data("comment-id");
+        const commentContent = $(this).closest('.comment').find('.comment-content').text().trim();
+        
+        $(this).closest('.comment').find('.comment-content').hide();
+        $(this).closest('.comment').find('.comment-actions').hide();
+        
+        $(this).closest('.comment').append(`
+            <div class="edit-form-${commentId} mt-2">
+                <textarea class="form-control mb-2">${commentContent}</textarea>
+                <button class="btn btn-sm btn-primary save-edit" data-comment-id="${commentId}">Save</button>
+                <button class="btn btn-sm btn-secondary cancel-edit">Cancel</button>
+            </div>
+        `);
+    });
+
+    // Save edited comment
+    $(document).on("click", ".save-edit", function() {
+        const commentId = $(this).data("comment-id");
+        const content = $(this).siblings("textarea").val().trim();
+        
+        $.ajax({
+            type: "PUT",
+            url: apiLink + "/api/lecture_comments/edit",
+            headers: {
+                Authorization: "Bearer " + getCookie("token"),
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify({
+                comment_id: commentId,
+                content: content
+            }),
+            success: function(response) {
+                fetchComments();
+                showToast("Comment updated successfully", "success");
+            },
+            error: function(err) {
+                console.error("Failed to update comment:", err);
+                showToast("Failed to update comment", "danger");
+            }
+        });
+    });
+
+    // Cancel edit
+    $(document).on("click", ".cancel-edit", function() {
+        const comment = $(this).closest('.comment');
+        comment.find('.comment-content').show();
+        comment.find('.comment-actions').show();
+        comment.find('[class^="edit-form-"]').remove();
+    });
+
+    // Delete comment
+    $(document).on("click", ".delete-comment", function() {
+        const commentId = $(this).data("comment-id");
+        
+        if (confirm("Are you sure you want to delete this comment?")) {
+            $.ajax({
+                type: "DELETE",
+                url: apiLink + "/api/lecture_comments/delete",
+                headers: {
+                    Authorization: "Bearer " + getCookie("token"),
+                },
+                data: {
+                    comment_id: commentId,
+                },
+                success: function() {
+                    fetchComments();
+                    showToast("Comment deleted successfully", "success");
+                },
+                error: function(err) {
+                    console.error("Failed to delete comment:", err);
+                    showToast("Failed to delete comment", "danger");
+                },
+            });
+        }
+    });
+
+    function showComment(comment) {
+        const commentHtml = `
+            <div class="comment mb-3" id="comment-${comment.id}">
+                <div class="d-flex align-items-start">
+                    <img src="${apiLink}${comment.user_profile_picture || '/media/profile_pics/default.png'}" 
+                         class="rounded-circle me-2" width="40" height="40" alt="User">
+                    <div class="flex-grow-1">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h6 class="mb-1">${comment.username}</h6>
+                            <small class="text-muted">${comment.timestamp}</small>
+                        </div>
+                        <p class="comment-content mb-1 text-dark">${comment.content}</p>
+                        <div class="comment-actions d-flex align-items-center gap-2">
+                            <button class="btn btn-sm btn-outline-primary reply-comment" data-comment-id="${comment.id}">
+                                Reply
+                            </button>
+                            ${comment.user_id === parseInt(getCookie('user_id')) ? `
+                                <button class="btn btn-sm btn-outline-secondary edit-comment" data-comment-id="${comment.id}">
+                                    Edit
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger delete-comment" data-comment-id="${comment.id}">
+                                    Delete
+                                </button>
+                            ` : ''}
+                        </div>
+                        <div class="reply-form-${comment.id} mt-2" style="display: none;"></div>
+                        ${comment.replies && comment.replies.length > 0 ? `
+                            <div class="replies ms-5 mt-2">
+                                ${comment.replies.map(reply => `
+                                    <div class="comment mb-2" id="comment-${reply.id}">
+                                        <div class="d-flex align-items-start">
+                                            <img src="${apiLink}${reply.user_profile_picture || '/media/profile_pics/default.png'}" 
+                                                 class="rounded-circle me-2" width="30" height="30" alt="User">
+                                            <div class="flex-grow-1">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <h6 class="mb-1">${reply.username}</h6>
+                                                    <small class="text-muted">${reply.timestamp}</small>
+                                                </div>
+                                                <p class="comment-content mb-1 text-dark">${reply.content}</p>
+                                                ${reply.user_id === parseInt(getCookie('user_id')) ? `
+                                                    <div class="comment-actions">
+                                                        <button class="btn btn-sm btn-outline-secondary edit-comment" data-comment-id="${reply.id}">
+                                                            Edit
+                                                        </button>
+                                                        <button class="btn btn-sm btn-outline-danger delete-comment" data-comment-id="${reply.id}">
+                                                            Delete
+                                                        </button>
+                                                    </div>
+                                                ` : ''}
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        $(".comments-section").append(commentHtml);
+    }
+
+    // Initial load of comments
+    fetchComments();
+});

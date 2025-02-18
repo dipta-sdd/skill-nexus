@@ -1,4 +1,3 @@
-<!-- File: course_detail.php -->
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -59,8 +58,148 @@
       width: 100px;
     }
 
+    .discussion-post {
+        background: var(--bg-color);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+    }
 
-    /* video */
+    .discussion-post:hover {
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .discussion-main {
+        position: relative;
+    }
+
+    .discussion-avatar img {
+        border: 2px solid #fff;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .discussion-content {
+        width: 100%;
+    }
+
+    .discussion-header {
+        margin-bottom: 0.5rem;
+    }
+
+    .discussion-body {
+        color: #2c3e50;
+    }
+
+    .discussion-actions button {
+        color: #6c757d;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+
+    .discussion-actions button:hover {
+        color: #0056b3;
+    }
+
+    .discussion-replies {
+        border-left: 3px solid var(--border-color);
+        padding-left: 1.5rem;
+        margin-left: 2rem;
+        margin-top: 1rem;
+    }
+
+    .comment-actions {
+        opacity: 0;
+        transition: opacity 0.2s;
+    }
+
+    .discussion-post:hover .comment-actions {
+        opacity: 1;
+    }
+
+    .badge {
+        font-size: 0.75em;
+        padding: 0.25em 0.5em;
+    }
+
+    /* Comment list container */
+    .comment-list-container {
+        max-height: 600px;
+        overflow-y: auto;
+        padding: 1rem;
+        background: var(--bg-color);
+        border-radius: 8px;
+    }
+
+    /* Scrollbar styling */
+    .comment-list-container::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .comment-list-container::-webkit-scrollbar-track {
+        background: var(--bg-color);
+    }
+
+    .comment-list-container::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: 4px;
+    }
+
+    /* Video styling */
+    .course-video {
+        max-height: 400px;
+        width: 100%;
+        object-fit: contain;
+    }
+
+    .star-rating {
+        display: flex;
+        flex-direction: row-reverse;
+        gap: 0.25rem;
+        margin-bottom: 1rem;
+    }
+
+    .star-rating input {
+        display: none;
+    }
+
+    .star-rating label {
+        cursor: pointer;
+        color: #ddd;
+        font-size: 1.5rem;
+    }
+
+    .star-rating label:hover,
+    .star-rating label:hover ~ label,
+    .star-rating input:checked ~ label {
+        color: #ffc107;
+    }
+
+    .star-rating label i {
+        transition: color 0.2s ease;
+    }
+
+    .review-item {
+        transition: background-color 0.2s ease;
+    }
+
+    .review-item:hover {
+        background-color: rgba(0,0,0,0.01);
+    }
+
+    .review-item:last-child {
+        border-bottom: none !important;
+        padding-bottom: 0 !important;
+        margin-bottom: 0 !important;
+    }
+
+    .dropdown-item {
+        font-size: 0.875rem;
+    }
+
+    .dropdown-item i {
+        width: 1rem;
+    }
   </style>
 </head>
 
@@ -76,7 +215,7 @@
     <nav aria-label="breadcrumb" class="mybg-t breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/">Home</a></li>
-        <li class="breadcrumb-item" aria-current="page">Login</li>
+        <li class="breadcrumb-item" aria-current="page">Course</li>
       </ol>
     </nav>
 
@@ -86,8 +225,7 @@
     <!-- main body-->
   </div>
 
- 
-<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
   <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
   <script src="{% static 'js/script.js' %}"></script>
   <script src="{% static 'js/single_course_detail.js' %}"></script>

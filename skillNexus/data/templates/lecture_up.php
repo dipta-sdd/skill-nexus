@@ -70,8 +70,7 @@
     </div>
   </div>
 
- 
-<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
   <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
   <script src="{% static 'js/script.js' %}"></script>
   <script>
@@ -99,9 +98,12 @@
           processData: false,
           contentType: false,
           success: function(response) {
-            // alert('Lecture uploaded successfully!');
-            showToast("Lecture uploaded successfully in that course!", "Primary");
-            // You can redirect or update the page content here
+            // Show success toast
+            showToast("Lecture uploaded successfully!", "Success");
+            // Wait a brief moment for the toast to be visible, then redirect
+            setTimeout(function() {
+              window.location.href = "/course_detail?" + value;
+            }, 3000);
           },
           error: function(jqXHR, textStatus, errorThrown) {
             alert('Failed to upload lecture: ' + textStatus);

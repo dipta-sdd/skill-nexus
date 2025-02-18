@@ -43,7 +43,7 @@ $(document).ready(function () {
       },
       success: function (company) {
         console.log(company);
-        if (company) showDetails(".company", company);
+        showDetails(".company", company);
       },
     });
   } else {
@@ -81,11 +81,6 @@ $(document).ready(function () {
           showDetails(".company", company);
           $(".company button.btn-edit").removeClass("d-none");
           $(".company button.btn-save").addClass("d-none");
-        },
-        error: function (error) {
-          if (error.responseJSON) {
-            labelErrors(".company .form-control", error.responseJSON);
-          }
         },
       });
     }
@@ -224,7 +219,7 @@ $(document).ready(function () {
       },
       error: function (err) {
         res = err.responseJSON;
-        $(".personal-details").html(`+
+        $(".personal-details").html(`
         <div class="col-lg-6">
           <div class="input-group mb-3">
             <span class="input-group-text">Father's Name</span>
@@ -627,4 +622,33 @@ $(document).ready(function () {
 
   //   return true;
   // });
+
+  // Add click handler for CV download button
+  $(".btn-download-cv").click(function(e) {
+    e.preventDefault();
+    console.log("CV button clicked");
+    console.log("Current user:", user);
+    console.log("Opening CV view at:", apiLink + '/api/cv_view/');
+    
+    // Open in new window with authorization header
+    const token = getCookie('token');
+    const newWindow = window.open('', '_blank');
+    
+    $.ajax({
+      url: apiLink + '/api/cv_view/',
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      success: function(response) {
+        newWindow.document.write(response);
+        newWindow.document.close();
+      },
+      error: function(xhr, status, error) {
+        console.error("Error fetching CV:", error);
+        showToast("Error loading CV. Please try again.", "danger");
+        newWindow.close();
+      }
+    });
+  });
 });

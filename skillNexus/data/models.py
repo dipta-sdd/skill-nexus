@@ -2,6 +2,8 @@ from datetime import datetime
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils import timezone
+from django.conf import settings
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class User(AbstractUser):
@@ -168,24 +170,24 @@ class University(models.Model):
     url = models.URLField(blank=False)
 
 
-class Course(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
-    title = models.CharField(max_length=1000, blank=False)
-    course_outcome = models.CharField(max_length=1000, blank=False)
-    course_contain = models.CharField(max_length=1000, blank=False)
-    course_fee = models.DecimalField(
-        decimal_places=2, max_digits=5, blank=False)
-    course_thumbnil = models.ImageField(upload_to="thumbnil/", blank=False)
+# class Course(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
+#     title = models.CharField(max_length=1000, blank=False)
+#     course_outcome = models.CharField(max_length=1000, blank=False)
+#     course_contain = models.CharField(max_length=1000, blank=False)
+#     course_fee = models.DecimalField(
+#         decimal_places=2, max_digits=5, blank=False)
+#     course_thumbnil = models.ImageField(upload_to="thumbnil/", blank=False)
     
 
 
-class CourseLecture(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, blank=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
-    title = models.CharField(max_length=1000, blank=False)
-    lecture_description = models.CharField(max_length=1000, blank=False)
-    material = models.FileField(upload_to='materials/', blank=True)
-    video = models.FileField(upload_to='videos/', blank=True)
+# class CourseLecture(models.Model):
+#     course = models.ForeignKey(Course, on_delete=models.CASCADE, blank=False)
+#     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
+#     title = models.CharField(max_length=1000, blank=False)
+#     lecture_description = models.CharField(max_length=1000, blank=False)
+#     material = models.FileField(upload_to='materials/', blank=True)
+#     video = models.FileField(upload_to='videos/', blank=True)
 
 
 class Skill(models.Model):
@@ -200,13 +202,13 @@ class User_skill(models.Model):
         unique_together = ('user', 'skill')
 
 
-class Enrollment(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    # enrolled_on = models.DateTimeField(default=datetime.now)
+# class Enrollment(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     course = models.ForeignKey(Course, on_delete=models.CASCADE)
+#     # enrolled_on = models.DateTimeField(default=datetime.now)
 
-    class Meta:
-        unique_together = ('user', 'course')
+#     class Meta:
+#         unique_together = ('user', 'course')
 
 
 # class Jobs(models.Model):
@@ -299,23 +301,23 @@ class ProgramApplication(models.Model):
 
 # freelencing
 
-class Payment(models.Model):
-    sender = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='sent_payments')
-    receiver = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='received_payments')
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    transaction_id = models.CharField(max_length=255)
-    status = models.CharField(
-        max_length=50,
-        choices=[
-            ('Pending', 'Pending'),
-            ('Completed', 'Completed'),
-            ('Failed', 'Failed')
-        ],
-        default='Pending'
-    )
-    timestamp = models.DateTimeField(auto_now_add=True)
+# class Payment(models.Model):
+#     sender = models.ForeignKey(
+#         User, on_delete=models.CASCADE, related_name='sent_payments')
+#     receiver = models.ForeignKey(
+#         User, on_delete=models.CASCADE, related_name='received_payments')
+#     amount = models.DecimalField(max_digits=10, decimal_places=2)
+#     transaction_id = models.CharField(max_length=255)
+#     status = models.CharField(
+#         max_length=50,
+#         choices=[
+#             ('Pending', 'Pending'),
+#             ('Completed', 'Completed'),
+#             ('Failed', 'Failed')
+#         ],
+#         default='Pending'
+#     )
+#     timestamp = models.DateTimeField(auto_now_add=True)
 
 
 class Job(models.Model):
@@ -332,8 +334,8 @@ class Job(models.Model):
         User, on_delete=models.CASCADE, related_name='freelancer_jobs', null=True, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     deadline = models.DateField()
-    payment = models.ForeignKey(
-        Payment, on_delete=models.SET_NULL, null=True, blank=True)
+    # payment = models.ForeignKey(
+        # Payment, on_delete=models.SET_NULL, null=True, blank=True)
     freelancer_proposed_rate = models.DecimalField(
         max_digits=10, decimal_places=2, null=True, blank=True)
     freelancer_proposed_deadline = models.DateField(null=True, blank=True)
@@ -377,3 +379,210 @@ class Message(models.Model):
     seen = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     # created_at = models.DateTimeField(auto_now_add=True)
+
+# polash
+
+class Course(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
+    title = models.CharField(max_length=1000, blank=False)
+    course_outcome = models.CharField(max_length=1000, blank=False)
+    course_contain = models.CharField(max_length=1000, blank=False)
+    course_fee = models.DecimalField(
+        decimal_places=2, max_digits=5, blank=False)
+    course_thumbnil = models.ImageField(upload_to="thumbnil/", blank=False)
+
+
+class CourseLecture(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, blank=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
+    title = models.CharField(max_length=1000, blank=False)
+    lecture_description = models.CharField(max_length=1000, blank=False)
+    material = models.FileField(upload_to='materials/', blank=True)
+    video = models.FileField(upload_to='videos/', blank=True)
+
+
+class Enrollment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    enrolled_on = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        unique_together = ('user', 'course')
+
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    course = models.ForeignKey(
+        Course, 
+        on_delete=models.CASCADE, 
+        related_name='comments',
+        default=1  # Temporary default
+    )
+    content = models.TextField()
+    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='replies')
+    timestamp = models.DateTimeField(auto_now_add=True)
+    edited = models.BooleanField(default=False)
+    edited_at = models.DateTimeField(null=True, blank=True)
+    likes = models.ManyToManyField(User, related_name='liked_comments', blank=True)
+
+    class Meta:
+        ordering = ['-timestamp']
+
+    def __str__(self):
+        return f'Comment by {self.user.username} on {self.course.title}'
+
+    def like_count(self):
+        return self.likes.count()
+
+class LectureComment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='lecture_comments')
+    lecture = models.ForeignKey(CourseLecture, on_delete=models.CASCADE, related_name='comments')
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='lecture_comments')
+    content = models.TextField()
+    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='replies')
+    timestamp = models.DateTimeField(auto_now_add=True)
+    edited = models.BooleanField(default=False)
+    edited_at = models.DateTimeField(null=True, blank=True)
+    likes = models.ManyToManyField(User, related_name='liked_lecture_comments', blank=True)
+
+    class Meta:
+        ordering = ['-timestamp']
+
+    def __str__(self):
+        return f'Comment by {self.user.username} on lecture: {self.lecture.title}'
+
+    def like_count(self):
+        return self.likes.count()
+
+class AssignmentSubmission(models.Model):
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
+    course = models.ForeignKey('Course', on_delete=models.CASCADE)
+    lecture = models.ForeignKey('CourseLecture', on_delete=models.CASCADE)
+    assignment_file = models.FileField(upload_to='assignments/')
+    submission_date = models.DateTimeField(default=timezone.now)
+    status = models.IntegerField(default=0)  # 0: Submitted, 1: Reviewed
+    feedback = models.TextField(null=True, blank=True)
+    grade = models.FloatField(null=True, blank=True)
+
+class VideoProgress(models.Model):
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
+    lecture = models.ForeignKey('CourseLecture', on_delete=models.CASCADE)
+    watched_time = models.FloatField(default=0)  # Store time in seconds
+    video_duration = models.FloatField(default=0)  # Total video duration
+    last_updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('user', 'lecture')
+
+class CourseMessage(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='course_sent_messages')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='course_received_messages', null=True)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='course_messages')
+    content = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['timestamp']
+
+    def save(self, *args, **kwargs):
+        if not self.receiver_id:
+            self.receiver = self.course.user
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f'Message from {self.sender.username} to {self.receiver.username if self.receiver else "unknown"} in {self.course.title}'
+
+class InternshipOffer(models.Model):
+    STATUS_ENDED = -1
+    STATUS_CLOSED = 0
+    STATUS_ACTIVE = 1
+    
+    STATUS_CHOICES = [
+        (STATUS_ENDED, 'Ended'),
+        (STATUS_CLOSED, 'Closed'),
+        (STATUS_ACTIVE, 'Active'),
+    ]
+
+    university = models.ForeignKey(User, on_delete=models.CASCADE, related_name='internship_offers')
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    requirements = models.TextField()
+    duration_months = models.IntegerField()
+    stipend = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    location = models.CharField(max_length=200)
+    skills_required = models.ManyToManyField(Skill)
+    positions_available = models.IntegerField()
+    application_deadline = models.DateField()
+    start_date = models.DateField()
+    status = models.IntegerField(choices=STATUS_CHOICES, default=STATUS_ACTIVE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.title} by {self.university.username}"
+
+    class Meta:
+        ordering = ['-created_at']
+
+class InternshipApplication(models.Model):
+    STATUS_PENDING = 0
+    STATUS_ACCEPTED = 1
+    STATUS_REJECTED = 2
+    
+    STATUS_CHOICES = [
+        (STATUS_PENDING, 'Pending'),
+        (STATUS_ACCEPTED, 'Accepted'),
+        (STATUS_REJECTED, 'Rejected'),
+    ]
+
+    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='internship_applications')
+    internship = models.ForeignKey(InternshipOffer, on_delete=models.CASCADE, related_name='applications')
+    status = models.IntegerField(choices=STATUS_CHOICES, default=STATUS_PENDING)
+    applied_at = models.DateTimeField(auto_now_add=True)
+    resume = models.FileField(upload_to='internship_resumes/', null=True, blank=True)
+    cv = models.FileField(upload_to='internship_cvs/', null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.student.username}'s application for {self.internship.title}"
+
+    class Meta:
+        ordering = ['-applied_at']
+
+
+class Payment(models.Model):
+    sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='course_payments_sent')
+    receiver = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='course_payments_received')
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    card_number = models.CharField(max_length=16,null= True, blank=True)  # Encrypted in production
+    card_expiry = models.CharField(max_length=5,null= True, blank=True)   # MM/YY format
+    card_cvv = models.CharField(max_length=4,null= True, blank=True)      # Encrypted in production
+    course_id = models.IntegerField(null= True, blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=20, default='pending')  # pending, completed, failed
+    transaction_id = models.CharField(max_length=100, null=True, blank=True)  # Made optional
+
+    class Meta:
+        ordering = ['-timestamp']
+
+    def __str__(self):
+        return f"Payment {self.transaction_id or 'N/A'} - {self.amount} from {self.sender.username} to {self.receiver.username}"
+
+class CourseReview(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='course_reviews')
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='reviews')
+    rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    review_text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_edited = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['-created_at']
+        unique_together = ('user', 'course')  # Prevent duplicate reviews
+
+    def __str__(self):
+        return f"Review by {self.user.username} for {self.course.title}"
+
+    def save(self, *args, **kwargs):
+        if self.pk:  # If review exists (editing)
+            self.is_edited = True
+        super().save(*args, **kwargs)

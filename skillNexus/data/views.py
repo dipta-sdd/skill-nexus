@@ -114,62 +114,6 @@ def suspended(request):
     return render(request, 'sus.html')
 
 
-def lecture_up(request):
-    # Add logic for lecture upload
-    return render(request, 'lecture_up.php')
-
-
-def all_course_detail(request):
-    return render(request, 'all_course_detail.php')
-
-
-def course_detail(request):
-
-    return render(request, 'course_detail.php')
-
-
-def course_list(request):
-    return render(request, 'course_list.php')
-
-
-def course_list_single(request):
-    return render(request, 'course_list_single.php')
-
-
-def edit_detail(request):
-    # Add logic for editing details
-    return render(request, 'edit_detail.php')
-
-
-def edit_video(request):
-    # Add logic for editing video
-    return render(request, 'edit_video.php')
-
-
-def create_course(request):
-    # Add logic for creating a course
-    return render(request, 'create_course.php')
-
-
-def lec_detail(request):
-    return render(request, 'lec_detail.php')
-
-
-def student_view_lec_detail(request):
-
-    return render(request, 'student_view_lec_detail.php')
-
-
-def videoshow(request):
-    return render(request, 'videoshow.php')
-
-
-def allvideoshow(request):
-    return render(request, 'allvideoshow.php')
-
-# /university/program/id
-
-
 def manageProgram(request, program_id):
     program = UniversityProgram.objects.get(id=program_id)
     program = UniversityProgramSerial(program)
@@ -341,3 +285,182 @@ def run_raw_sql(query, params=None):
             for row in cursor.fetchall()
         ]
     return results
+
+
+
+def lecture_up(request):
+    # Add logic for lecture upload
+    return render(request, 'lecture_up.php')
+
+
+def all_course_detail(request):
+    return render(request, 'all_course_detail.php')
+
+
+def course_detail(request):
+
+    return render(request, 'course_detail.php')
+
+
+def course_list(request):
+    return render(request, 'course_list.php')
+
+
+def course_list_single(request):
+    return render(request, 'course_list_single.php')
+
+
+def edit_detail(request):
+    # Add logic for editing details
+    return render(request, 'edit_detail.php')
+
+
+def edit_video(request):
+    # Add logic for editing video
+    return render(request, 'edit_video.php')
+
+
+def create_course(request):
+    # Add logic for creating a course
+    return render(request, 'create_course.php')
+
+
+def lec_detail(request):
+    return render(request, 'lec_detail.php')
+
+
+def student_view_lec_detail(request):
+
+    return render(request, 'student_view_lec_detail.php')
+
+
+
+def educator_view_lec_detail(request):
+    return render(request, 'educator_view_lec_detail.php')
+
+def videoshow(request):
+    return render(request, 'videoshow.php')
+
+
+def allvideoshow(request):
+    return render(request, 'allvideoshow.php')
+
+# /university/program/id
+
+def see_submission(request):
+    return render(request, 'see_submission.php')
+
+def see_progress(request):
+    return render(request, 'see_progress.php')
+
+def educator_home(request):
+    return render(request, 'educator_home.php')
+
+def offer_internship(request):
+    return render(request, 'offer_internship.php')
+
+def view_internship_uni(request):
+    return render(request, 'view_internship_uni.php')
+
+def view_internship_student(request):
+    return render(request, 'view_internship_student.php')
+
+def view_applicant(request, internship_id):
+    return render(request, 'view_applicant.php')
+
+def payment(request):
+    return render(request, 'payment.php')
+
+def cv_view(request):
+    return render(request,'cv_view.php')
+
+def view_progress_edu(request):
+    return render(request,'view_progress_edu.php')
+
+@login_required
+def certificate_view(request, course_id):
+    try:
+        # Get the course enrollment for the current user
+        enrollment = Enrollment.objects.get(
+            course_id=course_id,
+            user=request.user
+        )
+        
+        # Get the course details
+        course = Course.objects.get(id=course_id)
+        
+        # Get instructor name
+        instructor_name = "Instructor"
+        if course.user.first_name or course.user.last_name:
+            instructor_name = f"{course.user.first_name} {course.user.last_name}".strip()
+        elif course.user.username:
+            instructor_name = course.user.username
+            
+        # Get student name
+        student_name = "Student"
+        if request.user.first_name or request.user.last_name:
+            student_name = f"{request.user.first_name} {request.user.last_name}".strip()
+        elif request.user.username:
+            student_name = request.user.username
+        
+        # Get current date for completion
+        completion_date = timezone.now().strftime('%B %d, %Y')
+        
+        # Pass the context data to the template
+        context = {
+            'course_id': course_id,
+            'student_name': student_name,
+            'course_name': course.title,
+            'instructor_name': instructor_name,
+            'completion_date': completion_date,
+        }
+        
+        # Render the certificate template
+        response = render(request, 'certificate.php', context)
+        response['Content-Type'] = 'text/html'
+        return response
+        
+    except Enrollment.DoesNotExist:
+        from django.http import Http404
+        raise Http404("You are not enrolled in this course")
+    except Course.DoesNotExist:
+        from django.http import Http404
+        raise Http404("Course not found")
+    except Exception as e:
+        from django.http import HttpResponseServerError
+        return HttpResponseServerError(f"An error occurred: {str(e)}")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
