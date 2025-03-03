@@ -366,7 +366,7 @@ def view_internship_student(request):
     return render(request, 'view_internship_student.php')
 
 def view_applicant(request, internship_id):
-    return render(request, 'view_applicant.php')
+    return render(request, 'view_applicant.php', {'internship_id': internship_id})
 
 def payment(request):
     return render(request, 'payment.php')

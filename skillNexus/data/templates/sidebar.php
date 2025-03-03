@@ -20,8 +20,8 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <form class="d-flex ms-auto me-5" role="search">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-            <button class="btn navbar-btn btn-outline-dark" type="submit">
+            <input class="form-control me-2 " style="opacity:0" type="search" placeholder="Search" aria-label="Search" />
+            <button class="btn navbar-btn btn-outline-dark" style="opacity:0" type="submit">
               Search
             </button>
           </form>
@@ -54,9 +54,9 @@
                 <li>
                   <a class="dropdown-item" href="/profile">Profile</a>
                 </li>
-                <li>
+                <!-- <li>
                   <a class="dropdown-item" href="#">Another action</a>
-                </li>
+                </li> -->
                 <li>
                   <hr class="dropdown-divider" />
                 </li>
@@ -80,29 +80,29 @@
 <div id="sidebar" class="h-100 transition_speed">
     <ul class="list-unstyled components mb-5">
         <li>
-            <a href="/"><span class="fa fa-home"></span> &nbsp; Home</a>
+            <a href="/"><span class="fa-solid fa-house"></span> &nbsp; Home</a>
         </li>
 
         {% if user.is_authenticated %} 
             <li>
-                <a href="/profile"><span class="fa fa-download"></span> &nbsp; Profile</a>
+                <a href="/profile"><span class="fa-solid fa-user"></span> &nbsp; Profile</a>
             </li>
 
             {% if user.role == 'Admin' %}
                 <li>
-                    <a href="/manage_education"><span class="fa fa-graduation-cap"></span> &nbsp; Educations</a>
+                    <a href="/manage_education"><span class="fa-solid fa-graduation-cap"></span> &nbsp; Educations</a>
                 </li>
                 <li>
-                    <a href="/users"><span class="fa-solid fa-user"></span> &nbsp; Users</a>
+                    <a href="/users"><span class="fa-solid fa-user-group"></span> &nbsp; Users</a>
                 </li>
             {% endif %}
 
             {% if user.role == 'Student' %}
                 <li>
-                    <a href="/education"><span class="fa fa-graduation-cap"></span> &nbsp; Educations</a>
+                    <a href="/education"><span class="fa-solid fa-graduation-cap"></span> &nbsp; Educations</a>
                 </li>
                 <li>
-                    <a href="/training"><span class="fa-solid fa-clipboard-list"></span> &nbsp; Trainings</a>
+                    <a href="/training"><span class="fa-solid fa-file-pen"></span> &nbsp; Trainings</a>
                 </li>
                 <li>
                     <a href="/experience"><span class="fa-solid fa-briefcase"></span> &nbsp; Experience</a>
@@ -111,10 +111,13 @@
                     <a href="/course_list"><span class="fa-solid fa-book"></span> &nbsp; Course List</a>
                 </li>
                 <li>
-                    <a href="/programs"><span class="fa-solid fa-play"></span> &nbsp; Program</a>
+                    <a href="/programs"><span class="fa-solid fa-graduation-cap"></span> &nbsp; Program</a>
                 </li>
                 <li>
-                    <a href="/student/my_programs"><span class="fa-solid fa-play"></span> &nbsp; My Programs</a>
+                    <a href="/student/my_programs"><span class="fa-solid fa-graduation-cap"></span> &nbsp; My Programs</a>
+                </li>
+                <li>
+                    <a href="/view_internship_student"><span class="fa-solid fa-briefcase"></span> &nbsp View Internship</a>
                 </li>
                 <li>
                     <a href="/my_skills"><span class="fa-solid fa-tools"></span> &nbsp; Skills</a>
@@ -129,10 +132,10 @@
 
             {% if user.role == 'Educator' %}
                 <li>
-                    <a href="/create_course"><span class="fa-solid fa-book"></span> &nbsp; Create Course</a>
+                    <a href="/create_course"><span class="fa-solid fa-pen-to-square"></span> &nbsp; Create Course</a>
                 </li>
                 <li>
-                    <a href="/all_course_detail"><span class="fa-solid fa-hammer"></span> &nbsp; See Details</a>
+                    <a href="/all_course_detail"><span class="fa-solid fa-eye"></span> &nbsp; See Details</a>
                 </li>
             {% endif %}
             {% if user.role == 'Freelancer' %}
@@ -152,17 +155,23 @@
 
             {% if user.role == 'University' %}
                 <li>
-                    <a href="/university/programs"><span class="fa-solid fa-wand-magic-sparkles"></span> &nbsp; Programs</a>
+                    <a href="/university/programs"><span class="fa-solid fa-graduation-cap"></span> &nbsp; Programs</a>
+                </li>
+                <li >
+                  <a href="/offer_internship"><span class="fa-solid fa-briefcase"></span> &nbsp Offer Internship</a>
+                </li>
+                <li >
+                  <a href="/view_internship_uni"><span class="fa-solid fa-briefcase"></span> &nbsp View Internship</a>
                 </li>
             {% endif %}
 
             <li class="logout">
-                <a href="/logout"><span class="fa fa-sign-out mr-3 logout"></span> &nbsp; Sign Out</a>
+                <a href="/logout"><span class="fa-solid fa-right-from-bracket"></span> &nbsp; Sign Out</a>
             </li>
 
         {% else %}
             <li>
-                <a href="/login"><span class="fa fa-sign-out mr-3"></span> &nbsp; Sign In</a>
+                <a href="/login"><span class="fa-solid fa-right-to-bracket"></span> &nbsp; Sign In</a>
             </li>
         {% endif %}
 

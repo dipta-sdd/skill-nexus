@@ -299,6 +299,30 @@
             });
         }
 
+        // function displayComments(comments) {
+        //     console.log('Displaying comments:', comments);
+        //     const commentsList = $(".comments-list");
+        //     commentsList.empty();
+            
+        //     if (!comments || !Array.isArray(comments) || comments.length === 0) {
+        //         commentsList.html('<p class="text-muted">No comments yet. Be the first to comment!</p>');
+        //         return;
+        //     }
+            
+        //     // Separate top-level comments and replies
+        //     const parentComments = comments.filter(comment => !comment.parent_id);
+        //     const replies = comments.filter(comment => comment.parent_id);
+            
+        //     console.log('Parent comments:', parentComments);
+        //     console.log('Replies:', replies);
+            
+        //     // Group replies by parent
+        //     parentComments.forEach(comment => {
+        //         // Find all replies for this parent comment
+        //         comment.replies = replies.filter(reply => reply.parent_id === comment.id);
+        //         commentsList.append(createCommentHTML(comment));
+        //     });
+        // }
         function displayComments(comments) {
             console.log('Displaying comments:', comments);
             const commentsList = $(".comments-list");
@@ -309,21 +333,33 @@
                 return;
             }
             
-            // Separate top-level comments and replies
-            const parentComments = comments.filter(comment => !comment.parent_id);
-            const replies = comments.filter(comment => comment.parent_id);
-            
-            console.log('Parent comments:', parentComments);
-            console.log('Replies:', replies);
-            
-            // Group replies by parent
-            parentComments.forEach(comment => {
-                // Find all replies for this parent comment
-                comment.replies = replies.filter(reply => reply.parent_id === comment.id);
+            // Build comment hierarchy
+            const commentMap = new Map();
+            const rootComments = [];
+
+            // First, map all comments by their ID
+            comments.forEach(comment => {
+                comment.replies = [];
+                commentMap.set(comment.id, comment);
+            });
+
+            // Then, build the hierarchy
+            comments.forEach(comment => {
+                if (comment.parent_id) {
+                    const parent = commentMap.get(comment.parent_id);
+                    if (parent) {
+                        parent.replies.push(comment);
+                    }
+                } else {
+                    rootComments.push(comment);
+                }
+            });
+
+            // Render root comments
+            rootComments.forEach(comment => {
                 commentsList.append(createCommentHTML(comment));
             });
         }
-
         function createCommentHTML(comment) {
             const currentUserId = getCurrentUserId();
             const commentUserId = comment.user_id || (comment.user && comment.user.id);

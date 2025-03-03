@@ -116,6 +116,9 @@
     .discussion-post:hover .comment-actions {
         opacity: 1;
     }
+    .comment-actions:hover {
+        opacity: 1;
+    }
 
     .badge {
         font-size: 0.75em;

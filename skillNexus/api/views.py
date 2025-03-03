@@ -779,12 +779,17 @@ def deelProgram(req):
     responses={201: CourseSeriallizer, 400: 'Bad Request'},
     security=[{"Bearer": []}]
 )
-@api_view(['POST'])
+
+@ api_view(['POST'])
 def addCourse(req):
     print('_____________________add training_______________________')
     user = getUser(req)
     data = req.data.copy()
     data['user'] = user['id']
+    # if 'id' in data:
+    #     obj = Experience.objects.get(id=data['id'], user=user['id'])
+    #     serializer = ExperienceSeriallizer(obj, data=data, partial=True)
+    # else:
 
     serializer = CourseSeriallizer(data=data)
     if serializer.is_valid():
@@ -809,6 +814,8 @@ def addCourse(req):
     },
     security=[{"Bearer": []}]
 )
+
+
 @ api_view(['GET'])
 def getCourseDetail(req):
     user = getUser(req)
@@ -842,7 +849,8 @@ def getCourseDetail(req):
     },
     security=[{"Bearer": []}]
 )
-@api_view(['DELETE'])
+
+@ api_view(['DELETE'])
 def delcourse(req):
     user = getUser(req)
 
@@ -865,7 +873,7 @@ def delcourse(req):
     responses={201: CourseLectureSeriallizer, 400: 'Bad Request'},
     security=[{"Bearer": []}]
 )
-@api_view(['POST'])
+@ api_view(['POST'])
 def addCourseLecture(req):
     print('_____________________add Lecture_______________________')
     user = getUser(req)
@@ -935,6 +943,7 @@ def delCourse(request):
 )
 @api_view(['POST'])
 def editCourse(request):
+    print('___________________________')
     user = request.user
     course_id = request.data.get('course_id')
     try:
@@ -983,7 +992,6 @@ def getLectureDetail(req):
     except:
         return Response({'msg': 'No Lecture Found'}, status=status.HTTP_204_NO_CONTENT)
 
-
 @swagger_auto_schema(
     methods=['get'],
     operation_summary="Get a course by ID",
@@ -997,20 +1005,35 @@ def getLectureDetail(req):
     responses={200: CourseLectureSeriallizer(many=True)}
 )
 @ api_view(['GET'])
-def getCourseVideo(req):
-    user = getUser(req)
+def getCourseVideo(request):
     try:
-        if 'course_id' in req.query_params:
-            objs = CourseLecture.objects.filter(
-                user=user['id'], id=req.query_params['course_id'])
-        else:
-            objs = CourseLecture.objects.filter(user=user['id'])
-        print(objs)
-        course = CourseLectureSeriallizer(objs, many=True)
-        return Response(course.data, status=status.HTTP_200_OK)
-    except:
-        return Response({'msg': 'No Lecture Found'}, status=status.HTTP_204_NO_CONTENT)
+        lecture_id = request.query_params.get('lecture_id')
+        
+        if not lecture_id:
+            return Response(
+                {'error': 'Lecture ID is required'}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
+        # Get lecture details
+        lecture = CourseLecture.objects.select_related('course').get(id=lecture_id)
+        
+        # Serialize the lecture data
+        serializer = CourseLectureSeriallizer(lecture)
+        return Response([serializer.data], status=status.HTTP_200_OK)
+
+
+    except CourseLecture.DoesNotExist:
+        return Response(
+            {'error': 'Lecture not found'}, 
+            status=status.HTTP_404_NOT_FOUND
+        )
+    except Exception as e:
+        print(f"Error in getCourseVideo: {str(e)}")  # For debugging
+        return Response(
+            {'error': str(e)}, 
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
 
 # @api_view(['GET'])
 # def getEnrolledCourseVideo(req):
@@ -1083,38 +1106,101 @@ def getEnrolledCourseVideo(req):
 @api_view(['POST'])
 def edit_course_video(request):
     try:
-        user = getUser(request)  # Assuming `getUser` retrieves user info
-        course_id = request.query_params.get('course_id')
-
-        if course_id:
-            objs = CourseLecture.objects.filter(user=user['id'], id=course_id)
-        else:
-            objs = CourseLecture.objects.filter(user=user['id'])
-
-        if objs.exists():
-            serializer = CourseLectureSeriallizer(objs, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        else:
-            return Response({'msg': 'No Lecture Found'}, status=status.HTTP_204_NO_CONTENT)
-
+        lecture_id = request.data.get('id')
+        title = request.data.get('title')
+        description = request.data.get('lecture_description')
+        
+        # Debug prints
+        print("Received edit request:")
+        print(f"ID: {lecture_id}")
+        print(f"Title: {title}")
+        print(f"Description: {description}")
+        print(f"Files: {request.FILES}")
+        
+        # Get the lecture
+        lecture = CourseLecture.objects.get(id=lecture_id)
+        
+        # Update fields
+        if title:
+            lecture.title = title
+        if description:
+            lecture.lecture_description = description
+            
+        # Handle file uploads
+        if 'material' in request.FILES:
+            lecture.material = request.FILES['material']
+        if 'video' in request.FILES:
+            lecture.video = request.FILES['video']
+            
+        # Save changes
+        lecture.save()
+        
+        # Return updated lecture data
+        return Response({
+            'success': True,
+            'message': 'Lecture updated successfully',
+            'data': {
+                'id': lecture.id,
+                'title': lecture.title,
+                'lecture_description': lecture.lecture_description,
+                'material': lecture.material.url if lecture.material else None,
+                'video': lecture.video.url if lecture.video else None
+            }
+        })
+        
+    except CourseLecture.DoesNotExist:
+        return Response({
+            'success': False,
+            'message': 'Lecture not found'
+        }, status=404)
     except Exception as e:
-        return Response({'msg': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        print(f"Error updating lecture: {str(e)}")
+        return Response({
+            'success': False,
+            'message': str(e)
+        }, status=400)
 
 
 @swagger_auto_schema(methods=['get'], responses={200: CourseSeriallizer(many=True)})
 @ api_view(['GET'])
-def courselist(req):
+def courselist(request):
     try:
-        if 'course_id' in req.query_params:
-            objs = Course.objects.filter(id=req.query_params['course_id'])
-        else:
-            objs = Course.objects.filter()
-        print(objs)
-        course = CourseSeriallizer(objs, many=True)
-        return Response(course.data, status=status.HTTP_200_OK)
-    except:
-        return Response({'msg': 'No Course Found'}, status=status.HTTP_204_NO_CONTENT)
+        search_query = request.GET.get('search', '').strip()
+        filter_value = request.GET.get('filter', 'name_a_z')
 
+        print(f"Debug - Received parameters: search='{search_query}', filter='{filter_value}'")
+
+        # Start with all courses
+        courses = Course.objects.all()
+
+        # Apply search if provided
+        if search_query:
+            courses = courses.filter(
+                Q(title__icontains=search_query) |
+                Q(course_outcome__icontains=search_query)
+            )
+            print(f"Debug - Found {courses.count()} courses matching search: '{search_query}'")
+
+        # Apply filters
+        if filter_value == 'free':
+            courses = courses.filter(course_fee=0)
+        elif filter_value == 'price_low_high':
+            courses = courses.order_by('course_fee')
+        elif filter_value == 'price_high_low':
+            courses = courses.order_by('-course_fee')
+        elif filter_value == 'name_a_z':
+            courses = courses.order_by('title')
+        elif filter_value == 'name_z_a':
+            courses = courses.order_by('-title')
+
+        print(f"Debug - Final course count after filtering: {courses.count()}")
+
+        serializer = CourseSeriallizer(courses, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        print(f"Error in courselist: {str(e)}")
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @swagger_auto_schema(methods=['get'], responses={200: CourseSeriallizer(many=True)})
 @ api_view(['GET'])
@@ -1828,6 +1914,7 @@ def get_course_comments(request):
         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
+
 @api_view(['POST'])
 def add_comment(request):
     try:
@@ -1873,6 +1960,7 @@ def add_comment(request):
             {"error": str(e)}, 
             status=status.HTTP_400_BAD_REQUEST
         )
+
 
 
 @api_view(['PUT'])
@@ -1988,6 +2076,9 @@ def get_lecture_comments(request):
         )
 
 
+
+
+
 @api_view(['POST'])
 def add_lecture_comment(request):
     try:
@@ -2069,7 +2160,6 @@ def delete_lecture_comment(request):
     except LectureComment.DoesNotExist:
         return Response({'error': 'Comment not found or unauthorized'}, status=status.HTTP_404_NOT_FOUND)
 
-
 @api_view(['POST'])
 def like_lecture_comment(request):
     try:
@@ -2090,6 +2180,8 @@ def like_lecture_comment(request):
         }, status=status.HTTP_200_OK)
     except LectureComment.DoesNotExist:
         return Response({'error': 'Comment not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
 
 
 @api_view(['POST'])
@@ -2138,7 +2230,6 @@ def submit_assignment(request):
         return Response({
             'error': 'Failed to submit assignment. Please try again.'
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -2264,7 +2355,7 @@ def update_video_progress(request):
             'error': 'Server error',
             'details': str(e)
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+    
 
 @api_view(['GET'])
 def get_video_progress(request):
@@ -2394,9 +2485,12 @@ def get_course_messages(request):
             course_id = int(course_id)
         except ValueError:
             return Response({'error': 'Invalid course ID format'}, status=400)
-            
+        user = getUser(request)['id']
+        receiver = request.GET.get('receiver')
+        if receiver:
+            user = receiver
         course = get_object_or_404(Course, id=course_id)
-        messages = CourseMessage.objects.filter(course=course).order_by('timestamp')
+        messages = CourseMessage.objects.filter(Q(sender=user) | Q(receiver=user), course=course).order_by('timestamp')
         
         print(f"Found {messages.count()} messages for course {course_id}")  # Debug print
         
@@ -2412,6 +2506,7 @@ def get_course_messages(request):
 @permission_classes([IsAuthenticated])
 def send_course_message(request):
     try:
+        print('____________________________send msg ______________________________---')
         print(f"Received data: {request.data}")  # Debug print
         
         # Handle both JSON and form data
@@ -2422,6 +2517,7 @@ def send_course_message(request):
             
         course_id = data.get('course_id')
         content = data.get('content')
+        receiver = data.get('receiver')
         
         print(f"Parsed course_id: {course_id}, content: {content}")  # Debug print
         
@@ -2437,12 +2533,18 @@ def send_course_message(request):
             return Response({'error': 'Invalid course ID format'}, status=400)
         
         course = get_object_or_404(Course, id=course_id)
+        print('___________________1')
+        try :
+            receiver = get_object_or_404(User, id=receiver)
+        except:
+            receiver = course.user
         
         # Create message with receiver automatically set to course educator
         message = CourseMessage.objects.create(
             sender=request.user,
             course=course,
-            content=content.strip()
+            content=content.strip(),
+            receiver=receiver
         )
         
         serializer = CourseMessageSerializer(message)

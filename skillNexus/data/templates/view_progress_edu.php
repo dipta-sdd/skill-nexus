@@ -544,7 +544,7 @@
                       }
                       <div>
                         <h6 class="mb-0">${student.first_name} ${student.last_name}</h6>
-                        <small class="text-muted">${student.email}</small>
+                        <small class="text-muted">${student.email || 'N/A'}</small>
                       </div>
                     </div>
                   </td>
@@ -656,10 +656,10 @@
                 <h6 class="mb-2">${video.lecture_title}</h6>
                 <div class="d-flex justify-content-between align-items-center mb-1">
                   <span class="text-muted">Progress</span>
-                  <span class="badge bg-${progressPercent >= 90 ? 'success' : 'warning'}">${progressPercent}%</span>
+                  <span class="badge bg-${progressPercent >= 90 ? 'success' : 'warning'}">${progressPercent || 0}%</span>
                 </div>
                 <div class="progress" style="height: 5px;">
-                  <div class="progress-bar" role="progressbar" style="width: ${progressPercent}%"></div>
+                  <div class="progress-bar" role="progressbar" style="width: ${progressPercent ? progressPercent : 0}%"></div>
                 </div>
                 
               </div>

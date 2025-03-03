@@ -103,7 +103,7 @@
 
                 <div class="ms-auto">
                     {% if user.role == "Student" or user.role == "Freelancer" %}
-                    <button type="button" class="btn btn-outline-primary ms-auto me-0">
+                    <button type="button" class="btn btn-outline-primary btn-download-cv ms-auto me-0">
                         Download CV
                     </button>
                     {% endif %}

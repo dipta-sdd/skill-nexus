@@ -87,7 +87,7 @@
             </div>
             <div class="col-lg-4">
                 <div class="row p-0 m-0">
-                    <div class="col-12">
+                    <div class="col-12 d-none">
                         <div class="input-group mb-3">
                             <input type="text" class="form-control" placeholder="Search"
                                 aria-describedby="button-addon2">

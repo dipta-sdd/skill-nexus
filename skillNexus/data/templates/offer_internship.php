@@ -430,7 +430,7 @@
             success: function(response) {
               showToast("Internship offer created successfully!", "success");
               setTimeout(() => {
-                window.location.href = '/view_internship';
+                window.location.href = '/view_internship_uni';
               }, 2000);
             },
             error: function(xhr) {

@@ -24,7 +24,6 @@ function getEducatorDisplayName(user) {
 // Keep these declarations at the top of the file
 const url = window.location.href;
 const value = url.split("?")[1];
-
 // Initialize everything when document is ready
 $(document).ready(function() {
     console.log("Document ready - initializing course list single");
@@ -1393,6 +1392,7 @@ function showCourse(course) {
                 </div>
             `);
             fetchLectures(course.id);
+            loadInstructorDetails(course.id);
 
             // Add event listeners after creating the elements
             $(`#postComment-${course.id}`).on('click', function() {
@@ -2693,9 +2693,11 @@ $(document).ready(function() {
         .appendTo('head');
 });
 
+
 function loadInstructorDetails(courseId) {
+    // alert(courseId);
     console.log("Loading instructor details for course:", courseId);
-    
+    // alert(courseId);
     $.ajax({
         type: "GET",
         url: apiLink + "/api/instructor_details/get",
@@ -2708,7 +2710,6 @@ function loadInstructorDetails(courseId) {
         success: function(response) {
             console.log("Instructor details loaded successfully:", response);
             const container = $(`#instructors-${courseId} .card-body`);
-            
             // Create HTML for instructor details
             const instructorHtml = `
                 <div class="instructor-profile">
@@ -2799,6 +2800,7 @@ function loadInstructorDetails(courseId) {
             container.html(instructorHtml);
         },
         error: function(error) {
+            // alert('eee');
             console.error("Error loading instructor details:", error);
             const container = $(`#instructors-${courseId} .card-body`);
             container.html(`
@@ -2812,7 +2814,8 @@ function loadInstructorDetails(courseId) {
 }
 
 // Add this to initialize instructor details when the tab is shown
-$('body').on('shown.bs.tab', 'button[data-bs-target^="#instructors-"]', function (e) {
-    const courseId = $(this).attr('data-bs-target').split('-')[1];
-    loadInstructorDetails(courseId);
-});
+// $('body').on('shown.bs.tab', `button[data-bs-target^="#instructors"]`, function (e) {
+//     alert('hh')
+//     const courseId = $(this).attr('data-bs-target').split('-')[1];
+//     loadInstructorDetails(courseId);
+// });

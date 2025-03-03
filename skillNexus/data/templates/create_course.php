@@ -119,6 +119,9 @@
                 success: function(response) {
                     // alert('Course created successfully!');
                     showToast("Course created successfully!", "Primary");
+                    setTimeout(() => {
+                        window.location.href = "/all_course_detail";
+                    }, 1000);
                     // Optionally, you can reset the form here
                     $("#courseForm")[0].reset();
                 },

@@ -111,6 +111,7 @@ $(document).ready(function() {
                 applicationCounts.set(internship.id, -1);
             })
         )).then(() => {
+            tbody.empty();
             // Render table only once after all counts are fetched
             filtered.forEach(internship => {
                 const applicationCount = applicationCounts.get(internship.id);

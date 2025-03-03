@@ -72,7 +72,8 @@ function createCommentHTML(comment, courseId) {
     const currentUserId = getCurrentUserId();
     const commentUserId = comment.user_id || (comment.user && comment.user.id);
     const isCommentOwner = String(commentUserId) === String(currentUserId);
-    
+    console.log('commnet = ' , comment);
+    console.log('isCommentOwner = ' + isCommentOwner);
     // Get first letter of username and create profile image or letter circle
     const firstLetter = comment.username ? comment.username.charAt(0).toUpperCase() : '?';
     const profileImageOrLetter = comment.user_profile_picture ? 
@@ -487,6 +488,7 @@ function showConversation(courseId, studentId) {
                 container.scrollTop(container[0].scrollHeight);
             
             // Set up send button handler for this conversation
+            console.log(`#send-button-${courseId}`, studentId);
             $(`#send-button-${courseId}`).off('click').on('click', function() {
                 sendMessage(courseId, studentId);
             });

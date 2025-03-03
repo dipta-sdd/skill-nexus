@@ -54,8 +54,11 @@ $(document).ready(function () {
         contentType: false,
         success: function (res) {
           showToast("Course updated successfully", 'primary');
-          
           // window.location.reload();
+           setTimeout(function () {
+             
+          window.location.href = "/course_detail?" + value;
+           }, 1000);
           populateEditForm(res);
         },
         error: function (err) {

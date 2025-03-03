@@ -65,7 +65,7 @@ urlpatterns = [
     path('view_internship_student',views.view_internship_student,name='view_internship'),
     path('payment',views.payment,name='payment'),
     path('cv_view', views.cv_view, name='cv_view'),
-    path('view_applicant', views.view_applicant, name='view_applicant'),
+    path('view_applicant/<int:internship_id>/', views.view_applicant, name='view_applicant'),
     path('view_progress_edu', views.view_progress_edu, name='view_progress_edu'),
 
     path('certificate/<int:course_id>/', views.certificate_view, name='certificate_view'),

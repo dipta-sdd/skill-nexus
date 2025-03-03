@@ -228,7 +228,7 @@
                     ${sub.status === 0 ? 'Pending Review' : 'Reviewed'}
                   </span>
                 </td>
-                <td>${sub.status === 1 ? `${sub.grade}/100` : '-'}</td>
+                <td>${sub.status === 1 ? `${sub.grade}/10` : '-'}</td>
                 <td>
                   <a href="${sub.file_url || sub.assignment_file}" class="btn btn-sm btn-primary" target="_blank">
                     <i class="fas fa-download"></i> View
